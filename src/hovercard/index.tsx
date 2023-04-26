@@ -1,13 +1,23 @@
 // @ts-nocheck
 import hex_md5 from './md5';
 
+// Unminified source for `gprofiles.js`: profile hovercard implementation.
+//
+// If you make changes to this file, please generate a new minified `gprofiles.js`.
+// Last minified using UglifyJS version 3.8.0
+// Command line: npx uglify-js@3.8.0 -m -o gprofiles.js gprofiles.dev.js
+//
 // NOTE: This file intentionally does not make use of any polyfills or libraries,
 // including jQuery. Please keep all code as vanilla ES5, and namespace everything
 // under the `Gravatar` and `GProfile` globals below.
 // Code follows WordPress browser support guidelines. For an up to date list, see
 // https://make.wordpress.org/core/handbook/best-practices/browser-support/
 
-const Gravatar = {
+if ( 'undefined' == typeof console ) {
+	console = { log: function ( str ) {}, debug: function ( str ) {} };
+}
+
+var Gravatar = {
 	/* All loaded profiles, keyed off ghash */
 	profile_stack: {},
 
@@ -39,7 +49,6 @@ const Gravatar = {
 	throbber: null,
 
 	/* Has a custom background image been added to the card? */
-	has_bg: false,
 	disabled: false,
 
 	/* The base of Gravatar URLs, taking into account secure connections */
@@ -47,6 +56,20 @@ const Gravatar = {
 
 	/* Whether the current browser supports passive event listeners */
 	supportsPassiveEvents: false,
+
+	/* Services sort order  */
+	services_order: [
+		'wordpress',
+		'tumblr',
+		'twitter',
+		'mastodon',
+		'tiktok',
+		'vimeo',
+		'github',
+		'stackoverflow',
+		'foursquare',
+		'tripit',
+	],
 
 	// From https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#feature-detection
 	testSupportsPassiveEvents: function () {
@@ -259,7 +282,7 @@ const Gravatar = {
 			return;
 		}
 
-		dom_id = this.profile_map[ 'g' + Gravatar.active_hash ];
+		let dom_id = this.profile_map[ 'g' + Gravatar.active_hash ];
 
 		// Close any existing cards
 		var cards = document.querySelectorAll( '.gcard' );
@@ -366,24 +389,100 @@ const Gravatar = {
 			/* Position of the small arrow in relation to the Gravatar */
 			var arrow_offset = grav_height / 2;
 			arrow_offset = Math.min( arrow_offset, card_height / 2 - 6, 53 ); // Max
-			if ( this.has_bg ) {
-				arrow_offset = arrow_offset - 8;
-			}
 			arrow_offset = Math.max( arrow_offset, 0 ); // Min
-
-			var arrow = document.querySelector( '#' + card_id + ' .grav-cardarrow' );
-			arrow.style.height = 2 * grav_height + top_offset + 'px';
-			arrow.style.backgroundPosition = '0px ' + arrow_offset + 'px';
-			if ( 'pos-right' == grav_pos_class ) {
-				arrow.style.right = 'auto';
-				arrow.style.left = '-7px';
-			} else {
-				arrow.style.right = '-10px';
-				arrow.style.left = 'auto';
-			}
 		}
 
 		Gravatar.fadeIn( card_el );
+	},
+
+	get_social_link: function ( service_shortname ) {
+		switch ( service_shortname ) {
+			case 'foursquare':
+				return 'https://secure.gravatar.com/icons/foursquare.svg';
+			case 'github':
+				return 'https://secure.gravatar.com/icons/github.svg';
+			case 'mastodon':
+				return 'https://secure.gravatar.com/icons/mastodon-black.svg';
+			case 'stackoverflow':
+				return 'https://secure.gravatar.com/icons/stackoverflow.svg';
+			case 'tiktok':
+				return 'https://secure.gravatar.com/icons/tiktok.svg';
+			case 'tripit':
+				return 'https://secure.gravatar.com/icons/tripit.svg';
+			case 'tumblr':
+				return 'https://secure.gravatar.com/icons/tumblr.svg';
+			case 'twitter':
+				return 'https://secure.gravatar.com/icons/twitter-alt.svg';
+			case 'vimeo':
+				return 'https://secure.gravatar.com/icons/vimeo.svg';
+			case 'wordpress':
+				return 'https://secure.gravatar.com/icons/wordpress.svg';
+			default:
+				return null;
+		}
+	},
+
+	get_social_link_title: function ( service_shortname ) {
+		switch ( service_shortname ) {
+			case 'foursquare':
+				return 'Foursquare';
+			case 'github':
+				return 'GitHub';
+			case 'mastodon':
+				return 'Mastodon';
+			case 'stackoverflow':
+				return 'StackOverflow';
+			case 'tiktok':
+				return 'TikTok';
+			case 'tripit':
+				return 'TripIt';
+			case 'tumblr':
+				return 'Tumblr';
+			case 'twitter':
+				return 'Twitter';
+			case 'vimeo':
+				return 'Vimeo';
+			case 'wordpress':
+				return 'WordPress';
+			default:
+				return null;
+		}
+	},
+
+	get_social_image: function ( service_shortname ) {
+		var social_link = Gravatar.get_social_link( service_shortname );
+		if ( ! social_link ) {
+			return;
+		}
+		return '<img class="gcard-services-icon" src="' + social_link + '" alt="' + service_shortname + '" />';
+	},
+
+	build_social_links: function ( services ) {
+		if ( ! services.length ) {
+			return '';
+		}
+		var html = '';
+
+		// Sort services in predefined order
+		var sortedServices = services.slice().sort( function ( service1, service2 ) {
+			return (
+				Gravatar.services_order.indexOf( service1.shortname ) -
+				Gravatar.services_order.indexOf( service2.shortname )
+			);
+		} );
+
+		sortedServices.forEach( function ( service ) {
+			var social_image = Gravatar.get_social_image( service.shortname );
+			var social_link_title = Gravatar.get_social_link_title( service.shortname );
+			var html_title = social_link_title ? 'title="' + social_link_title + '"' : '';
+
+			if ( ! social_image ) {
+				return;
+			}
+
+			html += '<a href="' + service.url + '" ' + html_title + ' >' + social_image + '</a>';
+		} );
+		return '<div class="gcard-services">' + html + '</div>';
 	},
 
 	build_card: function ( hash, profile ) {
@@ -439,10 +538,14 @@ const Gravatar = {
 			card_class.push( 'gcard-about' );
 		}
 
-		name = GProfile.get( 'displayName' );
+		var name = GProfile.get( 'displayName' );
 		if ( ! name.length ) {
 			name = GProfile.get( 'preferredUsername' );
 		}
+
+		var social_links = Gravatar.build_social_links( services );
+		var has_about = !! description.length || !! social_links;
+
 		var card =
 			'<div id="profile-' +
 			hash +
@@ -456,30 +559,31 @@ const Gravatar = {
 			GProfile.get( 'thumbnailUrl' ) +
 			'?s=100&r=pg&d=mm" width="100" height="100" /> \
 								</a> \
-							</div> \
-							<div class="grav-info"> \
-								<h4><a href="' +
+								<div class="grav-info"> \
+									<h4><a href="' +
 			GProfile.get( 'profileUrl' ) +
 			'" target="_blank">' +
 			name +
 			'</a></h4> \
-								<p class="grav-loc">' +
+									<p class="grav-loc">' +
 			GProfile.get( 'currentLocation' ) +
 			'</p> \
-								<p class="grav-about">' +
-			description +
-			'</p> \
-								<div class="grav-view-complete-button"> \
-									<a href="' +
-			GProfile.get( 'profileUrl' ) +
-			'" target="_blank" class="grav-view-complete">View Complete Profile</a> \
 								</div> \
-								<p class="grav-disable"><a href="#" onclick="Gravatar.disable(); return false">Turn off hovercards</a></p> \
 							</div> \
-							<div style="clear:both"></div> \
+							' +
+			( has_about
+				? ' \
+								<div> \
+									' +
+				  ( description ? '<p class="grav-about">' + description + '</p>' : '' ) +
+				  '\
+								' +
+				  social_links +
+				  '\
+								</div>'
+				: '' ) +
+			'\
 						</div> \
-						<div class="grav-cardarrow"></div> \
-						<div class="grav-tag"><a href="http://gravatar.com/" title="Powered by Gravatar.com" target="_blank">&nbsp;</a></div> \
 					</div>'; // .grav-inner, .gcard
 
 		// console.log( 'Finished building card for ' + dom_id );
@@ -487,28 +591,6 @@ const Gravatar = {
 		var inner = document.querySelector( '#profile-' + hash + ' .grav-inner' );
 		for ( var i = 0; i < card_class.length; i++ ) {
 			inner.classList.add( card_class[ i ] );
-		}
-
-		// Custom Background
-		this.has_bg = false;
-		var bg = GProfile.get( 'profileBackground' );
-		if ( getSize( bg ) ) {
-			this.has_bg = true;
-			var profile = document.querySelector( '#profile-' + hash );
-			profile.style.padding = '8px 0';
-			if ( bg.color ) {
-				profile.style.backgroundColor = bg.color;
-			}
-			if ( bg.url ) {
-				profile.style.backgroundImage = 'url(' + bg.url + ')';
-			}
-			if ( bg.position ) {
-				profile.style.backgroundPosition = bg.position;
-			}
-			if ( bg.repeat ) {
-				profile.style.backgroundRepeat = bg.repeat;
-			}
-			document.querySelector( '#profile-' + hash + ' .grav-tag' ).style.top = '8px';
 		}
 
 		// Resize card based on what's visible
@@ -560,21 +642,6 @@ const Gravatar = {
 				return Gravatar.stat( 'to_profile', e );
 			}
 		);
-		addListeners( '#profile-' + hash + ' .grav-tag a', 'click', function ( e ) {
-			if ( 3 == e.which || 2 == e.button || e.altKey || e.metaKey || e.ctrlKey ) {
-				e.preventDefault();
-				e.stopImmediatePropagation();
-				Gravatar.stat( 'egg' );
-				return Gravatar.whee();
-			}
-			return Gravatar.stat( 'to_gravatar', e );
-		} );
-		addListeners( '#profile-' + hash + ' .grav-tag a', 'contextmenu', function ( e ) {
-			e.preventDefault();
-			e.stopImmediatePropagation();
-			Gravatar.stat( 'egg' );
-			return Gravatar.whee();
-		} );
 
 		addListeners( '#profile-' + hash + ' a.grav-edit-profile', 'click', function ( e ) {
 			return Gravatar.stat( 'click_edit_profile', e );
@@ -611,15 +678,6 @@ const Gravatar = {
 		}
 		this.active_grav_clone.classList.add( 'grav-tilt' );
 		this.active_grav_clone.style.borderBottomWidth = this.active_grav.getBoundingClientRect().height / 5 + 'px';
-
-		var appendix = tempContainer.firstChild;
-		appendix.appendChild( this.active_grav_clone );
-		appendix.classList.add( 'grav-tilt-parent' );
-		appendix.style.top = top + 'px';
-		appendix.style.left = left + 'px';
-
-		/* Append the clone on top of the original */
-		document.body.appendChild( appendix );
 		this.active_grav_clone.classList.remove( 'grav-hashed' );
 	},
 
@@ -832,7 +890,7 @@ const Gravatar = {
 		}
 
 		// Make sure it's not already queued
-		for ( a = 0; a < this.notify_stack[ key ].length; a++ ) {
+		for ( let a = 0; a < this.notify_stack[ key ].length; a++ ) {
 			if ( callback == this.notify_stack[ key ][ a ] ) {
 				// console.log( 'already' );
 				return;
@@ -857,7 +915,7 @@ const Gravatar = {
 
 		// Reverse it so that notifications are sent in the order they were queued
 		// console.log( 'notifying key: ' + key + ' (with ' + this.notify_stack[ key ].length + ' listeners)' );
-		for ( a = 0; a < this.notify_stack[ key ].length; a++ ) {
+		for ( let a = 0; a < this.notify_stack[ key ].length; a++ ) {
 			if ( false == this.notify_stack[ key ][ a ] || 'undefined' == typeof this.notify_stack[ key ][ a ] ) {
 				continue;
 			}
@@ -872,7 +930,7 @@ const Gravatar = {
 		var src = ( el && el.getAttribute( 'src' ) ) || '';
 
 		// Get hash from img src
-		hash = /gravatar.com\/avatar\/([0-9a-f]{32})/.exec( src );
+		let hash = /gravatar.com\/avatar\/([0-9a-f]{32})/.exec( src );
 		if ( null != hash && 'object' == typeof hash && 2 == hash.length ) {
 			hash = hash[ 1 ];
 		} else {
@@ -938,10 +996,10 @@ const Gravatar = {
 
 		url = url.replace( /^(https?\:)?\/\//, '' ); // strip out the protocol and/or relative slashes
 		url = window.location.protocol + '//' + url; // hardcode the protocol for IE, which doesn't like relative protocol urls for stylesheets
-		new_css =
+		let new_css =
 			"<link rel='stylesheet' type='text/css' id='gravatar-card-css' href='" +
 			url +
-			'/dist/css/hovercard.min.css?' +
+			'/dist/css/hovercard-v2.min.css?' +
 			bust +
 			"' />";
 

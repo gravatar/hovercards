@@ -1,4 +1,4 @@
 // @ts-nocheck
-import Gravatar from '../module';
+import Gravatar from './hovercard';
 
 window.Gravatar = Gravatar;
