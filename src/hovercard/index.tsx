@@ -1,12 +1,6 @@
 // @ts-nocheck
 import hex_md5 from './md5';
 
-// Unminified source for `gprofiles.js`: profile hovercard implementation.
-//
-// If you make changes to this file, please generate a new minified `gprofiles.js`.
-// Last minified using UglifyJS version 3.8.0
-// Command line: npx uglify-js@3.8.0 -m -o gprofiles.js gprofiles.dev.js
-//
 // NOTE: This file intentionally does not make use of any polyfills or libraries,
 // including jQuery. Please keep all code as vanilla ES5, and namespace everything
 // under the `Gravatar` and `GProfile` globals below.
@@ -17,7 +11,7 @@ if ( 'undefined' == typeof console ) {
 	console = { log: function ( str ) {}, debug: function ( str ) {} };
 }
 
-var Gravatar = {
+const Gravatar = {
 	/* All loaded profiles, keyed off ghash */
 	profile_stack: {},
 
