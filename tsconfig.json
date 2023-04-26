@@ -26,10 +26,10 @@
 		"moduleResolution": "node",
 		"forceConsistentCasingInFileNames": true,
 
-		"declarationDir": "dist/types",
-		"outDir": "dist/esm",
-		"rootDir": "module",
+		"declarationDir": "build/types",
+		"outDir": "build/esm",
+		"rootDir": "src",
 		"types": []
 	},
-	"include": [ "module" ]
+	"include": [ "src" ]
 }

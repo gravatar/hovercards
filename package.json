@@ -1,35 +1,31 @@
 {
 	"name": "gravatar-hovercard",
 	"version": "1.0.0",
-	"main": "src/index.tsx",
+	"main": "build/cjs/hovercard/index.js",
+	"module": "build/esm/hovercard/index.js",
+	"types": "build/types",
 	"license": "MIT",
 	"scripts": {
-		"start": "tsc --build ./tsconfig.json --watch",
+		"start": "webpack serve --mode development ",
 		"build": "tsc --build ./tsconfig.json ./tsconfig-cjs.json && yarn build:global",
-		"build:global": "wp-scripts build",
-		"check-engines": "wp-scripts check-engines",
-		"check-licenses": "wp-scripts check-licenses",
-		"format": "wp-scripts format",
-		"lint:css": "wp-scripts lint-style",
-		"lint:js": "wp-scripts lint-js",
-		"lint:md:docs": "wp-scripts lint-md-docs",
-		"lint:pkg-json": "wp-scripts lint-pkg-json",
-		"packages-update": "wp-scripts packages-update",
-		"plugin-zip": "wp-scripts plugin-zip",
+		"build:global": "webpack --mode production && DEV_BUILD=1 webpack --mode production",
 		"start:sync": "onchange src/**/* -- yarn build:sync",
-		"build:sync": "yarn build && rsync -az --delete build vendor gravatar:public_html/",
-		"test:e2e": "wp-scripts test-e2e",
-		"test:unit": "wp-scripts test-unit-js"
+		"build:sync": "yarn build && rsync -az --delete dist/*.js gravatar:public_html/js/gprofiles/v2/",
+		"clean": "rm -rf dist build"
 	},
 	"dependencies": {
 		"@wordpress/prettier-config": "^2.14.0",
 		"@wordpress/scripts": "^26.2.0",
-		"eslint": "^8.38.0",
+		"eslint": "^8.39.0",
 		"eslint-config-wpcalypso": "^6.1.0",
 		"eslint-plugin-import": "^2.27.5",
 		"eslint-plugin-react": "^7.32.2",
 		"eslint-plugin-wpcalypso": "^7.0.0",
-		"typescript": "^5.0.4",
-		"uglify-js": "^3.17.4"
+		"typescript": "^5.0.4"
+	},
+	"devDependencies": {
+		"html-webpack-plugin": "^5.5.1",
+		"ts-loader": "^9.4.2",
+		"webpack-dev-server": "^4.13.3"
 	}
 }
