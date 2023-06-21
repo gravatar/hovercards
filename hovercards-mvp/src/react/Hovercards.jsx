@@ -4,7 +4,7 @@ import { useRef } from 'react';
 
 import useHovercards from "./useHovercards";
 
-export default function Hovercards( { children, container, loadingComponent, placement, onFetchProfileFinish } ) {
+export default function Hovercards( { children, container, loadingMask, placement, onFetchProfileFinish } ) {
   const containerRef = useRef();
   const { isLoading } = useHovercards( container || containerRef.current, { placement, onFetchProfileFinish } );
 
@@ -12,5 +12,10 @@ export default function Hovercards( { children, container, loadingComponent, pla
     return null;
   }
 
-  return isLoading ? loadingComponent : ( <div ref={ containerRef }>{ children }</div> );
+  return (
+    <div ref={ containerRef }>
+      { isLoading && loadingMask }
+      { children }
+    </div>
+  );
 }
