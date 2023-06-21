@@ -6,6 +6,7 @@ import fetchProfileWithCache from './profileFetcher';
 
 type Options = Partial< {
   placement: Placement;
+  // Not sure if we need this feature, it's useful to create a loading state. Probably a low priority feature.
   onFetchProfileFinish: ( profileData: ProfileData ) => void;
 } >;
 
