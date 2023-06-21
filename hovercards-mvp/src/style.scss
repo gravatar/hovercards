@@ -1,0 +1,64 @@
+.gravatar-hovercard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  padding-left: 10px;
+
+  .gravatar-hovercard__inner {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    min-width: 340px;
+    max-width: 400px;
+    gap: 15px;
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px 0px rgba(66, 68, 90, 0.2);
+  }
+
+  .gravatar-hovercard__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .gravatar-hovercard__avatar {
+    position: static;
+    border-radius: 50%;
+  }
+
+  .gravatar-hovercard__name-link {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+
+    &,
+    &:hover {
+      color: #000;
+    }
+  }
+
+  .gravatar-hovercard__name {
+    margin: 0;
+  }
+
+  .gravatar-hovercard__about {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .gravatar-hovercard__accounts {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .gravatar-hovercard__account-img {
+    position: static;
+    width: 20px;
+    height: 20px;
+  }
+}
