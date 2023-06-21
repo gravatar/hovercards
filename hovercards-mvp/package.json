@@ -1,0 +1,21 @@
+{
+  "name": "floating-hovercards",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "react": "^18.2.0",
+    "sass": "^1.63.4",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.4.1"
+  },
+  "peerDependencies": {
+    "react": ">= 16.8.0"
+  }
+}
