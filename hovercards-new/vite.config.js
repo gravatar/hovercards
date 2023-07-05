@@ -4,7 +4,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        'vanilla-js': 'src/vanilla-js.ts',
+        'wpcom': 'src/wpcom.ts',
         style: 'src/style.scss',
       },
       output: {
