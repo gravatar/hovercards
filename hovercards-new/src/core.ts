@@ -194,10 +194,10 @@ export default class Hovercards {
 			}
 
 			const hovercard = Hovercards.createHovercard( data, this.#additionalClass );
-			// To ensure the hovercard is on top of other elements
+			// Place the hovercard at the top-level of the document to avoid being clipped by overflow
 			document.body.appendChild( hovercard );
 
-			// Don't hide hovercard when mouse is over it
+			// Don't hide the hovercard when mouse is over it
 			hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutId ) );
 			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
 
