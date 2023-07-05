@@ -117,7 +117,7 @@ export default class Hovercards {
 	}
 
 	// It can also be used to render an independent hovercard
-	static renderHovercard( data: ProfileData, additionalClass?: string ) {
+	static createHovercard( data: ProfileData, additionalClass?: string ) {
 		const {
 			hash,
 			thumbnailUrl,
@@ -193,7 +193,7 @@ export default class Hovercards {
 				// TODO: Event and log
 			}
 
-			const hovercard = Hovercards.renderHovercard( profileData, this.#additionalClass );
+			const hovercard = Hovercards.createHovercard( profileData, this.#additionalClass );
 			// To ensure the hovercard is on top of other elements
 			document.body.appendChild( hovercard );
 
