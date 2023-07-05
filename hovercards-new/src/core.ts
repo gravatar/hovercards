@@ -194,7 +194,7 @@ export default class Hovercards {
 			}
 
 			const hovercard = Hovercards.createHovercard( data, this.#additionalClass );
-			// Place the hovercard at the top-level of the document to avoid being clipped by overflow
+			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
 			document.body.appendChild( hovercard );
 
 			// Don't hide the hovercard when mouse is over it
