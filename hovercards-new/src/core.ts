@@ -178,13 +178,13 @@ export default class Hovercards {
 				return;
 			}
 
-			let profileData: ProfileData;
+			let data: ProfileData;
 
 			try {
-				profileData = await fetchProfileWithCache( hash );
+				data = await fetchProfileWithCache( hash );
 
-				if ( profileData instanceof Error ) {
-					throw profileData;
+				if ( data instanceof Error ) {
+					throw data;
 				}
 			} catch ( error ) {
 				// TODO: Log the error
@@ -193,7 +193,7 @@ export default class Hovercards {
 				// TODO: Event and log
 			}
 
-			const hovercard = Hovercards.createHovercard( profileData, this.#additionalClass );
+			const hovercard = Hovercards.createHovercard( data, this.#additionalClass );
 			// To ensure the hovercard is on top of other elements
 			document.body.appendChild( hovercard );
 
