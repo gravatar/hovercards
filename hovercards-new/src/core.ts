@@ -13,9 +13,9 @@ type OnHovercardHidden = ( hash: string ) => void;
 // TODO: More events for stats
 type Options = Partial< {
 	placement: Placement;
+	autoPlacement: boolean;
 	offset: number;
 	additionalClass: string;
-	autoPlacement: boolean;
 	onHandleGravatarImg: OnHandleGravatarImg;
 	onHovercardShown: OnHovercardShown;
 	onHovercardHidden: OnHovercardHidden;
@@ -53,9 +53,9 @@ const socialLinksMap: Record< string, { imgUrl: string; title: string } > = {
 export default class Hovercards {
 	// Options
 	#placement: Placement;
+	#autoPlacement: boolean;
 	#offset: number;
 	#additionalClass: string;
-	#autoPlacement: boolean;
 	#onHandleGravatarImg: OnHandleGravatarImg;
 	#onHovercardShown: OnHovercardShown;
 	#onHovercardHidden: OnHovercardHidden;
@@ -68,17 +68,17 @@ export default class Hovercards {
 
 	constructor( {
 		placement = 'right',
+		autoPlacement = true,
 		offset = 10,
 		additionalClass = '',
-		autoPlacement = true,
 		onHandleGravatarImg = ( img ) => img,
 		onHovercardShown = () => {},
 		onHovercardHidden = () => {},
 	}: Options = {} ) {
 		this.#placement = placement;
+		this.#autoPlacement = autoPlacement;
 		this.#offset = offset;
 		this.#additionalClass = additionalClass;
-		this.#autoPlacement = autoPlacement;
 		this.#onHandleGravatarImg = onHandleGravatarImg;
 		this.#onHovercardShown = onHovercardShown;
 		this.#onHovercardHidden = onHovercardHidden;
