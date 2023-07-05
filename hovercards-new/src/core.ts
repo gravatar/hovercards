@@ -203,10 +203,7 @@ export default class Hovercards {
 
 			const { x, y } = await computePosition( img, hovercard, {
 				placement: this.#placement,
-				middleware: [
-					offset( this.#offset ),
-					this.#autoPlacement && flip(),
-				],
+				middleware: [ offset( this.#offset ), this.#autoPlacement && flip() ],
 			} );
 
 			hovercard.style.left = `${ x }px`;
