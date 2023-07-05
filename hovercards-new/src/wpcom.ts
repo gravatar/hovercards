@@ -18,6 +18,7 @@ window.Gravatar = {
 				// To compatible with the WPGroHo.js of Jetpack
 				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
 			},
+			// TODO: Stats
 		} );
 		hovercards.setTarget( document.querySelector( container ) as HTMLElement, `${ ignore } img[src*="gravatar.com/"]` );
 
