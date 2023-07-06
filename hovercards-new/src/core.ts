@@ -16,7 +16,6 @@ type OnHovercardShown = ( data: ProfileData ) => void;
 
 type OnHovercardHidden = ( data: ProfileData ) => void;
 
-// TODO: More events for stats
 type Options = Partial< {
 	placement: Placement;
 	autoPlacement: boolean;
@@ -31,7 +30,6 @@ type Options = Partial< {
 } >;
 
 // TODO: Move it to the user profile API?!
-// TODO: Add Gravatar icon and update icons
 const socialLinksMap: Record< string, { imgUrl: string; title: string } > = {
 	gravatar: {
 		imgUrl: 'https://secure.gravatar.com/icons/gravatar.svg',
