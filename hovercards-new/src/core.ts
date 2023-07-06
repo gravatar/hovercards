@@ -227,14 +227,13 @@ export default class Hovercards {
 	#handleMouseEnter( e: MouseEvent ) {
 		e.stopImmediatePropagation();
 
-		// To avoid multiple hovercards are shown at the same time
-		clearInterval( this.#showHovercardTimeoutId );
 		this.#showHovercard( e.target as HTMLImageElement );
 	}
 
 	#handleMouseLeave( e: MouseEvent ) {
 		e.stopImmediatePropagation();
 
+		clearInterval( this.#showHovercardTimeoutId );
 		this.#hideHovercard( ( e.target as HTMLImageElement ).dataset.gravatarHash || '' );
 	}
 
