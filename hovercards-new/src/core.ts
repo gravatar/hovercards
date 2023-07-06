@@ -1,33 +1,35 @@
 import type { Placement } from '@floating-ui/dom';
 import { computePosition, offset, flip } from '@floating-ui/dom';
 
-import type { ProfileData } from './profile-fetcher';
-import fetchProfileWithCache, { cachedProfiles } from './profile-fetcher';
+// TODO: Refine the type
+type ProfileData = Record< string, any >;
 
-type OnHandleGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
+type ProcessGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
 type OnFetchProfileStart = () => void;
 
-type OnFetchProfileSuccess = ( data: ProfileData ) => void;
+type OnFetchProfileSuccess = ( profileData: ProfileData ) => void;
 
 type OnFetchProfilFailure = ( error: Error ) => void;
 
-type OnHovercardShown = ( data: ProfileData ) => void;
+type OnHovercardShown = ( profileData: ProfileData, hovercard: HTMLDivElement  ) => void;
 
-type OnHovercardHidden = ( data: ProfileData ) => void;
+type OnHovercardHidden = ( profileData: ProfileData, hovercard: HTMLDivElement ) => void;
 
 type Options = Partial< {
 	placement: Placement;
 	autoPlacement: boolean;
 	offset: number;
 	additionalClass: string;
-	onHandleGravatarImg: OnHandleGravatarImg;
+	processGravatarImg: ProcessGravatarImg;
 	onFetchProfileStart: OnFetchProfileStart;
 	onFetchProfileSuccess: OnFetchProfileSuccess;
 	onFetchProfilFailure: OnFetchProfilFailure;
 	onHovercardShown: OnHovercardShown;
 	onHovercardHidden: OnHovercardHidden;
 } >;
+
+const BASE_API_URL = 'https://secure.gravatar.com';
 
 // TODO: Move it to the user profile API?!
 const socialLinksMap: Record< string, { imgUrl: string; title: string } > = {
@@ -63,7 +65,7 @@ export default class Hovercards {
 	#autoPlacement: boolean;
 	#offset: number;
 	#additionalClass: string;
-	#onHandleGravatarImg: OnHandleGravatarImg;
+	#processGravatarImg: ProcessGravatarImg;
 	#onFetchProfileStart: OnFetchProfileStart;
 	#onFetchProfileSuccess: OnFetchProfileSuccess;
 	#onFetchProfilFailure: OnFetchProfilFailure;
@@ -75,13 +77,14 @@ export default class Hovercards {
 	#gravatarImages: HTMLImageElement[] = [];
 	#showHovercardTimeoutId: ReturnType< typeof setTimeout > | undefined;
 	#hideHovercardTimeoutId: ReturnType< typeof setTimeout > | undefined;
+	#cachedProfiles = new Map< string, ProfileData >();
 
 	constructor( {
 		placement = 'right',
 		autoPlacement = true,
 		offset = 10,
 		additionalClass = '',
-		onHandleGravatarImg = ( img ) => img,
+		processGravatarImg = ( img ) => img,
 		onFetchProfileStart = () => {},
 		onFetchProfileSuccess = () => {},
 		onFetchProfilFailure = () => {},
@@ -92,7 +95,7 @@ export default class Hovercards {
 		this.#autoPlacement = autoPlacement;
 		this.#offset = offset;
 		this.#additionalClass = additionalClass;
-		this.#onHandleGravatarImg = onHandleGravatarImg;
+		this.#processGravatarImg = processGravatarImg;
 		this.#onFetchProfileStart = onFetchProfileStart;
 		this.#onFetchProfileSuccess = onFetchProfileSuccess;
 		this.#onFetchProfilFailure = onFetchProfilFailure;
@@ -105,7 +108,11 @@ export default class Hovercards {
 		return hostname.endsWith( 'gravatar.com' ) ? pathname.split( '/' )[ 2 ] : '';
 	}
 
-	#getGravatarImages( target: HTMLElement, ignoreSelector: string ) {
+	getGravatarImages() {
+		return this.#gravatarImages;
+	}
+
+	#queryGravatarImages( target: HTMLElement, ignoreSelector: string ) {
 		let images: HTMLImageElement[] = [];
 		const ignoreImages: HTMLImageElement[] = Array.from( document.querySelectorAll( ignoreSelector ) );
 
@@ -125,7 +132,7 @@ export default class Hovercards {
 
 				img.setAttribute( 'data-gravatar-hash', hash );
 
-				return this.#onHandleGravatarImg( img );
+				return this.#processGravatarImg( img );
 			} )
 			.filter( Boolean ) as HTMLImageElement[];
 
@@ -133,7 +140,7 @@ export default class Hovercards {
 	}
 
 	// It can also be used to render an independent hovercard
-	static createHovercard( data: ProfileData, additionalClass?: string ) {
+	static createHovercard( profileData: ProfileData, additionalClass?: string ) {
 		const {
 			hash,
 			thumbnailUrl,
@@ -142,7 +149,7 @@ export default class Hovercards {
 			currentLocation,
 			aboutMe,
 			accounts = [],
-		} = data;
+		} = profileData;
 
 		const hovercard = document.createElement( 'div' );
 		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
@@ -157,7 +164,7 @@ export default class Hovercards {
 
 					return socialLink
 						? `
-              <a class="gravatar-hovercard__social-link" href="${ url }">
+              <a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }" data-service-name=${ shortname }">
                 <img class="gravatar-hovercard__social-icon" src="${ socialLink.imgUrl }" width="32px" height="32px" alt="${ socialLink.title }" />
               </a>
             `
@@ -167,19 +174,17 @@ export default class Hovercards {
 			.join( '' );
 
 		hovercard.innerHTML = `
-      <div class="gravatar-hovercard__header">
-        <a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
-          <img class="gravatar-hovercard__avatar" src="${ thumbnailUrl }" width="56px" height="56px" alt="${ displayName }" />
-        </a>
-        <a class="gravatar-hovercard__info-link" href="${ profileUrl }" target="_blank">
-          <h4 class="gravatar-hovercard__name">${ displayName }</h4>
-          ${ currentLocation ? `<p class="gravatar-hovercard__location">${ currentLocation }</p>` : '' }
-        </a>
-      </div>
-      ${ aboutMe ? `<p class="gravatar-hovercard__body">${ aboutMe }</p>` : '' }
-      <div class="gravatar-hovercard__footer">
+			<a class="gravatar-hovercard__user-link" href="${ profileUrl }" target="_blank">
+				<img class="gravatar-hovercard__avatar" src="${ thumbnailUrl }" width="56px" height="56px" alt="${ displayName }" />
+				<div class="gravatar-hovercard__name-location-wrapper">
+					<h4 class="gravatar-hovercard__name">${ displayName }</h4>
+					${ currentLocation ? `<p class="gravatar-hovercard__location">${ currentLocation }</p>` : '' }
+				</div>
+			</a>
+      ${ aboutMe ? `<p class="gravatar-hovercard__about">${ aboutMe }</p>` : '' }
+      <div class="gravatar-hovercard__social-view-profile-wrapper">
         <div class="gravatar-hovercard__social-links">${ renderSocialLinks }</div>
-        <a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>
+        <a class="gravatar-hovercard__view-profile-link" href="${ profileUrl }" target="_blank">View profile</a>
       </div>
     `;
 
@@ -194,24 +199,32 @@ export default class Hovercards {
 				return;
 			}
 
-			let data: ProfileData;
+			let profileData = this.#cachedProfiles.get( hash );
 
-			try {
-				this.#onFetchProfileStart();
+			if ( ! profileData ) {
+				try {
+					this.#onFetchProfileStart();
+	
+					const res = await fetch( `${ BASE_API_URL }/${ hash }.json` );
+					const data = await res.json();
+	
+					// API error handling
+					if ( ! data?.entry ) {
+						// The data will be an error message
+						throw new Error( data );
+					}
+	
+					profileData = data.entry[ 0 ] as ProfileData;
+					this.#cachedProfiles.set( hash, profileData );
 
-				data = await fetchProfileWithCache( hash );
-
-				if ( data instanceof Error ) {
-					throw data;
+					this.#onFetchProfileSuccess( profileData );
+				} catch ( error ) {
+					this.#onFetchProfilFailure( error as Error );
+					return;
 				}
-
-				this.#onFetchProfileSuccess( data );
-			} catch ( error ) {
-				this.#onFetchProfilFailure( error as Error );
-				return;
 			}
 
-			const hovercard = Hovercards.createHovercard( data, this.#additionalClass );
+			const hovercard = Hovercards.createHovercard( profileData, this.#additionalClass );
 			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
 			document.body.appendChild( hovercard );
 
@@ -227,7 +240,7 @@ export default class Hovercards {
 			hovercard.style.left = `${ x }px`;
 			hovercard.style.top = `${ y }px`;
 
-			this.#onHovercardShown( data );
+			this.#onHovercardShown( profileData, hovercard );
 		}, 500 );
 	}
 
@@ -237,7 +250,7 @@ export default class Hovercards {
 
 			if ( hovercard ) {
 				hovercard.remove();
-				this.#onHovercardHidden( cachedProfiles.get( hash )! );
+				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
 			}			
 		}, 300 );
 	}
@@ -262,7 +275,7 @@ export default class Hovercards {
 
 		this.unsetTarget();
 
-		const images = this.#getGravatarImages( target, ignoreSelector );
+		const images = this.#queryGravatarImages( target, ignoreSelector );
 
 		images.forEach( ( img ) => {
 			img.addEventListener( 'mouseenter', this.#handleMouseEnter.bind( this ) );
