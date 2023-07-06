@@ -78,4 +78,13 @@
   .gravatar-hovercard__social-link {
     display: inline-flex;
   }
+
+  // Override WP theme styles
+  .gravatar-hovercard__view-profile-link {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
