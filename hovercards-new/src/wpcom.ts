@@ -21,6 +21,7 @@ window.Gravatar = {
 				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
 				sendStat( 'show' );
+				
 				( hovercard.querySelector( '.gravatar-hovercard__user-link' ) as HTMLAnchorElement ).onclick = ( e ) => redirectAfterStatSent( 'to_profile', e );
 				( hovercard.querySelector( '.gravatar-hovercard__view-profile-link' ) as HTMLAnchorElement ).onclick = ( e ) => redirectAfterStatSent( 'click_view_profile', e );
 				( hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as NodeListOf< HTMLAnchorElement > ).forEach( ( link ) => {
