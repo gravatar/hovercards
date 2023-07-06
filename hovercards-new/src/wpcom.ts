@@ -1,8 +1,10 @@
 import Hovercards from './core';
 
 window.Gravatar = {
+	Hovercards,
+	profile_cb: () => {},
 	init( container = 'body', ignore ) {
-		const hovercards = new Hovercards( {
+		const hovercards = new this.Hovercards( {
 			// Some themes/plugins/widgets are customizing Gravatar images based on these classes, so keep them for compatibility
 			onHandleGravatarImg: ( img ) => {
 				img.classList.add( 'grav-hashed' );
@@ -15,7 +17,7 @@ window.Gravatar = {
 			},
 			onHovercardShown: ( { hash } ) => {
 				// To compatible with the WPGroHo.js of Jetpack
-				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
+				this.profile_cb( hash, `${ this.Hovercards.hovercardIdPrefix }${ hash }` );
 			},
 			// TODO: Stats
 		} );
@@ -25,5 +27,4 @@ window.Gravatar = {
 		const bust = hovercardsScript ? hovercardsScript.getAttribute( 'src' )?.split( '?' )[ 1 ] : '';
 		document.head.insertAdjacentHTML( 'beforeend', `<link rel="stylesheet" id="gravatar-card-css" href="https://0.gravatar.com/dist/css/hovercard.min.css?${ bust }" />` );
 	},
-	profile_cb: () => {},
 };
