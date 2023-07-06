@@ -21,11 +21,11 @@ window.Gravatar = {
 				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
 				sendStat( 'show' );
-				
-				( hovercard.querySelector( '.gravatar-hovercard__user-link' ) as HTMLAnchorElement ).onclick = ( e ) => redirectAfterStatSent( 'to_profile', e );
-				( hovercard.querySelector( '.gravatar-hovercard__view-profile-link' ) as HTMLAnchorElement ).onclick = ( e ) => redirectAfterStatSent( 'click_view_profile', e );
+
+				( hovercard.querySelector( '.gravatar-hovercard__user-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'to_profile', e );
+				( hovercard.querySelector( '.gravatar-hovercard__view-profile-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'click_view_profile', e );
 				( hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as NodeListOf< HTMLAnchorElement > ).forEach( ( link ) => {
-					link.onclick = ( e ) => redirectAfterStatSent( `click_${ link.dataset.serviceName }`, e );
+					link.onclick = ( e ) => sendLinkStat( `click_${ link.dataset.serviceName }`, e );
 				} );
 			},
 			onFetchProfileSuccess: () => sendStat( 'fetch' ),
@@ -53,7 +53,8 @@ function sendStat( name: string, cb = () => {} ) {
 	img.onerror = () => cb();
 };
 
-function redirectAfterStatSent( name: string, e: MouseEvent ) {
+// To send stat and then redirect to the link
+function sendLinkStat( name: string, e: MouseEvent ) {
 	e.preventDefault();
 	const anchor = e.currentTarget as HTMLAnchorElement;
 	sendStat( name, () => window.open( anchor.href, anchor.target || '_self' ) );
