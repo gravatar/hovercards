@@ -1,7 +1,6 @@
 import Hovercards from './core';
 
 window.Gravatar = {
-	profile_cb: () => {},
 	init( container = 'body', ignore ) {
 		const hovercards = new Hovercards( {
 			// Some themes/plugins/widgets are customizing Gravatar images based on these classes, so keep them for compatibility
@@ -26,4 +25,6 @@ window.Gravatar = {
 		const bust = hovercardsScript ? hovercardsScript.getAttribute( 'src' )?.split( '?' )[ 1 ] : '';
 		document.head.insertAdjacentHTML( 'beforeend', `<link rel="stylesheet" id="gravatar-card-css" href="https://0.gravatar.com/dist/css/hovercard.min.css?${ bust }" />` );
 	},
+	profile_cb: () => {},
+	create_hovercard: ( data, additionalClass ) => Hovercards.createHovercard( data, additionalClass ),
 };
