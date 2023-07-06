@@ -6,6 +6,12 @@ import fetchProfileWithCache, { cachedProfiles } from './profile-fetcher';
 
 type OnHandleGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
+type OnFetchProfileStart = () => void;
+
+type OnFetchProfileSuccess = ( data: ProfileData ) => void;
+
+type OnFetchProfilFailure = ( error: Error ) => void;
+
 type OnHovercardShown = ( data: ProfileData ) => void;
 
 type OnHovercardHidden = ( data: ProfileData ) => void;
@@ -17,6 +23,9 @@ type Options = Partial< {
 	offset: number;
 	additionalClass: string;
 	onHandleGravatarImg: OnHandleGravatarImg;
+	onFetchProfileStart: OnFetchProfileStart;
+	onFetchProfileSuccess: OnFetchProfileSuccess;
+	onFetchProfilFailure: OnFetchProfilFailure;
 	onHovercardShown: OnHovercardShown;
 	onHovercardHidden: OnHovercardHidden;
 } >;
@@ -57,6 +66,9 @@ export default class Hovercards {
 	#offset: number;
 	#additionalClass: string;
 	#onHandleGravatarImg: OnHandleGravatarImg;
+	#onFetchProfileStart: OnFetchProfileStart;
+	#onFetchProfileSuccess: OnFetchProfileSuccess;
+	#onFetchProfilFailure: OnFetchProfilFailure;
 	#onHovercardShown: OnHovercardShown;
 	#onHovercardHidden: OnHovercardHidden;
 
@@ -72,6 +84,9 @@ export default class Hovercards {
 		offset = 10,
 		additionalClass = '',
 		onHandleGravatarImg = ( img ) => img,
+		onFetchProfileStart = () => {},
+		onFetchProfileSuccess = () => {},
+		onFetchProfilFailure = () => {},
 		onHovercardShown = () => {},
 		onHovercardHidden = () => {},
 	}: Options = {} ) {
@@ -80,6 +95,9 @@ export default class Hovercards {
 		this.#offset = offset;
 		this.#additionalClass = additionalClass;
 		this.#onHandleGravatarImg = onHandleGravatarImg;
+		this.#onFetchProfileStart = onFetchProfileStart;
+		this.#onFetchProfileSuccess = onFetchProfileSuccess;
+		this.#onFetchProfilFailure = onFetchProfilFailure;
 		this.#onHovercardShown = onHovercardShown;
 		this.#onHovercardHidden = onHovercardHidden;
 	}
@@ -181,16 +199,18 @@ export default class Hovercards {
 			let data: ProfileData;
 
 			try {
+				this.#onFetchProfileStart();
+
 				data = await fetchProfileWithCache( hash );
 
 				if ( data instanceof Error ) {
 					throw data;
 				}
+
+				this.#onFetchProfileSuccess( data );
 			} catch ( error ) {
-				// TODO: Log the error
+				this.#onFetchProfilFailure( error as Error );
 				return;
-			} finally {
-				// TODO: Event and log
 			}
 
 			const hovercard = Hovercards.createHovercard( data, this.#additionalClass );
