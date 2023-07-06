@@ -26,5 +26,4 @@ window.Gravatar = {
 		document.head.insertAdjacentHTML( 'beforeend', `<link rel="stylesheet" id="gravatar-card-css" href="https://0.gravatar.com/dist/css/hovercard.min.css?${ bust }" />` );
 	},
 	profile_cb: () => {},
-	create_hovercard: ( data, additionalClass ) => Hovercards.createHovercard( data, additionalClass ),
 };
