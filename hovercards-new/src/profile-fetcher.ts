@@ -24,7 +24,7 @@ async function fetchProfile( hash: string ): Promise< ProfileData | Error > {
 	}
 }
 
-const cachedProfiles = new Map< string, ProfileData >();
+export const cachedProfiles = new Map< string, ProfileData >();
 
 export default async function fetchProfileWithCache( hash: string ): Promise< ProfileData | Error > {
 	if ( cachedProfiles.has( hash ) ) {

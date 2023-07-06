@@ -2,13 +2,13 @@ import type { Placement } from '@floating-ui/dom';
 import { computePosition, offset, flip } from '@floating-ui/dom';
 
 import type { ProfileData } from './profile-fetcher';
-import fetchProfileWithCache from './profile-fetcher';
+import fetchProfileWithCache, { cachedProfiles } from './profile-fetcher';
 
 type OnHandleGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
 type OnHovercardShown = ( data: ProfileData ) => void;
 
-type OnHovercardHidden = ( hash: string ) => void;
+type OnHovercardHidden = ( data: ProfileData ) => void;
 
 // TODO: More events for stats
 type Options = Partial< {
@@ -215,9 +215,12 @@ export default class Hovercards {
 
 	#hideHovercard( hash: string ) {
 		this.#hideHovercardTimeoutId = setTimeout( () => {
-			document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` )?.remove();
+			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
-			this.#onHovercardHidden( hash );
+			if ( hovercard ) {
+				hovercard.remove();
+				this.#onHovercardHidden( cachedProfiles.get( hash )! );
+			}			
 		}, 300 );
 	}
 
