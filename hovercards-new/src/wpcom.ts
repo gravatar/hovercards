@@ -37,10 +37,11 @@ window.Gravatar = {
 			onFetchProfilFailure: () => sendStat( 'profile_404' ),
 		} );
 
-		hovercards.setTarget( document.querySelector( container ) as HTMLElement, `${ ignore } img[src*="gravatar.com/"]` );
-
-		hovercards.getGravatarImages().forEach( ( img ) => {
-			img.onmouseover = () => sendStat( 'hover' );
+		hovercards.setTarget( document.querySelector( container ) as HTMLElement, {
+			ignoreSelector: `${ ignore } img[src*="gravatar.com/"]`,
+			onGravatarImagesQueried: ( images ) => images.forEach( ( img ) => {
+				img.onmouseover = () => sendStat( 'hover' );
+			} ),
 		} );
 
 		// Loading hovercards CSS

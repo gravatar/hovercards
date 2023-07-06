@@ -16,7 +16,7 @@ type OnHovercardShown = ( profileData: ProfileData, hovercard: HTMLDivElement  )
 
 type OnHovercardHidden = ( profileData: ProfileData, hovercard: HTMLDivElement ) => void;
 
-type Options = Partial< {
+type HovercardsOptions = Partial< {
 	placement: Placement;
 	autoPlacement: boolean;
 	offset: number;
@@ -27,6 +27,11 @@ type Options = Partial< {
 	onFetchProfilFailure: OnFetchProfilFailure;
 	onHovercardShown: OnHovercardShown;
 	onHovercardHidden: OnHovercardHidden;
+} >;
+
+type SetTargetOptions = Partial< {
+	ignoreSelector: string;
+	onGravatarImagesQueried: ( images: HTMLImageElement[] ) => void;
 } >;
 
 const BASE_API_URL = 'https://secure.gravatar.com';
@@ -90,7 +95,7 @@ export default class Hovercards {
 		onFetchProfilFailure = () => {},
 		onHovercardShown = () => {},
 		onHovercardHidden = () => {},
-	}: Options = {} ) {
+	}: HovercardsOptions = {} ) {
 		this.#placement = placement;
 		this.#autoPlacement = autoPlacement;
 		this.#offset = offset;
@@ -106,10 +111,6 @@ export default class Hovercards {
 	#getHash( url: string ) {
 		const { hostname, pathname } = new URL( url );
 		return hostname.endsWith( 'gravatar.com' ) ? pathname.split( '/' )[ 2 ] : '';
-	}
-
-	getGravatarImages() {
-		return this.#gravatarImages;
 	}
 
 	#queryGravatarImages( target: HTMLElement, ignoreSelector: string ) {
@@ -246,11 +247,11 @@ export default class Hovercards {
 
 	#hideHovercard( hash: string ) {
 		this.#hideHovercardTimeoutId = setTimeout( () => {
-			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
+			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) as HTMLDivElement;
 
 			if ( hovercard ) {
 				hovercard.remove();
-				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
+				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard );
 			}			
 		}, 300 );
 	}
@@ -268,7 +269,10 @@ export default class Hovercards {
 		this.#hideHovercard( ( e.target as HTMLImageElement ).dataset.gravatarHash || '' );
 	}
 
-	setTarget( target: HTMLElement, ignoreSelector = '' ) {
+	setTarget(
+		target: HTMLElement,
+		{ ignoreSelector = '', onGravatarImagesQueried = () => {} }: SetTargetOptions = {}
+	) {
 		if ( ! target ) {
 			return;
 		}
@@ -281,6 +285,8 @@ export default class Hovercards {
 			img.addEventListener( 'mouseenter', this.#handleMouseEnter.bind( this ) );
 			img.addEventListener( 'mouseleave', this.#handleMouseLeave.bind( this ) );
 		} );
+
+		onGravatarImagesQueried( this.#gravatarImages );
 	}
 
 	// To remove all event listeners when React component is unmounted
