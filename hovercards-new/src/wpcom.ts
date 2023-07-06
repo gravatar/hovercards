@@ -14,7 +14,7 @@ window.Gravatar = {
 
 				return img;
 			},
-			onHovercardShown: ( hash ) => {
+			onHovercardShown: ( { hash } ) => {
 				// To compatible with the WPGroHo.js of Jetpack
 				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
 			},

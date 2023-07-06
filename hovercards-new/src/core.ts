@@ -6,7 +6,7 @@ import fetchProfileWithCache from './profile-fetcher';
 
 type OnHandleGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
-type OnHovercardShown = ( hash: string ) => void;
+type OnHovercardShown = ( data: ProfileData ) => void;
 
 type OnHovercardHidden = ( hash: string ) => void;
 
@@ -209,7 +209,7 @@ export default class Hovercards {
 			hovercard.style.left = `${ x }px`;
 			hovercard.style.top = `${ y }px`;
 
-			this.#onHovercardShown( hash );
+			this.#onHovercardShown( data );
 		}, 500 );
 	}
 
