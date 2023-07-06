@@ -247,11 +247,11 @@ export default class Hovercards {
 
 	#hideHovercard( hash: string ) {
 		this.#hideHovercardTimeoutId = setTimeout( () => {
-			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) as HTMLDivElement;
+			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
 			if ( hovercard ) {
 				hovercard.remove();
-				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard );
+				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
 			}			
 		}, 300 );
 	}
