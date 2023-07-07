@@ -231,8 +231,6 @@ export default class Hovercards {
 			hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutId ) );
 			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
 
-			this.#placement = 'left-start';
-
 			const { x, y } = computePosition( img, hovercard, {
 				placement: this.#placement,
 				offset: this.#offset,
