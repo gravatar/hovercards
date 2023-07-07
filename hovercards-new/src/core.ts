@@ -1,5 +1,5 @@
-import type { Placement } from '@floating-ui/dom';
-import { computePosition, offset, flip } from '@floating-ui/dom';
+import type { Placement } from './compute-position';
+import computePosition from './compute-position';
 
 // TODO: Refine the type
 type ProfileData = Record< string, any >;
@@ -18,7 +18,7 @@ type OnHovercardHidden = ( profileData: ProfileData, hovercard: HTMLDivElement )
 
 type Options = Partial< {
 	placement: Placement;
-	autoPlacement: boolean;
+	autoFlip: boolean;
 	offset: number;
 	additionalClass: string;
 	onQueryGravatarImg: OnQueryGravatarImg;
@@ -62,7 +62,7 @@ const socialLinksMap: Record< string, { imgUrl: string; title: string } > = {
 export default class Hovercards {
 	// Options
 	#placement: Placement;
-	#autoPlacement: boolean;
+	#autoFlip: boolean;
 	#offset: number;
 	#additionalClass: string;
 	#onQueryGravatarImg: OnQueryGravatarImg;
@@ -81,7 +81,7 @@ export default class Hovercards {
 
 	constructor( {
 		placement = 'right',
-		autoPlacement = true,
+		autoFlip = true,
 		offset = 10,
 		additionalClass = '',
 		onQueryGravatarImg = ( img ) => img,
@@ -92,7 +92,7 @@ export default class Hovercards {
 		onHovercardHidden = () => {},
 	}: Options = {} ) {
 		this.#placement = placement;
-		this.#autoPlacement = autoPlacement;
+		this.#autoFlip = autoFlip;
 		this.#offset = offset;
 		this.#additionalClass = additionalClass;
 		this.#onQueryGravatarImg = onQueryGravatarImg;
@@ -118,8 +118,7 @@ export default class Hovercards {
 			images = Array.from( target.querySelectorAll( 'img[src*="gravatar.com/"]' ) );
 		}
 
-		this.#gravatarImages = images
-			.map( ( img ) => {
+		this.#gravatarImages = images.map( ( img ) => {
 				const hash = this.#getHash( img.src );
 
 				if ( ! hash || ignoreImages.includes( img ) ) {
@@ -232,9 +231,10 @@ export default class Hovercards {
 			hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutId ) );
 			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
 
-			const { x, y } = await computePosition( img, hovercard, {
+			const { x, y } = computePosition( img, hovercard, {
 				placement: this.#placement,
-				middleware: [ offset( this.#offset ), this.#autoPlacement && flip() ],
+				offset: this.#offset,
+				autoFlip: this.#autoFlip
 			} );
 
 			hovercard.style.left = `${ x }px`;
