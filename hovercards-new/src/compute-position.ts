@@ -32,6 +32,7 @@ export default function computingPosition(
 	let x = referenceRectR + offset;
 	let y = referenceRectT - floatingRect.height / 2 + referenceRect.height / 2;
 	let [ dir, align = 'middle' ] = placement.split( '-' );
+	offset = Math.min( 0, offset );
 
 	if ( autoFlip ) {
 		const topSpace = referenceRect.top;
