@@ -28,14 +28,14 @@ window.Gravatar = {
 					( hovercard.querySelector( '.gravatar-hovercard__edit-profile' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'click_edit_profile', e );
 				}
 
-				sendStat( 'show' );
-
 				( hovercard.querySelector( '.gravatar-hovercard__avatar-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'to_profile', e );
 				( hovercard.querySelector( '.gravatar-hovercard__name-location-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'to_profile', e );
 				( hovercard.querySelector( '.gravatar-hovercard__profile-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'click_view_profile', e );
 				( hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as NodeListOf< HTMLAnchorElement > ).forEach( ( link ) => {
 					link.onclick = ( e ) => sendLinkStat( `click_${ link.dataset.serviceName }`, e );
 				} );
+
+				sendStat( 'show' );
 			},
 			onFetchProfileSuccess: () => sendStat( 'fetch' ),
 			onFetchProfilFailure: () => sendStat( 'profile_404' ),
