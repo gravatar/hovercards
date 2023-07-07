@@ -170,17 +170,21 @@ export default class Hovercards {
 			.join( '' );
 
 		hovercard.innerHTML = `
-			<a class="gravatar-hovercard__user-link" href="${ profileUrl }" target="_blank">
-				<img class="gravatar-hovercard__avatar" src="${ thumbnailUrl }" width="56px" height="56px" alt="${ displayName }" />
-				<div class="gravatar-hovercard__name-location-wrapper">
+			<div class="gravatar-hovercard__header">
+				<a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
+					<img class="gravatar-hovercard__avatar" src="${ thumbnailUrl }" width="56px" height="56px" alt="${ displayName }" />
+				</a>
+				<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
 					<h4 class="gravatar-hovercard__name">${ displayName }</h4>
 					${ currentLocation ? `<p class="gravatar-hovercard__location">${ currentLocation }</p>` : '' }
-				</div>
-			</a>
-      ${ aboutMe ? `<p class="gravatar-hovercard__about">${ aboutMe }</p>` : '' }
-      <div class="gravatar-hovercard__social-view-profile-wrapper">
+				</a>
+			</div>
+			<div class="gravatar-hovercard__body">
+				${ aboutMe ? `<p class="gravatar-hovercard__about">${ aboutMe }</p>` : '' }
+			</div>
+      <div class="gravatar-hovercard__footer">
         <div class="gravatar-hovercard__social-links">${ renderSocialLinks }</div>
-        <a class="gravatar-hovercard__view-profile-link" href="${ profileUrl }" target="_blank">View profile</a>
+        <a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>
       </div>
     `;
 

@@ -3,7 +3,9 @@ import Hovercards from './core';
 window.Gravatar = {
 	// Expose the class for the hovercard preview and many other cases
 	Hovercards,
-	// It's called by the WPGroHo.js of Jetpack
+	// It's assigned by the Jetpack > WPGroHo.js
+	my_hash: '',
+	// It's called by the Jetpack > WPGroHo.js
 	profile_cb: () => {},
 	init( container = 'body', ignore ) {
 		const hovercards = new Hovercards( {
@@ -18,13 +20,19 @@ window.Gravatar = {
 
 				return img;
 			},
-			onHovercardShown: ( { hash }, hovercard ) => {
+			onHovercardShown: ( { hash, aboutMe }, hovercard ) => {
 				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
+
+				if ( this.my_hash === hash && ! aboutMe ) {
+					( hovercard.querySelector( '.gravatar-hovercard__body' ) as HTMLDivElement).innerHTML = '<p>Want a better profile? <a class="gravatar-hovercard__edit-profile" href="https://gravatar.com/profiles/edit/?noclose" target="_blank">Click here</a>.</p>';
+					( hovercard.querySelector( '.gravatar-hovercard__edit-profile' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'click_edit_profile', e );
+				}
 
 				sendStat( 'show' );
 
-				( hovercard.querySelector( '.gravatar-hovercard__user-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'to_profile', e );
-				( hovercard.querySelector( '.gravatar-hovercard__view-profile-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'click_view_profile', e );
+				( hovercard.querySelector( '.gravatar-hovercard__avatar-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'to_profile', e );
+				( hovercard.querySelector( '.gravatar-hovercard__name-location-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'to_profile', e );
+				( hovercard.querySelector( '.gravatar-hovercard__profile-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'click_view_profile', e );
 				( hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as NodeListOf< HTMLAnchorElement > ).forEach( ( link ) => {
 					link.onclick = ( e ) => sendLinkStat( `click_${ link.dataset.serviceName }`, e );
 				} );
