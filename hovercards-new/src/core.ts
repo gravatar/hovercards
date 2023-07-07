@@ -4,7 +4,7 @@ import { computePosition, offset, flip } from '@floating-ui/dom';
 // TODO: Refine the type
 type ProfileData = Record< string, any >;
 
-type ProcessGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
+type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
 type OnFetchProfileStart = () => void;
 
@@ -16,22 +16,17 @@ type OnHovercardShown = ( profileData: ProfileData, hovercard: HTMLDivElement  )
 
 type OnHovercardHidden = ( profileData: ProfileData, hovercard: HTMLDivElement ) => void;
 
-type HovercardsOptions = Partial< {
+type Options = Partial< {
 	placement: Placement;
 	autoPlacement: boolean;
 	offset: number;
 	additionalClass: string;
-	processGravatarImg: ProcessGravatarImg;
+	onQueryGravatarImg: OnQueryGravatarImg;
 	onFetchProfileStart: OnFetchProfileStart;
 	onFetchProfileSuccess: OnFetchProfileSuccess;
 	onFetchProfilFailure: OnFetchProfilFailure;
 	onHovercardShown: OnHovercardShown;
 	onHovercardHidden: OnHovercardHidden;
-} >;
-
-type SetTargetOptions = Partial< {
-	ignoreSelector: string;
-	onGravatarImagesQueried: ( images: HTMLImageElement[] ) => void;
 } >;
 
 const BASE_API_URL = 'https://secure.gravatar.com';
@@ -70,7 +65,7 @@ export default class Hovercards {
 	#autoPlacement: boolean;
 	#offset: number;
 	#additionalClass: string;
-	#processGravatarImg: ProcessGravatarImg;
+	#onQueryGravatarImg: OnQueryGravatarImg;
 	#onFetchProfileStart: OnFetchProfileStart;
 	#onFetchProfileSuccess: OnFetchProfileSuccess;
 	#onFetchProfilFailure: OnFetchProfilFailure;
@@ -89,18 +84,18 @@ export default class Hovercards {
 		autoPlacement = true,
 		offset = 10,
 		additionalClass = '',
-		processGravatarImg = ( img ) => img,
+		onQueryGravatarImg = ( img ) => img,
 		onFetchProfileStart = () => {},
 		onFetchProfileSuccess = () => {},
 		onFetchProfilFailure = () => {},
 		onHovercardShown = () => {},
 		onHovercardHidden = () => {},
-	}: HovercardsOptions = {} ) {
+	}: Options = {} ) {
 		this.#placement = placement;
 		this.#autoPlacement = autoPlacement;
 		this.#offset = offset;
 		this.#additionalClass = additionalClass;
-		this.#processGravatarImg = processGravatarImg;
+		this.#onQueryGravatarImg = onQueryGravatarImg;
 		this.#onFetchProfileStart = onFetchProfileStart;
 		this.#onFetchProfileSuccess = onFetchProfileSuccess;
 		this.#onFetchProfilFailure = onFetchProfilFailure;
@@ -133,7 +128,7 @@ export default class Hovercards {
 
 				img.setAttribute( 'data-gravatar-hash', hash );
 
-				return this.#processGravatarImg( img );
+				return this.#onQueryGravatarImg( img );
 			} )
 			.filter( Boolean ) as HTMLImageElement[];
 
@@ -269,10 +264,7 @@ export default class Hovercards {
 		this.#hideHovercard( ( e.target as HTMLImageElement ).dataset.gravatarHash || '' );
 	}
 
-	setTarget(
-		target: HTMLElement,
-		{ ignoreSelector = '', onGravatarImagesQueried = () => {} }: SetTargetOptions = {}
-	) {
+	setTarget( target: HTMLElement, ignoreSelector = '' ) {
 		if ( ! target ) {
 			return;
 		}
@@ -285,8 +277,6 @@ export default class Hovercards {
 			img.addEventListener( 'mouseenter', this.#handleMouseEnter.bind( this ) );
 			img.addEventListener( 'mouseleave', this.#handleMouseLeave.bind( this ) );
 		} );
-
-		onGravatarImagesQueried( this.#gravatarImages );
 	}
 
 	// To remove all event listeners when React component is unmounted

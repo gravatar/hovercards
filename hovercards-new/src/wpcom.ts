@@ -7,13 +7,14 @@ window.Gravatar = {
 	profile_cb: () => {},
 	init( container = 'body', ignore ) {
 		const hovercards = new Hovercards( {
-			// Some themes/plugins/widgets are customizing Gravatar images based on these classes, so keep them for compatibility
-			processGravatarImg: ( img ) => {
+			onQueryGravatarImg: ( img ) => {
+				// Some themes/plugins/widgets are customizing Gravatar images based on these classes, so keep them for compatibility
 				img.classList.add( 'grav-hashed' );
-
 				if ( img.parentElement?.tagName !== 'A' ) {
 					img.classList.add( 'grav-hijack' );
 				}
+
+				img.onmouseover = () => sendStat( 'hover' );
 
 				return img;
 			},
@@ -32,12 +33,7 @@ window.Gravatar = {
 			onFetchProfilFailure: () => sendStat( 'profile_404' ),
 		} );
 
-		hovercards.setTarget( document.querySelector( container ) as HTMLElement, {
-			ignoreSelector: `${ ignore } img[src*="gravatar.com/"]`,
-			onGravatarImagesQueried: ( images ) => images.forEach( ( img ) => {
-				img.onmouseover = () => sendStat( 'hover' );
-			} ),
-		} );
+		hovercards.setTarget( document.querySelector( container ) as HTMLElement, `${ ignore } img[src*="gravatar.com/"]` );
 
 		// Loading hovercards CSS
 		const hovercardsScript = document.querySelector( 'script[src*="/js/gprofiles."]' );
