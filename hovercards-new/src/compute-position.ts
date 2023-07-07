@@ -31,7 +31,7 @@ export default function computingPosition(
 	const referenceRectL = referenceRect.left + scrollX;
 	let x = referenceRectR + offset;
 	let y = referenceRectT - floatingRect.height / 2 + referenceRect.height / 2;
-	let [ dir, align = 'middle' ] = placement.split( '-' );
+	let [ dir, align ] = placement.split( '-' );
 	offset = Math.min( 0, offset );
 
 	if ( autoFlip ) {
