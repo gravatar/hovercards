@@ -152,21 +152,19 @@ export default class Hovercards {
 
 		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
 		const socialLinks = [ { url: profileUrl, shortname: 'gravatar' }, ...accounts ];
-		const renderSocialLinks = socialLinks
-			.map(
-				( { url, shortname }: { url: string; shortname: string } ) => {
-					const socialLink = socialLinksMap[ shortname ];
+		const renderSocialLinks = socialLinks.reduce( ( links, { url, shortname }: { url: string; shortname: string } ) => {
+			const socialLink = socialLinksMap[ shortname ];
 
-					return socialLink
-						? `
-              <a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }" data-service-name=${ shortname }">
-                <img class="gravatar-hovercard__social-icon" src="${ socialLink.imgUrl }" width="32px" height="32px" alt="${ socialLink.title }" />
-              </a>
-            `
-						: '';
-				}
-			)
-			.join( '' );
+			if ( socialLink ) {
+				links += `
+					<a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }" data-service-name=${ shortname }">
+						<img class="gravatar-hovercard__social-icon" src="${ socialLink.imgUrl }" width="32px" height="32px" alt="${ socialLink.title }" />
+					</a>
+				`;
+			}
+
+			return links;
+		}, '' );
 
 		hovercard.innerHTML = `
 			<div class="gravatar-hovercard__header">

@@ -23,15 +23,29 @@ window.Gravatar = {
 			onHovercardShown: ( { hash, aboutMe }, hovercard ) => {
 				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
-				if ( this.my_hash === hash && ! aboutMe ) {
-					( hovercard.querySelector( '.gravatar-hovercard__body' ) as HTMLDivElement).innerHTML = '<p>Want a better profile? <a class="gravatar-hovercard__edit-profile" href="https://gravatar.com/profiles/edit/?noclose" target="_blank">Click here</a>.</p>';
+				const body = hovercard.querySelector( '.gravatar-hovercard__body' ) as HTMLDivElement | null;
+				if ( this.my_hash === hash && ! aboutMe && body ) {
+					body.innerHTML = '<p>Want a better profile? <a class="gravatar-hovercard__edit-profile" href="https://gravatar.com/profiles/edit/?noclose" target="_blank">Click here</a>.</p>';
 					( hovercard.querySelector( '.gravatar-hovercard__edit-profile' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'click_edit_profile', e );
 				}
 
-				( hovercard.querySelector( '.gravatar-hovercard__avatar-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'to_profile', e );
-				( hovercard.querySelector( '.gravatar-hovercard__name-location-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'to_profile', e );
-				( hovercard.querySelector( '.gravatar-hovercard__profile-link' ) as HTMLAnchorElement ).onclick = ( e ) => sendLinkStat( 'click_view_profile', e );
-				( hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as NodeListOf< HTMLAnchorElement > ).forEach( ( link ) => {
+				const avatarLink = hovercard.querySelector( '.gravatar-hovercard__avatar-link' ) as HTMLAnchorElement | null;
+				if ( avatarLink ) {
+					avatarLink.onclick = ( e ) => sendLinkStat( 'to_profile', e );
+				} 
+
+				const nameLocationLink = hovercard.querySelector( '.gravatar-hovercard__name-location-link' ) as HTMLAnchorElement | null;
+				if ( nameLocationLink ) {
+					nameLocationLink.onclick = ( e ) => sendLinkStat( 'to_profile', e );
+				}
+
+				const profileLink = hovercard.querySelector( '.gravatar-hovercard__profile-link' ) as HTMLAnchorElement | null;
+				if ( profileLink ) {
+					profileLink.onclick = ( e ) => sendLinkStat( 'click_view_profile', e );
+				}
+
+				const socialLinks = hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as NodeListOf< HTMLAnchorElement > | [];
+				socialLinks.forEach( ( link ) => {
 					link.onclick = ( e ) => sendLinkStat( `click_${ link.dataset.serviceName }`, e );
 				} );
 
