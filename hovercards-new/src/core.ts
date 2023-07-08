@@ -32,7 +32,8 @@ type Options = Partial< {
 const BASE_API_URL = 'https://secure.gravatar.com';
 
 // TODO: Move it to the user profile API?!
-const socialLinksMap: Record< string, { imgUrl: string; title: string } > = {
+// TODO: Order icons
+const socialLinksMap = {
 	gravatar: {
 		imgUrl: 'https://secure.gravatar.com/icons/gravatar.svg',
 		title: 'Gravatar',
