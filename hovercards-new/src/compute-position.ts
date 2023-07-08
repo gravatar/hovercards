@@ -25,10 +25,10 @@ export default function computingPosition(
 ) {
 	const referenceRect = reference.getBoundingClientRect();
 	const floatingRect = floating.getBoundingClientRect();
-	const referenceRectT = referenceRect.top + scrollY;
-	const referenceRectB = referenceRect.bottom + scrollY;
-	const referenceRectR = referenceRect.right + scrollX;
-	const referenceRectL = referenceRect.left + scrollX;
+	const referenceScrollT = referenceRect.top + scrollY;
+	const referenceScrollB = referenceRect.bottom + scrollY;
+	const referenceScrollR = referenceRect.right + scrollX;
+	const referenceScrollL = referenceRect.left + scrollX;
 	let x = 0;
 	let y = 0;
 	let [ dir, align ] = placement.split( '-' );
@@ -60,26 +60,26 @@ export default function computingPosition(
 	}
 
 	if ( dir === 'top' || dir === 'bottom' ) {
-		x = referenceRectL + referenceRect.width / 2 - floatingRect.width / 2;
-		y = dir === 'top' ? referenceRectT - floatingRect.height - offset : referenceRectB + offset;
+		x = referenceScrollL + referenceRect.width / 2 - floatingRect.width / 2;
+		y = dir === 'top' ? referenceScrollT - floatingRect.height - offset : referenceScrollB + offset;
 
 		if ( align === 'start' ) {
-			x = referenceRectL;
+			x = referenceScrollL;
 		}
 
 		if ( align === 'end' ) {
-			x = referenceRectR - floatingRect.width;
+			x = referenceScrollR - floatingRect.width;
 		}
 	} else {
-		x = dir === 'right' ? referenceRectR + offset : referenceRectL - floatingRect.width - offset;
-		y = referenceRectT + referenceRect.height / 2 - floatingRect.height / 2;
+		x = dir === 'right' ? referenceScrollR + offset : referenceScrollL - floatingRect.width - offset;
+		y = referenceScrollT + referenceRect.height / 2 - floatingRect.height / 2;
 
 		if ( align === 'start' ) {
-			y = referenceRectT;
+			y = referenceScrollT;
 		}
 
 		if ( align === 'end' ) {
-			y = referenceRectB - floatingRect.height;
+			y = referenceScrollB - floatingRect.height;
 		}
 	}
 
