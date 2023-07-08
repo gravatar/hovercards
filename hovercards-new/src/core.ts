@@ -33,7 +33,7 @@ const BASE_API_URL = 'https://secure.gravatar.com';
 
 // TODO: Move it to the user profile API?!
 // TODO: Order icons
-const socialLinksMap = {
+const socialLinksMap: Record< string, { imgUrl: string; title: string } > = {
 	gravatar: {
 		imgUrl: 'https://secure.gravatar.com/icons/gravatar.svg',
 		title: 'Gravatar',
