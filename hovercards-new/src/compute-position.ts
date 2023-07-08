@@ -29,8 +29,8 @@ export default function computingPosition(
 	const referenceRectB = referenceRect.bottom + scrollY;
 	const referenceRectR = referenceRect.right + scrollX;
 	const referenceRectL = referenceRect.left + scrollX;
-	let x = referenceRectR + offset;
-	let y = referenceRectT + referenceRect.height / 2 - floatingRect.height / 2;
+	let x = 0;
+	let y = 0;
 	let [ dir, align ] = placement.split( '-' );
 	offset = Math.max( 0, offset );
 
@@ -70,12 +70,9 @@ export default function computingPosition(
 		if ( align === 'end' ) {
 			x = referenceRectR - floatingRect.width;
 		}
-	}
-
-  if ( dir === 'left' || dir === 'right' ) {
-		if ( dir === 'left' ) {
-			x = referenceRectL - floatingRect.width - offset;
-		}
+	} else {
+		x = dir === 'right' ? referenceRectR + offset : referenceRectL - floatingRect.width - offset;
+		y = referenceRectT + referenceRect.height / 2 - floatingRect.height / 2;
 
 		if ( align === 'start' ) {
 			y = referenceRectT;
