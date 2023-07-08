@@ -30,9 +30,9 @@ export default function computingPosition(
 	const referenceRectR = referenceRect.right + scrollX;
 	const referenceRectL = referenceRect.left + scrollX;
 	let x = referenceRectR + offset;
-	let y = referenceRectT - floatingRect.height / 2 + referenceRect.height / 2;
+	let y = referenceRectT + referenceRect.height / 2 - floatingRect.height / 2;
 	let [ dir, align ] = placement.split( '-' );
-	offset = Math.min( 0, offset );
+	offset = Math.max( 0, offset );
 
 	if ( autoFlip ) {
 		const topSpace = referenceRect.top;
