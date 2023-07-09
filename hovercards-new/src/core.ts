@@ -131,19 +131,19 @@ export default class Hovercards {
 			{
 				url: profileUrl,
 				iconUrl: 'https://secure.gravatar.com/icons/gravatar.svg',
-				label: 'Gravatar',
+				name: 'Gravatar',
 				shortname: 'gravatar',
 			},
 			...accounts
 		];
 		const renderSocialLinks = socialLinks
-			.reduce( ( links, { url, shortname, iconUrl, label } ) => {
+			.reduce( ( links, { url, shortname, iconUrl, name } ) => {
 				const idx = allowedSocialServices.indexOf( shortname );
 
 				if ( idx !== -1 ) {
 					links[ idx ] = `
 						<a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }" data-service-name=${ shortname }">
-							<img class="gravatar-hovercard__social-icon" src="${ iconUrl }" width="32px" height="32px" alt="${ label }" />
+							<img class="gravatar-hovercard__social-icon" src="${ iconUrl }" width="32px" height="32px" alt="${ name }" />
 						</a>
 					`;
 				}
