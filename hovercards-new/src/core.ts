@@ -31,34 +31,8 @@ type Options = Partial< {
 
 const BASE_API_URL = 'https://secure.gravatar.com';
 
-// TODO: Move it to the user profile API?!
-// TODO: Order icons
-const socialLinksMap: Record< string, { imgUrl: string; title: string } > = {
-	gravatar: {
-		imgUrl: 'https://secure.gravatar.com/icons/gravatar.svg',
-		title: 'Gravatar',
-	},
-	wordpress: {
-		imgUrl: 'https://secure.gravatar.com/icons/wordpress.svg',
-		title: 'WordPress',
-	},
-	mastodon: {
-		imgUrl: 'https://secure.gravatar.com/icons/mastodon-black.svg',
-		title: 'Mastodon',
-	},
-	tumblr: {
-		imgUrl: 'https://secure.gravatar.com/icons/tumblr.svg',
-		title: 'Tumblr',
-	},
-	github: {
-		imgUrl: 'https://secure.gravatar.com/icons/github.svg',
-		title: 'GitHub',
-	},
-	twitter: {
-		imgUrl: 'https://secure.gravatar.com/icons/twitter-alt.svg',
-		title: 'Twitter',
-	},
-};
+// Ordering matters
+const allowedSocialServices = [ 'gravatar', 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
 
 export default class Hovercards {
 	// Options
@@ -152,20 +126,31 @@ export default class Hovercards {
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
 		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
-		const socialLinks = [ { url: profileUrl, shortname: 'gravatar' }, ...accounts ];
-		const renderSocialLinks = socialLinks.reduce( ( links, { url, shortname }: { url: string; shortname: string } ) => {
-			const socialLink = socialLinksMap[ shortname ];
+		// TODO: Refine the type
+		const socialLinks: any[] = [
+			{
+				url: profileUrl,
+				iconUrl: 'https://secure.gravatar.com/icons/gravatar.svg',
+				label: 'Gravatar',
+				shortname: 'gravatar',
+			},
+			...accounts
+		];
+		const renderSocialLinks = socialLinks
+			.reduce( ( links, { url, shortname, iconUrl, label } ) => {
+				const idx = allowedSocialServices.indexOf( shortname );
 
-			if ( socialLink ) {
-				links += `
-					<a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }" data-service-name=${ shortname }">
-						<img class="gravatar-hovercard__social-icon" src="${ socialLink.imgUrl }" width="32px" height="32px" alt="${ socialLink.title }" />
-					</a>
-				`;
-			}
+				if ( idx !== -1 ) {
+					links[ idx ] = `
+						<a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }" data-service-name=${ shortname }">
+							<img class="gravatar-hovercard__social-icon" src="${ iconUrl }" width="32px" height="32px" alt="${ label }" />
+						</a>
+					`;
+				}
 
-			return links;
-		}, '' );
+				return links;
+			}, [] )
+			.join( '' );
 
 		hovercard.innerHTML = `
 			<div class="gravatar-hovercard__header">
