@@ -1,9 +1,10 @@
 .gravatar-hovercard {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 400px;
-  gap: 15px;
-  padding: 16px;
+  height: 213px;
+  padding: 24px 24px 16px;
   background-color: #fff;
   border: 1px solid #d8dbdd;
   border-radius: 4px;
