@@ -236,6 +236,7 @@ export default class Hovercards {
 				autoFlip: this.#autoFlip
 			} );
 
+			hovercard.style.position = 'absolute';
 			hovercard.style.left = `${ x }px`;
 			hovercard.style.top = `${ y }px`;
 
