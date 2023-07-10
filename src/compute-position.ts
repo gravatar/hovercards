@@ -42,26 +42,45 @@ export default function computingPosition(
 		const floatingSpaceV = floatingRect.height + offset;
 		const floatingSpaceH = floatingRect.width + offset;
 
-		if ( dir === 'top' && topSpace < floatingSpaceV && bottomSpace > topSpace ) {
+		if (
+			dir === 'top' &&
+			topSpace < floatingSpaceV &&
+			bottomSpace > topSpace
+		) {
 			dir = 'bottom';
 		}
 
-		if ( dir === 'bottom' && bottomSpace < floatingSpaceV && topSpace > bottomSpace ) {
+		if (
+			dir === 'bottom' &&
+			bottomSpace < floatingSpaceV &&
+			topSpace > bottomSpace
+		) {
 			dir = 'top';
 		}
 
-		if ( dir === 'left' && leftSpace < floatingSpaceH && rightSpace > leftSpace ) {
+		if (
+			dir === 'left' &&
+			leftSpace < floatingSpaceH &&
+			rightSpace > leftSpace
+		) {
 			dir = 'right';
 		}
 
-		if ( dir === 'right' && rightSpace < floatingSpaceH && leftSpace > rightSpace ) {
+		if (
+			dir === 'right' &&
+			rightSpace < floatingSpaceH &&
+			leftSpace > rightSpace
+		) {
 			dir = 'left';
 		}
 	}
 
 	if ( dir === 'top' || dir === 'bottom' ) {
 		x = referenceScrollL + referenceRect.width / 2 - floatingRect.width / 2;
-		y = dir === 'top' ? referenceScrollT - floatingRect.height - offset : referenceScrollB + offset;
+		y =
+			dir === 'top'
+				? referenceScrollT - floatingRect.height - offset
+				: referenceScrollB + offset;
 
 		if ( align === 'start' ) {
 			x = referenceScrollL;
@@ -71,8 +90,14 @@ export default function computingPosition(
 			x = referenceScrollR - floatingRect.width;
 		}
 	} else {
-		x = dir === 'right' ? referenceScrollR + offset : referenceScrollL - floatingRect.width - offset;
-		y = referenceScrollT + referenceRect.height / 2 - floatingRect.height / 2;
+		x =
+			dir === 'right'
+				? referenceScrollR + offset
+				: referenceScrollL - floatingRect.width - offset;
+		y =
+			referenceScrollT +
+			referenceRect.height / 2 -
+			floatingRect.height / 2;
 
 		if ( align === 'start' ) {
 			y = referenceScrollT;

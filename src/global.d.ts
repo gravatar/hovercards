@@ -1,4 +1,4 @@
-import Hovercards from "./core";
+import Hovercards from './core';
 
 declare global {
 	interface Window {
