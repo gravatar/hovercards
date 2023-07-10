@@ -1,3 +1,11 @@
+@mixin ellipsis($lineCount: 1) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lineCount;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .gravatar-hovercard {
 	display: flex;
 	flex-direction: column;
@@ -55,11 +63,8 @@
 	}
 
 	.gravatar-hovercard__name {
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		@include ellipsis(2);
+
 		font-family: Helvetica, Arial, Tahoma, sans-serif;
 		font-size: 18px;
 		font-weight: 600;
@@ -68,6 +73,8 @@
 	}
 
 	.gravatar-hovercard__location {
+		@include ellipsis(1);
+
 		opacity: 0.6;
 	}
 
@@ -76,11 +83,7 @@
 	}
 
 	.gravatar-hovercard__about {
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		@include ellipsis(3);
 	}
 
 	.gravatar-hovercard__footer {
