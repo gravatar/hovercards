@@ -6,11 +6,11 @@ type ProfileData = Record< string, any >;
 
 type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
-type OnFetchProfileStart = () => void;
+type OnFetchProfileStart = ( hash: string ) => void;
 
 type OnFetchProfileSuccess = ( profileData: ProfileData ) => void;
 
-type OnFetchProfilFailure = ( error: Error ) => void;
+type OnFetchProfilFailure = ( hash: string, error: Error ) => void;
 
 type OnHovercardShown = ( profileData: ProfileData, hovercard: HTMLDivElement  ) => void;
 
@@ -186,7 +186,7 @@ export default class Hovercards {
 
 			if ( ! profileData ) {
 				try {
-					this.#onFetchProfileStart();
+					this.#onFetchProfileStart( hash );
 	
 					const res = await fetch( `${ BASE_API_URL }/${ hash }.json` );
 					const data = await res.json();
@@ -202,7 +202,7 @@ export default class Hovercards {
 
 					this.#onFetchProfileSuccess( profileData );
 				} catch ( error ) {
-					this.#onFetchProfilFailure( error as Error );
+					this.#onFetchProfilFailure( hash, error as Error );
 					return;
 				}
 			}
