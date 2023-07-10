@@ -1,8 +1,34 @@
 import type { Placement } from './compute-position';
 import computePosition from './compute-position';
 
-// TODO: Refine the type
-type ProfileData = Record< string, any >;
+type Account = Record<
+	'domain' | 'display' | 'url' | 'iconUrl' | 'username' | 'verified' | 'name' | 'shortname',
+	string
+>;
+
+interface ProfileData {
+	id: string;
+	hash: string;
+	requestHash: string;
+	profileUrl: string;
+	preferredUsername: string;
+	thumbnailUrl: string;
+	status?: string;
+	name?: Record< 'givenName' | 'familyName' | 'formatted', string >;
+	pronouns?: string;
+	displayName: string;
+	currentLocation?: string;
+	aboutMe?: string;
+	photos: Record< 'value' | 'type', string >[];
+	urls: Record< 'value' | 'title', string >[] | [];
+	profileBackground?: Partial< Record< 'color' | 'url', string > >;
+	phoneNumbers?: Record< 'type' | 'value', string >[];
+	emails?: Record< 'primary' | 'value', string >[];
+	ims?: Record< 'type' | 'value', string >[];
+	accounts?: Account[];
+	payments?: Partial< Record< 'paypalme' | 'patreon' | 'venmo', string > >;
+	currency?: Record< 'type' | 'value', string >[];
+}
 
 type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
@@ -127,8 +153,7 @@ export default class Hovercards {
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
 		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
-		// TODO: Refine the type
-		const socialLinks: any[] = [
+		const socialLinks: Partial< Account >[] = [
 			{
 				url: profileUrl,
 				iconUrl: 'https://secure.gravatar.com/icons/gravatar.svg',
