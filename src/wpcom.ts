@@ -68,7 +68,7 @@ window.Gravatar = {
 
 		hovercards.setTarget(
 			document.querySelector( container ) as HTMLElement,
-			`${ ignore } img[src*="gravatar.com/"]`
+			ignore ? `${ ignore } img[src*="gravatar.com/"]` : ''
 		);
 
 		// Don't load the CSS if it's already loaded (e.g. dev mode)
