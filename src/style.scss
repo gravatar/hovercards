@@ -1,9 +1,9 @@
 @mixin ellipsis($lineCount: 1) {
-  display: -webkit-box;
-  -webkit-line-clamp: $lineCount;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: $lineCount;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .gravatar-hovercard {
