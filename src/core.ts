@@ -20,7 +20,7 @@ interface ProfileData {
 	currentLocation?: string;
 	aboutMe?: string;
 	photos: Record< 'value' | 'type', string >[];
-	urls: Record< 'value' | 'title', string >[] | [];
+	urls: Record< 'value' | 'title', string >[];
 	profileBackground?: Partial< Record< 'color' | 'url', string > >;
 	phoneNumbers?: Record< 'type' | 'value', string >[];
 	emails?: Record< 'primary' | 'value', string >[];
