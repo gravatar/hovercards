@@ -21,58 +21,43 @@ window.Gravatar = {
 				return img;
 			},
 			onHovercardShown: ( { hash, aboutMe }, hovercard ) => {
-				this.profile_cb(
-					hash,
-					`${ Hovercards.hovercardIdPrefix }${ hash }`
-				);
+				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
-				const body = hovercard.querySelector(
-					'.gravatar-hovercard__body'
-				) as HTMLDivElement | null;
+				const body = hovercard.querySelector( '.gravatar-hovercard__body' ) as HTMLDivElement | null;
 				if ( this.my_hash === hash && ! aboutMe && body ) {
 					body.innerHTML =
 						'<p>Want a better profile? <a class="gravatar-hovercard__edit-profile" href="https://gravatar.com/profiles/edit/?noclose" target="_blank">Click here</a>.</p>';
-					(
-						hovercard.querySelector(
-							'.gravatar-hovercard__edit-profile'
-						) as HTMLAnchorElement
-					 ).onclick = ( e ) =>
-						sendLinkStat( 'click_edit_profile', e );
+					( body.querySelector( '.gravatar-hovercard__edit-profile' ) as HTMLAnchorElement ).onclick = (
+						e
+					) => sendLinkStat( 'click_edit_profile', e );
 				}
 
 				const avatarLink = hovercard.querySelector(
 					'.gravatar-hovercard__avatar-link'
 				) as HTMLAnchorElement | null;
 				if ( avatarLink ) {
-					avatarLink.onclick = ( e ) =>
-						sendLinkStat( 'to_profile', e );
+					avatarLink.onclick = ( e ) => sendLinkStat( 'to_profile', e );
 				}
 
 				const nameLocationLink = hovercard.querySelector(
 					'.gravatar-hovercard__name-location-link'
 				) as HTMLAnchorElement | null;
 				if ( nameLocationLink ) {
-					nameLocationLink.onclick = ( e ) =>
-						sendLinkStat( 'to_profile', e );
+					nameLocationLink.onclick = ( e ) => sendLinkStat( 'to_profile', e );
 				}
 
 				const profileLink = hovercard.querySelector(
 					'.gravatar-hovercard__profile-link'
 				) as HTMLAnchorElement | null;
 				if ( profileLink ) {
-					profileLink.onclick = ( e ) =>
-						sendLinkStat( 'click_view_profile', e );
+					profileLink.onclick = ( e ) => sendLinkStat( 'click_view_profile', e );
 				}
 
-				const socialLinks = hovercard.querySelectorAll(
-					'.gravatar-hovercard__social-link'
-				) as NodeListOf< HTMLAnchorElement > | [];
+				const socialLinks = hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as
+					| NodeListOf< HTMLAnchorElement >
+					| [];
 				socialLinks.forEach( ( link ) => {
-					link.onclick = ( e ) =>
-						sendLinkStat(
-							`click_${ link.dataset.serviceName }`,
-							e
-						);
+					link.onclick = ( e ) => sendLinkStat( `click_${ link.dataset.serviceName }`, e );
 				} );
 
 				sendStat( 'show' );
@@ -89,12 +74,8 @@ window.Gravatar = {
 		// Don't load styles in dev mode
 		if ( ! document.querySelector( 'link[href="hovercard.min.css"]' ) ) {
 			// Loading hovercards CSS
-			const hovercardsScript = document.querySelector(
-				'script[src*="/js/gprofiles."]'
-			);
-			const bust = hovercardsScript
-				? hovercardsScript.getAttribute( 'src' )?.split( '?' )[ 1 ]
-				: '';
+			const hovercardsScript = document.querySelector( 'script[src*="/js/gprofiles."]' );
+			const bust = hovercardsScript ? hovercardsScript.getAttribute( 'src' )?.split( '?' )[ 1 ] : '';
 			document.head.insertAdjacentHTML(
 				'beforeend',
 				`<link rel="stylesheet" id="gravatar-card-css" href="https://0.gravatar.com/dist/css/hovercard.min.css?${ bust }" />`
@@ -114,7 +95,5 @@ function sendStat( name: string, cb = () => {} ) {
 function sendLinkStat( name: string, e: MouseEvent ) {
 	e.preventDefault();
 	const anchor = e.currentTarget as HTMLAnchorElement;
-	sendStat( name, () =>
-		window.open( anchor.href, anchor.target || '_self' )
-	);
+	sendStat( name, () => window.open( anchor.href, anchor.target || '_self' ) );
 }

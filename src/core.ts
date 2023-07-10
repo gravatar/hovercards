@@ -12,15 +12,9 @@ type OnFetchProfileSuccess = ( profileData: ProfileData ) => void;
 
 type OnFetchProfilFailure = ( hash: string, error: Error ) => void;
 
-type OnHovercardShown = (
-	profileData: ProfileData,
-	hovercard: HTMLDivElement
-) => void;
+type OnHovercardShown = ( profileData: ProfileData, hovercard: HTMLDivElement ) => void;
 
-type OnHovercardHidden = (
-	profileData: ProfileData,
-	hovercard: HTMLDivElement
-) => void;
+type OnHovercardHidden = ( profileData: ProfileData, hovercard: HTMLDivElement ) => void;
 
 type Options = Partial< {
 	placement: Placement;
@@ -38,14 +32,7 @@ type Options = Partial< {
 const BASE_API_URL = 'https://secure.gravatar.com';
 
 // Ordering matters
-const allowedSocialServices = [
-	'gravatar',
-	'wordpress',
-	'mastodon',
-	'tumblr',
-	'github',
-	'twitter',
-];
+const allowedSocialServices = [ 'gravatar', 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
 
 export default class Hovercards {
 	// Options
@@ -93,23 +80,17 @@ export default class Hovercards {
 
 	#getHash( url: string ) {
 		const { hostname, pathname } = new URL( url );
-		return hostname.endsWith( 'gravatar.com' )
-			? pathname.split( '/' )[ 2 ]
-			: '';
+		return hostname.endsWith( 'gravatar.com' ) ? pathname.split( '/' )[ 2 ] : '';
 	}
 
 	#queryGravatarImages( target: HTMLElement, ignoreSelector: string ) {
 		let images: HTMLImageElement[] = [];
-		const ignoreImages: HTMLImageElement[] = Array.from(
-			document.querySelectorAll( ignoreSelector )
-		);
+		const ignoreImages: HTMLImageElement[] = Array.from( document.querySelectorAll( ignoreSelector ) );
 
 		if ( target.tagName === 'IMG' ) {
 			images = [ target as HTMLImageElement ];
 		} else {
-			images = Array.from(
-				target.querySelectorAll( 'img[src*="gravatar.com/"]' )
-			);
+			images = Array.from( target.querySelectorAll( 'img[src*="gravatar.com/"]' ) );
 		}
 
 		this.#gravatarImages = images
@@ -130,10 +111,7 @@ export default class Hovercards {
 	}
 
 	// It can also be used to render an independent hovercard
-	static createHovercard(
-		profileData: ProfileData,
-		additionalClass?: string
-	) {
+	static createHovercard( profileData: ProfileData, additionalClass?: string ) {
 		const {
 			hash,
 			thumbnailUrl,
@@ -146,9 +124,7 @@ export default class Hovercards {
 
 		const hovercard = document.createElement( 'div' );
 		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
-		hovercard.className = `gravatar-hovercard${
-			additionalClass ? ` ${ additionalClass }` : ''
-		}`;
+		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
 		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
 		// TODO: Refine the type
@@ -184,11 +160,7 @@ export default class Hovercards {
 				</a>
 				<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
 					<h4 class="gravatar-hovercard__name">${ displayName }</h4>
-					${
-						currentLocation
-							? `<p class="gravatar-hovercard__location">${ currentLocation }</p>`
-							: ''
-					}
+					${ currentLocation ? `<p class="gravatar-hovercard__location">${ currentLocation }</p>` : '' }
 				</a>
 			</div>
 			<div class="gravatar-hovercard__body">
@@ -207,11 +179,7 @@ export default class Hovercards {
 		this.#showHovercardTimeoutId = setTimeout( async () => {
 			const hash = img.dataset.gravatarHash || '';
 
-			if (
-				document.getElementById(
-					`${ Hovercards.hovercardIdPrefix }${ hash }`
-				)
-			) {
+			if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
 				return;
 			}
 
@@ -221,9 +189,7 @@ export default class Hovercards {
 				try {
 					this.#onFetchProfileStart( hash );
 
-					const res = await fetch(
-						`${ BASE_API_URL }/${ hash }.json`
-					);
+					const res = await fetch( `${ BASE_API_URL }/${ hash }.json` );
 					const data = await res.json();
 
 					// API error handling
@@ -242,20 +208,13 @@ export default class Hovercards {
 				}
 			}
 
-			const hovercard = Hovercards.createHovercard(
-				profileData,
-				this.#additionalClass
-			);
+			const hovercard = Hovercards.createHovercard( profileData, this.#additionalClass );
 			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
 			document.body.appendChild( hovercard );
 
 			// Don't hide the hovercard when mouse is over it
-			hovercard.addEventListener( 'mouseenter', () =>
-				clearInterval( this.#hideHovercardTimeoutId )
-			);
-			hovercard.addEventListener( 'mouseleave', () =>
-				this.#hideHovercard( hash )
-			);
+			hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutId ) );
+			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
 
 			const { x, y } = computePosition( img, hovercard, {
 				placement: this.#placement,
@@ -273,16 +232,11 @@ export default class Hovercards {
 
 	#hideHovercard( hash: string ) {
 		this.#hideHovercardTimeoutId = setTimeout( () => {
-			const hovercard = document.getElementById(
-				`${ Hovercards.hovercardIdPrefix }${ hash }`
-			);
+			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
 			if ( hovercard ) {
 				hovercard.remove();
-				this.#onHovercardHidden(
-					this.#cachedProfiles.get( hash )!,
-					hovercard as HTMLDivElement
-				);
+				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
 			}
 		}, 300 );
 	}
@@ -297,9 +251,7 @@ export default class Hovercards {
 		e.stopImmediatePropagation();
 
 		clearInterval( this.#showHovercardTimeoutId );
-		this.#hideHovercard(
-			( e.target as HTMLImageElement ).dataset.gravatarHash || ''
-		);
+		this.#hideHovercard( ( e.target as HTMLImageElement ).dataset.gravatarHash || '' );
 	}
 
 	setTarget( target: HTMLElement, ignoreSelector = '' ) {
@@ -312,14 +264,8 @@ export default class Hovercards {
 		const images = this.#queryGravatarImages( target, ignoreSelector );
 
 		images.forEach( ( img ) => {
-			img.addEventListener(
-				'mouseenter',
-				this.#handleMouseEnter.bind( this )
-			);
-			img.addEventListener(
-				'mouseleave',
-				this.#handleMouseLeave.bind( this )
-			);
+			img.addEventListener( 'mouseenter', this.#handleMouseEnter.bind( this ) );
+			img.addEventListener( 'mouseleave', this.#handleMouseLeave.bind( this ) );
 		} );
 	}
 
