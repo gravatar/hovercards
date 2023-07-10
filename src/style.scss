@@ -9,6 +9,7 @@
 	border: 1px solid #d8dbdd;
 	border-radius: 4px;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+	box-sizing: border-box;
 	z-index: 10000000;
 
 	h4,
@@ -68,6 +69,10 @@
 
 	.gravatar-hovercard__location {
 		opacity: 0.6;
+	}
+
+	.gravatar-hovercard__body {
+		height: 63px;
 	}
 
 	.gravatar-hovercard__about {
