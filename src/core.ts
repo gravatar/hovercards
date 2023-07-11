@@ -108,9 +108,11 @@ export default class Hovercards {
 		return hostname.endsWith( 'gravatar.com' ) ? pathname.split( '/' )[ 2 ] : '';
 	}
 
-	#queryGravatarImages( target: HTMLElement, ignoreSelector: string ) {
+	#queryGravatarImages( target: HTMLElement, ignoreSelector?: string ) {
 		let images: HTMLImageElement[] = [];
-		const ignoreImages: HTMLImageElement[] = Array.from( document.querySelectorAll( ignoreSelector ) );
+		const ignoreImages: HTMLImageElement[] = ignoreSelector
+			? Array.from( document.querySelectorAll( ignoreSelector ) )
+			: [];
 
 		if ( target.tagName === 'IMG' ) {
 			images = [ target as HTMLImageElement ];
@@ -278,7 +280,7 @@ export default class Hovercards {
 		this.#hideHovercard( ( e.target as HTMLImageElement ).dataset.gravatarHash || '' );
 	}
 
-	setTarget( target: HTMLElement, ignoreSelector = '' ) {
+	setTarget( target: HTMLElement, ignoreSelector?: string ) {
 		if ( ! target ) {
 			return;
 		}
