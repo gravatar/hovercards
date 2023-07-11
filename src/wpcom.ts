@@ -3,7 +3,9 @@ import Hovercards from './core';
 window.Gravatar = {
 	// Expose the class for the hovercard preview and many other cases
 	Hovercards,
-	// It's called by the Jetpack > WPGroHo.js
+	// It will be assigned by WPCOM
+	my_hash: '',
+	// It will be called by the Jetpack > WPGroHo.js
 	profile_cb: () => {},
 	init( container = 'body', ignore ) {
 		const hovercards = new Hovercards( {
@@ -21,6 +23,21 @@ window.Gravatar = {
 			onHovercardShown: ( { hash, aboutMe }, hovercard ) => {
 				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
+				const profileLink = hovercard.querySelector(
+					'.gravatar-hovercard__profile-link'
+				) as HTMLAnchorElement | null;
+				let profileLinkEventName = 'click_view_profile';
+
+				if ( this.my_hash === hash && ! aboutMe && profileLink ) {
+					profileLink.classList.add( 'gravatar-hovercard__profile-link--edit' );
+					profileLink.textContent = 'Edit your profile';
+					profileLinkEventName = 'click_edit_profile';
+				}
+
+				if ( profileLink ) {
+					profileLink.onclick = ( e ) => sendLinkStat( profileLinkEventName, e );
+				}
+
 				const avatarLink = hovercard.querySelector(
 					'.gravatar-hovercard__avatar-link'
 				) as HTMLAnchorElement | null;
@@ -33,13 +50,6 @@ window.Gravatar = {
 				) as HTMLAnchorElement | null;
 				if ( nameLocationLink ) {
 					nameLocationLink.onclick = ( e ) => sendLinkStat( 'to_profile', e );
-				}
-
-				const profileLink = hovercard.querySelector(
-					'.gravatar-hovercard__profile-link'
-				) as HTMLAnchorElement | null;
-				if ( profileLink ) {
-					profileLink.onclick = ( e ) => sendLinkStat( 'click_view_profile', e );
 				}
 
 				const socialLinks = hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as
