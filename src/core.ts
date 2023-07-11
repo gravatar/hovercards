@@ -97,11 +97,6 @@ export default class Hovercards {
 		this.#onHovercardHidden = onHovercardHidden;
 	}
 
-	#getHash( url: string ) {
-		const { hostname, pathname } = new URL( url );
-		return hostname.endsWith( 'gravatar.com' ) ? pathname.split( '/' )[ 2 ] : '';
-	}
-
 	#queryGravatarImages( target: HTMLElement, ignoreSelector?: string ) {
 		let images: HTMLImageElement[] = [];
 		const ignoreImages: HTMLImageElement[] = ignoreSelector
@@ -116,9 +111,19 @@ export default class Hovercards {
 
 		this.#gravatarImages = images
 			.map( ( img ) => {
-				const hash = this.#getHash( img.src );
+				if ( ignoreImages.includes( img ) ) {
+					return null;
+				}
 
-				if ( ! hash || ignoreImages.includes( img ) ) {
+				const { hostname, pathname } = new URL( img.src );
+
+				if ( ! hostname.endsWith( 'gravatar.com' ) ) {
+					return null;
+				}
+
+				const hash = pathname.split( '/' )[ 2 ];
+
+				if ( ! hash ) {
 					return null;
 				}
 
