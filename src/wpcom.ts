@@ -3,8 +3,6 @@ import Hovercards from './core';
 window.Gravatar = {
 	// Expose the class for the hovercard preview and many other cases
 	Hovercards,
-	// It's assigned by the Jetpack > WPGroHo.js
-	my_hash: '',
 	// It's called by the Jetpack > WPGroHo.js
 	profile_cb: () => {},
 	init( container = 'body', ignore ) {
@@ -22,15 +20,6 @@ window.Gravatar = {
 			},
 			onHovercardShown: ( { hash, aboutMe }, hovercard ) => {
 				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
-
-				const body = hovercard.querySelector( '.gravatar-hovercard__body' ) as HTMLDivElement | null;
-				if ( this.my_hash === hash && ! aboutMe && body ) {
-					body.innerHTML =
-						'<p>Want a better profile? <a class="gravatar-hovercard__edit-profile" href="https://gravatar.com/profiles/edit/?noclose" target="_blank">Click here</a>.</p>';
-					( body.querySelector( '.gravatar-hovercard__edit-profile' ) as HTMLAnchorElement ).onclick = (
-						e
-					) => sendLinkStat( 'click_edit_profile', e );
-				}
 
 				const avatarLink = hovercard.querySelector(
 					'.gravatar-hovercard__avatar-link'
