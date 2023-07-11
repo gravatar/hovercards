@@ -201,83 +201,83 @@ export default class Hovercards {
 		return hovercard;
 	}
 
-	#showHovercard( img: HTMLImageElement ) {
-		this.#showHovercardTimeoutId = setTimeout( async () => {
-			const hash = img.dataset.gravatarHash || '';
+	async #showHovercard( img: HTMLImageElement ) {
+		const hash = img.dataset.gravatarHash || '';
 
-			if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
+		if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
+			return;
+		}
+
+		let profileData = this.#cachedProfiles.get( hash );
+
+		if ( ! profileData ) {
+			try {
+				this.#onFetchProfileStart( hash );
+
+				const res = await fetch( `${ BASE_API_URL }/${ hash }.json` );
+				const data = await res.json();
+
+				// API error handling
+				if ( ! data?.entry ) {
+					// The data will be an error message
+					throw new Error( data );
+				}
+
+				profileData = data.entry[ 0 ] as ProfileData;
+				this.#cachedProfiles.set( hash, profileData );
+
+				this.#onFetchProfileSuccess( profileData );
+			} catch ( error ) {
+				this.#onFetchProfilFailure( hash, error as Error );
 				return;
 			}
+		}
 
-			let profileData = this.#cachedProfiles.get( hash );
+		const hovercard = Hovercards.createHovercard( profileData, this.#additionalClass );
+		// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
+		document.body.appendChild( hovercard );
 
-			if ( ! profileData ) {
-				try {
-					this.#onFetchProfileStart( hash );
+		// Don't hide the hovercard when mouse is over it
+		hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutId ) );
+		hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
 
-					const res = await fetch( `${ BASE_API_URL }/${ hash }.json` );
-					const data = await res.json();
+		const { x, y } = computePosition( img, hovercard, {
+			placement: this.#placement,
+			offset: this.#offset,
+			autoFlip: this.#autoFlip,
+		} );
 
-					// API error handling
-					if ( ! data?.entry ) {
-						// The data will be an error message
-						throw new Error( data );
-					}
+		hovercard.style.position = 'absolute';
+		hovercard.style.left = `${ x }px`;
+		hovercard.style.top = `${ y }px`;
 
-					profileData = data.entry[ 0 ] as ProfileData;
-					this.#cachedProfiles.set( hash, profileData );
-
-					this.#onFetchProfileSuccess( profileData );
-				} catch ( error ) {
-					this.#onFetchProfilFailure( hash, error as Error );
-					return;
-				}
-			}
-
-			const hovercard = Hovercards.createHovercard( profileData, this.#additionalClass );
-			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
-			document.body.appendChild( hovercard );
-
-			// Don't hide the hovercard when mouse is over it
-			hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutId ) );
-			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
-
-			const { x, y } = computePosition( img, hovercard, {
-				placement: this.#placement,
-				offset: this.#offset,
-				autoFlip: this.#autoFlip,
-			} );
-
-			hovercard.style.position = 'absolute';
-			hovercard.style.left = `${ x }px`;
-			hovercard.style.top = `${ y }px`;
-
-			this.#onHovercardShown( profileData, hovercard );
-		}, 500 );
+		this.#onHovercardShown( profileData, hovercard );
 	}
 
 	#hideHovercard( hash: string ) {
-		this.#hideHovercardTimeoutId = setTimeout( () => {
-			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
+		const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
-			if ( hovercard ) {
-				hovercard.remove();
-				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
-			}
-		}, 300 );
+		if ( hovercard ) {
+			hovercard.remove();
+			this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
+		}
 	}
 
 	#handleMouseEnter( e: MouseEvent ) {
 		e.stopImmediatePropagation();
 
-		this.#showHovercard( e.target as HTMLImageElement );
+		this.#showHovercardTimeoutId = setTimeout( () => this.#showHovercard( e.target as HTMLImageElement ), 500 );
 	}
 
 	#handleMouseLeave( e: MouseEvent ) {
 		e.stopImmediatePropagation();
 
 		clearInterval( this.#showHovercardTimeoutId );
-		this.#hideHovercard( ( e.target as HTMLImageElement ).dataset.gravatarHash || '' );
+
+		this.#hideHovercardTimeoutId = setTimeout(
+			() => this.#hideHovercard( ( e.target as HTMLImageElement ).dataset.gravatarHash || '' ),
+			300
+		);
 	}
 
 	setTarget( target: HTMLElement, ignoreSelector?: string ) {
