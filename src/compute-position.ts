@@ -56,6 +56,8 @@ export default function computingPosition(
 	let [ dir, align ] = placement.split( '-' );
 	offset = Math.max( 0, offset );
 
+	// Auto flip the card if there's not enough space
+	// If both sides have not enough space, then the card will be placed on the side with more space
 	if ( autoFlip ) {
 		const topSpace = imgRect.top;
 		const bottomSpace = innerHeight - imgRect.bottom;
@@ -81,8 +83,10 @@ export default function computingPosition(
 		}
 	}
 
+	// Calculate the position of the card
 	if ( dir === 'top' || dir === 'bottom' ) {
 		x = imgScrollL + imgRect.width / 2 - cardRect.width / 2;
+		// The bottom offset will be filled with the card's padding
 		y = dir === 'top' ? imgScrollT - cardRect.height - offset : imgScrollB;
 
 		if ( align === 'start' ) {
@@ -93,6 +97,7 @@ export default function computingPosition(
 			x = imgScrollR - cardRect.width;
 		}
 	} else {
+		// The right offset will be filled with the card's padding
 		x = dir === 'right' ? imgScrollR : imgScrollL - cardRect.width - offset;
 		y = imgScrollT + imgRect.height / 2 - cardRect.height / 2;
 
