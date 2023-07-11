@@ -56,8 +56,7 @@ type Options = Partial< {
 
 const BASE_API_URL = 'https://secure.gravatar.com';
 
-// Ordering matters
-const allowedSocialServices = [ 'gravatar', 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
+const socialLinksOrder = [ 'gravatar', 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
 
 export default class Hovercards {
 	// Options
@@ -165,7 +164,7 @@ export default class Hovercards {
 		];
 		const renderSocialLinks = socialLinks
 			.reduce( ( links, { url, shortname, iconUrl, name } ) => {
-				const idx = allowedSocialServices.indexOf( shortname );
+				const idx = socialLinksOrder.indexOf( shortname );
 
 				if ( idx !== -1 ) {
 					links[ idx ] = `
