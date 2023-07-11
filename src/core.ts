@@ -8,25 +8,12 @@ type Account = Record<
 
 interface ProfileData {
 	hash: string;
-	requestHash: string;
-	profileUrl: string;
 	preferredUsername: string;
 	thumbnailUrl: string;
-	status?: string;
-	name?: Record< 'givenName' | 'familyName' | 'formatted', string >;
-	pronouns?: string;
 	displayName: string;
 	currentLocation?: string;
 	aboutMe?: string;
-	photos: Record< 'value' | 'type', string >[];
-	urls: Record< 'value' | 'title', string >[];
-	profileBackground?: Partial< Record< 'color' | 'url', string > >;
-	phoneNumbers?: Record< 'type' | 'value', string >[];
-	emails?: Record< 'primary' | 'value', string >[];
-	ims?: Record< 'type' | 'value', string >[];
 	accounts?: Account[];
-	payments?: Partial< Record< 'paypalme' | 'patreon' | 'venmo', string > >;
-	currency?: Record< 'type' | 'value', string >[];
 }
 
 type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
@@ -207,9 +194,7 @@ export default class Hovercards {
 			return;
 		}
 
-		let profileData = this.#cachedProfiles.get( hash );
-
-		if ( ! profileData ) {
+		if ( ! this.#cachedProfiles.get( hash ) ) {
 			try {
 				this.#onFetchProfileStart( hash );
 
@@ -222,17 +207,34 @@ export default class Hovercards {
 					throw new Error( data );
 				}
 
-				profileData = data.entry[ 0 ] as ProfileData;
-				this.#cachedProfiles.set( hash, profileData );
+				const {
+					hash: fetchedHash,
+					thumbnailUrl,
+					preferredUsername,
+					displayName,
+					currentLocation,
+					aboutMe,
+					accounts,
+				} = data.entry[ 0 ];
 
-				this.#onFetchProfileSuccess( profileData );
+				this.#cachedProfiles.set( hash, {
+					hash: fetchedHash,
+					thumbnailUrl,
+					preferredUsername,
+					displayName,
+					currentLocation,
+					aboutMe,
+					accounts,
+				} );
+
+				this.#onFetchProfileSuccess( this.#cachedProfiles.get( hash ) );
 			} catch ( error ) {
 				this.#onFetchProfilFailure( hash, error as Error );
 				return;
 			}
 		}
 
-		const hovercard = Hovercards.createHovercard( profileData, this.#additionalClass );
+		const hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), this.#additionalClass );
 		// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
 		document.body.appendChild( hovercard );
 
@@ -250,7 +252,7 @@ export default class Hovercards {
 		hovercard.style.left = `${ x }px`;
 		hovercard.style.top = `${ y }px`;
 
-		this.#onHovercardShown( profileData, hovercard );
+		this.#onHovercardShown( this.#cachedProfiles.get( hash ), hovercard );
 	}
 
 	#hideHovercard( hash: string ) {
