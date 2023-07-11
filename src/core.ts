@@ -7,7 +7,6 @@ type Account = Record<
 >;
 
 interface ProfileData {
-	id: string;
 	hash: string;
 	requestHash: string;
 	profileUrl: string;
