@@ -32,6 +32,8 @@ type Options = Partial< {
 	placement: Placement;
 	autoFlip: boolean;
 	offset: number;
+	delayToShow: number;
+	delayToHide: number;
 	additionalClass: string;
 	onQueryGravatarImg: OnQueryGravatarImg;
 	onFetchProfileStart: OnFetchProfileStart;
@@ -50,6 +52,8 @@ export default class Hovercards {
 	#placement: Placement;
 	#autoFlip: boolean;
 	#offset: number;
+	#delayToShow: number;
+	#delayToHide: number;
 	#additionalClass: string;
 	#onQueryGravatarImg: OnQueryGravatarImg;
 	#onFetchProfileStart: OnFetchProfileStart;
@@ -61,14 +65,16 @@ export default class Hovercards {
 	// Variables
 	static readonly hovercardIdPrefix = 'gravatar-hovercard-';
 	#gravatarImages: HTMLImageElement[] = [];
-	#showHovercardTimeoutId: ReturnType< typeof setTimeout > | undefined;
-	#hideHovercardTimeoutId: ReturnType< typeof setTimeout > | undefined;
+	#showHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
+	#hideHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
 	#cachedProfiles = new Map< string, ProfileData >();
 
 	constructor( {
 		placement = 'right',
 		autoFlip = true,
 		offset = 10,
+		delayToShow = 500,
+		delayToHide = 300,
 		additionalClass = '',
 		onQueryGravatarImg = ( img ) => img,
 		onFetchProfileStart = () => {},
@@ -80,6 +86,8 @@ export default class Hovercards {
 		this.#placement = placement;
 		this.#autoFlip = autoFlip;
 		this.#offset = offset;
+		this.#delayToShow = delayToShow;
+		this.#delayToHide = delayToHide;
 		this.#additionalClass = additionalClass;
 		this.#onQueryGravatarImg = onQueryGravatarImg;
 		this.#onFetchProfileStart = onFetchProfileStart;
@@ -166,119 +174,135 @@ export default class Hovercards {
 			.join( '' );
 
 		hovercard.innerHTML = `
-			<div class="gravatar-hovercard__header">
-				<a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
-					<img class="gravatar-hovercard__avatar" src="${ thumbnailUrl }" width="56px" height="56px" alt="${ displayName }" />
-				</a>
-				<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
-					<h4 class="gravatar-hovercard__name">${ displayName }</h4>
-					${ currentLocation ? `<p class="gravatar-hovercard__location">${ currentLocation }</p>` : '' }
-				</a>
+			<div class="gravatar-hovercard__inner">
+				<div class="gravatar-hovercard__header">
+					<a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
+						<img class="gravatar-hovercard__avatar" src="${ thumbnailUrl }" width="56px" height="56px" alt="${ displayName }" />
+					</a>
+					<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
+						<h4 class="gravatar-hovercard__name">${ displayName }</h4>
+						${ currentLocation ? `<p class="gravatar-hovercard__location">${ currentLocation }</p>` : '' }
+					</a>
+				</div>
+				<div class="gravatar-hovercard__body">
+					${ aboutMe ? `<p class="gravatar-hovercard__about">${ aboutMe }</p>` : '' }
+				</div>
+				<div class="gravatar-hovercard__footer">
+					<div class="gravatar-hovercard__social-links">${ renderSocialLinks }</div>
+					<a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>
+				</div>
 			</div>
-			<div class="gravatar-hovercard__body">
-				${ aboutMe ? `<p class="gravatar-hovercard__about">${ aboutMe }</p>` : '' }
-			</div>
-      <div class="gravatar-hovercard__footer">
-        <div class="gravatar-hovercard__social-links">${ renderSocialLinks }</div>
-        <a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>
-      </div>
     `;
 
 		return hovercard;
 	}
 
-	async #showHovercard( img: HTMLImageElement ) {
-		const hash = img.dataset.gravatarHash || '';
-
-		if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
-			return;
-		}
-
-		if ( ! this.#cachedProfiles.get( hash ) ) {
-			try {
-				this.#onFetchProfileStart( hash );
-
-				const res = await fetch( `${ BASE_API_URL }/${ hash }.json` );
-				const data = await res.json();
-
-				// API error handling
-				if ( ! data?.entry ) {
-					// The data will be an error message
-					throw new Error( data );
-				}
-
-				const {
-					hash: fetchedHash,
-					thumbnailUrl,
-					preferredUsername,
-					displayName,
-					currentLocation,
-					aboutMe,
-					accounts,
-				} = data.entry[ 0 ];
-
-				this.#cachedProfiles.set( hash, {
-					hash: fetchedHash,
-					thumbnailUrl,
-					preferredUsername,
-					displayName,
-					currentLocation,
-					aboutMe,
-					accounts,
-				} );
-
-				this.#onFetchProfileSuccess( this.#cachedProfiles.get( hash ) );
-			} catch ( error ) {
-				this.#onFetchProfilFailure( hash, error as Error );
+	#showHovercard( hash: string, img: HTMLImageElement ) {
+		const id = setTimeout( async () => {
+			if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
 				return;
 			}
-		}
 
-		const hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), this.#additionalClass );
-		// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
-		document.body.appendChild( hovercard );
+			if ( ! this.#cachedProfiles.has( hash ) ) {
+				try {
+					this.#onFetchProfileStart( hash );
 
-		// Don't hide the hovercard when mouse is over it
-		hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutId ) );
-		hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
+					const res = await fetch( `${ BASE_API_URL }/${ hash }.json` );
+					const data = await res.json();
 
-		const { x, y } = computePosition( img, hovercard, {
-			placement: this.#placement,
-			offset: this.#offset,
-			autoFlip: this.#autoFlip,
-		} );
+					// API error handling
+					if ( ! data?.entry ) {
+						// The data will be an error message
+						throw new Error( data );
+					}
 
-		hovercard.style.position = 'absolute';
-		hovercard.style.left = `${ x }px`;
-		hovercard.style.top = `${ y }px`;
+					const {
+						hash: fetchedHash,
+						thumbnailUrl,
+						preferredUsername,
+						displayName,
+						currentLocation,
+						aboutMe,
+						accounts,
+					} = data.entry[ 0 ];
 
-		this.#onHovercardShown( this.#cachedProfiles.get( hash ), hovercard );
+					this.#cachedProfiles.set( hash, {
+						hash: fetchedHash,
+						thumbnailUrl,
+						preferredUsername,
+						displayName,
+						currentLocation,
+						aboutMe,
+						accounts,
+					} );
+
+					this.#onFetchProfileSuccess( this.#cachedProfiles.get( hash ) );
+				} catch ( error ) {
+					this.#onFetchProfilFailure( hash, error as Error );
+					return;
+				}
+			}
+
+			const hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), this.#additionalClass );
+			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
+			document.body.appendChild( hovercard );
+
+			// Don't hide the hovercard when the mouse is over the hovercard from the image
+			hovercard.addEventListener( 'mouseenter', () =>
+				clearInterval( this.#hideHovercardTimeoutIds.get( hash ) )
+			);
+			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
+
+			const { x, y, padding, paddingValue } = computePosition( img, hovercard, {
+				placement: this.#placement,
+				offset: this.#offset,
+				autoFlip: this.#autoFlip,
+			} );
+
+			hovercard.style.position = 'absolute';
+			hovercard.style.left = `${ x }px`;
+			hovercard.style.top = `${ y }px`;
+			// To bridge the gap between the image and the hovercard,
+			// ensuring that the hovercard remains visible when the mouse hovers over the gap
+			hovercard.style[ padding ] = `${ paddingValue }px`;
+
+			this.#onHovercardShown( this.#cachedProfiles.get( hash ), hovercard );
+		}, this.#delayToShow );
+
+		this.#showHovercardTimeoutIds.set( hash, id );
 	}
 
 	#hideHovercard( hash: string ) {
-		const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
+		const id = setTimeout( () => {
+			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
-		if ( hovercard ) {
-			hovercard.remove();
-			this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
-		}
+			if ( hovercard ) {
+				hovercard.remove();
+				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
+			}
+		}, this.#delayToHide );
+
+		this.#hideHovercardTimeoutIds.set( hash, id );
 	}
 
 	#handleMouseEnter( e: MouseEvent ) {
 		e.stopImmediatePropagation();
 
-		this.#showHovercardTimeoutId = setTimeout( () => this.#showHovercard( e.target as HTMLImageElement ), 500 );
+		const img = e.target as HTMLImageElement;
+		const hash = img.dataset.gravatarHash || '';
+
+		// Don't hide the hovercard when the mouse is over the image from the hovercard
+		clearInterval( this.#hideHovercardTimeoutIds.get( hash ) );
+		this.#showHovercard( hash, img );
 	}
 
 	#handleMouseLeave( e: MouseEvent ) {
 		e.stopImmediatePropagation();
 
-		clearInterval( this.#showHovercardTimeoutId );
+		const hash = ( e.target as HTMLImageElement ).dataset.gravatarHash || '';
 
-		this.#hideHovercardTimeoutId = setTimeout(
-			() => this.#hideHovercard( ( e.target as HTMLImageElement ).dataset.gravatarHash || '' ),
-			300
-		);
+		clearInterval( this.#showHovercardTimeoutIds.get( hash ) );
+		this.#hideHovercard( hash );
 	}
 
 	setTarget( target: HTMLElement, ignoreSelector?: string ) {

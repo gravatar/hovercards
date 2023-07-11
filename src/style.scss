@@ -7,17 +7,7 @@
 }
 
 .gravatar-hovercard {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	width: 400px;
-	height: 213px;
-	padding: 24px 24px 16px;
-	background-color: #fff;
-	border: 1px solid #d8dbdd;
-	border-radius: 4px;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-	box-sizing: border-box;
+	display: inline-block;
 	z-index: 10000000;
 
 	h4,
@@ -41,6 +31,20 @@
 		font-size: 14px;
 		line-height: 1.5;
 		color: #000;
+	}
+
+	.gravatar-hovercard__inner {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		width: 400px;
+		height: 213px;
+		padding: 24px 24px 16px;
+		background-color: #fff;
+		border: 1px solid #d8dbdd;
+		border-radius: 4px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+		box-sizing: border-box;
 	}
 
 	.gravatar-hovercard__header {

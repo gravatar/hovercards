@@ -18,29 +18,51 @@ type Options = Partial< {
 	autoFlip: boolean;
 } >;
 
+interface ReturnValues {
+	x: number;
+	y: number;
+	padding: 'paddingBottom' | 'paddingTop' | 'paddingRight' | 'paddingLeft';
+	paddingValue: number;
+}
+
+const paddingMap: Record< string, ReturnValues[ 'padding' ] > = {
+	top: 'paddingBottom',
+	bottom: 'paddingTop',
+	left: 'paddingRight',
+	right: 'paddingLeft',
+};
+
+/**
+ * Calculates the position and padding of a card relative to an image element.
+ *
+ * @param {HTMLImageElement} img       - The image element.
+ * @param {HTMLDivElement}   card      - The card element.
+ * @param {Options}          [options] - Options for computing the position.
+ * @return {ReturnValues}              - Computed position values.
+ */
 export default function computingPosition(
-	reference: HTMLElement,
-	floating: HTMLElement,
+	img: HTMLImageElement,
+	card: HTMLDivElement,
 	{ placement = 'right', offset = 0, autoFlip = true }: Options = {}
-) {
-	const referenceRect = reference.getBoundingClientRect();
-	const floatingRect = floating.getBoundingClientRect();
-	const referenceScrollT = referenceRect.top + scrollY;
-	const referenceScrollB = referenceRect.bottom + scrollY;
-	const referenceScrollR = referenceRect.right + scrollX;
-	const referenceScrollL = referenceRect.left + scrollX;
+): ReturnValues {
+	const imgRect = img.getBoundingClientRect();
+	const cardRect = card.getBoundingClientRect();
+	const imgScrollT = imgRect.top + scrollY;
+	const imgScrollB = imgRect.bottom + scrollY;
+	const imgScrollR = imgRect.right + scrollX;
+	const imgScrollL = imgRect.left + scrollX;
 	let x = 0;
 	let y = 0;
 	let [ dir, align ] = placement.split( '-' );
 	offset = Math.max( 0, offset );
 
 	if ( autoFlip ) {
-		const topSpace = referenceRect.top;
-		const bottomSpace = innerHeight - referenceRect.bottom;
-		const leftSpace = referenceRect.left;
-		const rightSpace = innerWidth - referenceRect.right;
-		const floatingSpaceV = floatingRect.height + offset;
-		const floatingSpaceH = floatingRect.width + offset;
+		const topSpace = imgRect.top;
+		const bottomSpace = innerHeight - imgRect.bottom;
+		const leftSpace = imgRect.left;
+		const rightSpace = innerWidth - imgRect.right;
+		const floatingSpaceV = cardRect.height + offset;
+		const floatingSpaceH = cardRect.width + offset;
 
 		if ( dir === 'top' && topSpace < floatingSpaceV && bottomSpace > topSpace ) {
 			dir = 'bottom';
@@ -60,28 +82,28 @@ export default function computingPosition(
 	}
 
 	if ( dir === 'top' || dir === 'bottom' ) {
-		x = referenceScrollL + referenceRect.width / 2 - floatingRect.width / 2;
-		y = dir === 'top' ? referenceScrollT - floatingRect.height - offset : referenceScrollB + offset;
+		x = imgScrollL + imgRect.width / 2 - cardRect.width / 2;
+		y = dir === 'top' ? imgScrollT - cardRect.height - offset : imgScrollB;
 
 		if ( align === 'start' ) {
-			x = referenceScrollL;
+			x = imgScrollL;
 		}
 
 		if ( align === 'end' ) {
-			x = referenceScrollR - floatingRect.width;
+			x = imgScrollR - cardRect.width;
 		}
 	} else {
-		x = dir === 'right' ? referenceScrollR + offset : referenceScrollL - floatingRect.width - offset;
-		y = referenceScrollT + referenceRect.height / 2 - floatingRect.height / 2;
+		x = dir === 'right' ? imgScrollR : imgScrollL - cardRect.width - offset;
+		y = imgScrollT + imgRect.height / 2 - cardRect.height / 2;
 
 		if ( align === 'start' ) {
-			y = referenceScrollT;
+			y = imgScrollT;
 		}
 
 		if ( align === 'end' ) {
-			y = referenceScrollB - floatingRect.height;
+			y = imgScrollB - cardRect.height;
 		}
 	}
 
-	return { x, y };
+	return { x, y, padding: paddingMap[ dir ], paddingValue: offset };
 }
