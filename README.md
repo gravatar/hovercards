@@ -38,10 +38,6 @@ TODO: Describe the WPCOM Hovercards here.
 
 TODO: Describe how to use the WPCOM Hovercards here.
 
-### API
-
-TODO: Describe the WPCOM Hovercards API here.
-
 ## How to Contribute
 
 TODO: Move this section to a CONTRIBUTING.md file.
