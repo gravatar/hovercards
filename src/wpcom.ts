@@ -30,33 +30,34 @@ window.Gravatar = {
 
 				if ( this.my_hash === hash && ! aboutMe && profileLink ) {
 					profileLink.classList.add( 'gravatar-hovercard__profile-link--edit' );
+					profileLink.href = 'https://en.gravatar.com/profiles/edit';
 					profileLink.textContent = 'Edit your profile';
 					profileLinkEventName = 'click_edit_profile';
 				}
 
 				if ( profileLink ) {
-					profileLink.onclick = ( e ) => sendLinkStat( profileLinkEventName, e );
+					profileLink.onclick = () => sendStat( profileLinkEventName );
 				}
 
 				const avatarLink = hovercard.querySelector(
 					'.gravatar-hovercard__avatar-link'
 				) as HTMLAnchorElement | null;
 				if ( avatarLink ) {
-					avatarLink.onclick = ( e ) => sendLinkStat( 'to_profile', e );
+					avatarLink.onclick = () => sendStat( 'to_profile' );
 				}
 
 				const nameLocationLink = hovercard.querySelector(
 					'.gravatar-hovercard__name-location-link'
 				) as HTMLAnchorElement | null;
 				if ( nameLocationLink ) {
-					nameLocationLink.onclick = ( e ) => sendLinkStat( 'to_profile', e );
+					nameLocationLink.onclick = () => sendStat( 'to_profile' );
 				}
 
 				const socialLinks = hovercard.querySelectorAll( '.gravatar-hovercard__social-link' ) as
 					| NodeListOf< HTMLAnchorElement >
 					| [];
 				socialLinks.forEach( ( link ) => {
-					link.onclick = ( e ) => sendLinkStat( `click_${ link.dataset.serviceName }`, e );
+					link.onclick = () => sendStat( `click_${ link.dataset.serviceName }` );
 				} );
 
 				sendStat( 'show' );
@@ -83,16 +84,7 @@ window.Gravatar = {
 	},
 };
 
-function sendStat( name: string, cb = () => {} ) {
+function sendStat( name: string ) {
 	const img = new Image( 1, 1 );
 	img.src = `https://pixel.wp.com/g.gif?v=wpcom2&x_grav-hover=${ name }&rand=${ Math.random() }-${ new Date().getTime() }`;
-	img.onload = () => cb();
-	img.onerror = () => cb();
-}
-
-// To send stat and then redirect to the link
-function sendLinkStat( name: string, e: MouseEvent ) {
-	e.preventDefault();
-	const anchor = e.currentTarget as HTMLAnchorElement;
-	sendStat( name, () => window.open( anchor.href, anchor.target || '_self' ) );
 }
