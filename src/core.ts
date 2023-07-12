@@ -146,7 +146,7 @@ export default class Hovercards {
 
 	/**
 	 * Creates a hovercard element with the provided profile data.
-	 * Note: When using this method directly, ensure that the profile data is sanitized to prevent potential security vulnerabilities.
+	 * Note: Ensure that the profile data is sanitized to prevent potential security vulnerabilities.
 	 *
 	 * @param {ProfileData} profileData       - The profile data to populate the hovercard.
 	 * @param {string}      [additionalClass] - Additional CSS class for the hovercard.
@@ -215,8 +215,8 @@ export default class Hovercards {
 	}
 
 	/**
-	 * Waits for a specified delay (based on `delayToShow`) to fetch the user's profile data,
-	 * and then shows the hovercard for the specified hash and image element.
+	 * Waits for a specified delay and fetches the user's profile data,
+	 * then shows the hovercard for the specified hash and image element.
 	 *
 	 * @param {string}           hash - The hash associated with the hovercard.
 	 * @param {HTMLImageElement} img  - The image element triggering the hovercard.
@@ -299,8 +299,7 @@ export default class Hovercards {
 	}
 
 	/**
-	 * Waits for a specified delay (based on `delayToHide`) and hides the hovercard
-	 * for the specified hash.
+	 * Waits for a specified delay and hides the hovercard for the specified hash.
 	 *
 	 * @param {string} hash - The hash associated with the hovercard.
 	 * @return {void}
@@ -319,6 +318,13 @@ export default class Hovercards {
 		this.#hideHovercardTimeoutIds.set( hash, id );
 	}
 
+	/**
+	 * Handles the mouseenter event for Gravatar images.
+	 *
+	 * @param {MouseEvent} e - The mouseenter event object.
+	 * @return {void}
+	 * @private
+	 */
 	#handleMouseEnter( e: MouseEvent ) {
 		e.stopImmediatePropagation();
 
@@ -330,6 +336,13 @@ export default class Hovercards {
 		this.#showHovercard( hash, img );
 	}
 
+	/**
+	 * Handles the mouseleave event for Gravatar images.
+	 *
+	 * @param {MouseEvent} e - The mouseleave event object.
+	 * @return {void}
+	 * @private
+	 */
 	#handleMouseLeave( e: MouseEvent ) {
 		e.stopImmediatePropagation();
 
@@ -339,6 +352,13 @@ export default class Hovercards {
 		this.#hideHovercard( hash );
 	}
 
+	/**
+	 * Sets the target element and attaches event listeners to Gravatar images within the target element.
+	 *
+	 * @param {HTMLElement} target           - The target element to set.
+	 * @param {string}      [ignoreSelector] - The selector to ignore specific images.
+	 * @return {void}
+	 */
 	setTarget( target: HTMLElement, ignoreSelector?: string ) {
 		if ( ! target ) {
 			return;
@@ -354,7 +374,11 @@ export default class Hovercards {
 		} );
 	}
 
-	// To remove all event listeners when React component is unmounted
+	/**
+	 * Unsets the target element and removes event listeners from Gravatar images.
+	 *
+	 * @return {void}
+	 */
 	unsetTarget() {
 		if ( ! this.#gravatarImages.length ) {
 			return;

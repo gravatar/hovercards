@@ -33,12 +33,12 @@ const paddingMap: Record< string, ReturnValues[ 'padding' ] > = {
 };
 
 /**
- * Calculates the position and padding of a card relative to an image element.
+ * Computes the position of a card relative to an image.
  *
- * @param {HTMLImageElement} img       - The image element.
- * @param {HTMLDivElement}   card      - The card element.
- * @param {Options}          [options] - Options for computing the position.
- * @return {ReturnValues}              - Computed position values.
+ * @param {HTMLImageElement} img          - The image element.
+ * @param {HTMLDivElement}   card         - The card element.
+ * @param {Options}          [options={}] - The placement, offset, and auto-flip options.
+ * @return {ReturnValues}                 - The computed position values.
  */
 export default function computingPosition(
 	img: HTMLImageElement,
