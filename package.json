@@ -25,6 +25,7 @@
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js --fix",
 		"lint:style": "wp-scripts lint-style --fix",
+		"lint:md:docs": "wp-scripts lint-md-docs --fix",
 		"lint": "run-s 'lint:*'",
 		"clean:build": "rm -rf build",
 		"clean:dist": "rm -rf dist",
