@@ -16,6 +16,8 @@ interface ProfileData {
 	accounts?: Account[];
 }
 
+export type CreateHovercard = ( profileData: ProfileData, additionalClass?: string ) => HTMLDivElement;
+
 type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
 type OnFetchProfileStart = ( hash: string ) => void;
@@ -30,8 +32,8 @@ type OnHovercardHidden = ( profileData: ProfileData, hovercard: HTMLDivElement )
 
 type Options = Partial< {
 	placement: Placement;
-	autoFlip: boolean;
 	offset: number;
+	autoFlip: boolean;
 	delayToShow: number;
 	delayToHide: number;
 	additionalClass: string;
@@ -50,8 +52,8 @@ const socialLinksOrder = [ 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter
 export default class Hovercards {
 	// Options
 	#placement: Placement;
-	#autoFlip: boolean;
 	#offset: number;
+	#autoFlip: boolean;
 	#delayToShow: number;
 	#delayToHide: number;
 	#additionalClass: string;
@@ -153,7 +155,7 @@ export default class Hovercards {
 	 * @return {HTMLDivElement}               - The created hovercard element.
 	 * @static
 	 */
-	static createHovercard( profileData: ProfileData, additionalClass?: string ) {
+	static createHovercard: CreateHovercard = ( profileData, additionalClass ) => {
 		const {
 			hash,
 			thumbnailUrl,
@@ -212,7 +214,7 @@ export default class Hovercards {
     `;
 
 		return hovercard;
-	}
+	};
 
 	/**
 	 * Waits for a specified delay and fetches the user's profile data,

@@ -1,11 +1,11 @@
-import Hovercards from './core';
+import type { CreateHovercard } from './core';
 
 declare global {
 	interface Window {
 		Gravatar: {
-			Hovercards: typeof Hovercards;
 			my_hash: string;
 			profile_cb: ( hash: string, id: string ) => void;
+			createHovercard: CreateHovercard;
 			init: ( container?: string, ignore?: string ) => void;
 		};
 	}

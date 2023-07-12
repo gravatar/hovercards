@@ -1,12 +1,12 @@
 import Hovercards from './core';
 
 window.Gravatar = {
-	// Expose the class for the hovercard preview and many other cases
-	Hovercards,
-	// It will be assigned by WPCOM
+	// It'll be assigned by WPCOM
 	my_hash: '',
-	// It will be called by the Jetpack > WPGroHo.js
+	// It's called by the Jetpack > WPGroHo.js
 	profile_cb: () => {},
+	// It's used by the Gravatar > preview hovercards
+	createHovercard: Hovercards.createHovercard,
 	init( container = 'body', ignore ) {
 		const hovercards = new Hovercards( {
 			onQueryGravatarImg: ( img ) => {
