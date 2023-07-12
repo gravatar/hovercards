@@ -21,8 +21,10 @@
 		"hovercards"
 	],
 	"scripts": {
-		"start": "webpack serve",
-		"build": "webpack --node-env=production",
+		"start:wpcom": "webpack serve --node-env=development",
+		"start:sync-wpcom": "chokidar 'src/*.*' -c 'webpack && rsync -az --delete build/*.js gravatar:public_html/js/ && rsync -az --delete build/*.css gravatar:public_html/dist/css/ && echo ✨ Done!'",
+		"build:wpcom": "webpack --node-env=production",
+		"build:sync-wpcom": "yarn build:wpcom && rsync -az --delete build/*.js gravatar:public_html/js/ && rsync -az --delete build/*.css gravatar:public_html/dist/css/ && echo ✨ Done!",
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js --fix",
 		"lint:style": "wp-scripts lint-style --fix",
@@ -35,6 +37,7 @@
 	"devDependencies": {
 		"@wordpress/scripts": "^26.8.0",
 		"autoprefixer": "^10.4.14",
+		"chokidar-cli": "^3.0.0",
 		"css-loader": "^6.8.1",
 		"html-webpack-plugin": "^5.5.3",
 		"mini-css-extract-plugin": "^2.7.6",

@@ -78,7 +78,7 @@ window.Gravatar = {
 			const bust = hovercardsScript ? hovercardsScript.getAttribute( 'src' )?.split( '?' )[ 1 ] : '';
 			document.head.insertAdjacentHTML(
 				'beforeend',
-				`<link rel="stylesheet" id="gravatar-card-css" href="https://0.gravatar.com/dist/css/hovercard.min.css?${ bust }" />`
+				`<link rel="stylesheet" id="gravatar-card-css" href="https://0.gravatar.com/dist/css/hovercard-v2.min.css?${ bust }" />`
 			);
 		}
 	},

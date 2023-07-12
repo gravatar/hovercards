@@ -6,12 +6,12 @@ const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 const isProduction = process.env.NODE_ENV === 'production';
-const stylesHandler = MiniCssExtractPlugin.loader;
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 const config = {
 	entry: {
-		gprofiles: './src/wpcom.ts',
-		'hovercard.min': './src/style.scss',
+		'gprofiles-v2': './src/wpcom.ts',
+		'hovercard-v2.min': './src/style.scss',
 	},
 	output: {
 		path: path.resolve( __dirname, 'build' ),
@@ -23,7 +23,7 @@ const config = {
 	},
 	plugins: [
 		new RemoveEmptyScriptsPlugin(),
-		! isProduction &&
+		isDevelopment &&
 			new HtmlWebpackPlugin( {
 				template: 'index.html',
 			} ),
@@ -38,11 +38,11 @@ const config = {
 			},
 			{
 				test: /\.s[ac]ss$/i,
-				use: [ stylesHandler, 'css-loader', 'postcss-loader', 'sass-loader' ],
+				use: [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader' ],
 			},
 			{
 				test: /\.css$/i,
-				use: [ stylesHandler, 'css-loader', 'postcss-loader' ],
+				use: [ MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader' ],
 			},
 			{
 				test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,

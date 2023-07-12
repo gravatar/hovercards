@@ -4,28 +4,40 @@ Gravatar Hovercards is a library that allows you to add interactive hovercards t
 
 ## How to Contribute
 
-### WPCOM Library
+### For WPCOM
 
-To contribute to the Gravatar Hovercards WPCOM library, follow these steps:
+To contribute to the WPCOM Gravatar Hovercards library, ensure you have a Gravatar sandbox that's accessible via SSH using the `gravatar` handle.
 
-- **Installation**: Install the project dependencies by running the following command:
+#### Installation
+
+Install the project dependencies by running the following command:
 
 ```bash
 yarn install
 ```
 
-- Development: Start the development server by running the following command:
+#### Development
+
+Kickstart library development by running the following command:
 
 ```bash
-yarn start
+# This launches a development server, enabling you to start developing the hovercards via the `src` folder
+yarn start:wpcom
+
+# This creates a development build of the library and synchronizes it with your Gravatar sandbox
+yarn start:sync-wpcom
 ```
 
-This command will launch a development server, allowing you to start developing the hovercards via the src folder.
+### Build
 
-- Build: Create a production-ready build of the library by running the following command:
+Create a production-ready build of the library by running the following command:
 
 ```bash
-yarn build
+# This creates a build directory that houses the built files
+yarn build:wpcom
+
+# This command both creates a build directory with the built files and synchronizes them with your Gravatar sandbox
+yarn build:sync-wpcom
 ```
 
-This command will create a build folder with the built files.
+
