@@ -1,6 +1,6 @@
 # Gravatar Hovercards
 
-Gravatar Hovercards is a library that allows you to add interactive hovercards to Gravatar profile images with ease.
+Gravatar Hovercards is a library that allows you to add interactive hovercards to Gravatar profile images with ease ✨.
 
 ## How to Contribute
 
@@ -39,5 +39,3 @@ yarn build:wpcom
 # This command both creates a build directory with the built files and synchronizes them with your Gravatar sandbox
 yarn build:sync-wpcom
 ```
-
-
