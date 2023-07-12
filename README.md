@@ -6,7 +6,7 @@ Gravatar Hovercards is a library that allows you to add interactive hovercards t
 
 TODO: Describe how to install the Gravatar Hovercards library here.
 
-## Vanilla Hovercards
+## Vanilla JavaScript
 
 TODO: Describe the Vanilla Hovercards here.
 
@@ -18,11 +18,7 @@ TODO: Describe how to use the Vanilla Hovercards here.
 
 TODO: Describe the Vanilla Hovercards API here.
 
-### How to Contribute
-
-TODO: Describe how to contribute to the Vanilla Hovercards library here.
-
-## React Hovercards
+## React
 
 TODO: Describe the React Hovercards here.
 
@@ -34,11 +30,7 @@ TODO: Describe how to use the React Hovercards here.
 
 TODO: Describe the React Hovercards API here.
 
-### How to Contribute
-
-TODO: Describe how to contribute to the React Hovercards library here.
-
-## WPCOM Hovercards
+## WPCOM
 
 TODO: Describe the WPCOM Hovercards here.
 
@@ -46,7 +38,23 @@ TODO: Describe the WPCOM Hovercards here.
 
 TODO: Describe how to use the WPCOM Hovercards here.
 
-### How to Contribute
+### API
+
+TODO: Describe the WPCOM Hovercards API here.
+
+## How to Contribute
+
+TODO: Move this section to a CONTRIBUTING.md file.
+
+### Vanilla JavaScript
+
+TODO: Describe how to contribute to the Vanilla Hovercards here.
+
+### React
+
+TODO: Describe how to contribute to the React Hovercards here.
+
+### WPCOM
 
 To contribute to the WPCOM Gravatar Hovercards library, ensure you have a Gravatar sandbox that's accessible via SSH using the `gravatar` handle.
 
@@ -84,4 +92,4 @@ yarn build:sync-wpcom
 
 ## License
 
-TODO: Describe the license of the Gravatar Hovercards library here.
+TODO: Create a LICENSE.md file and describe the license of the Gravatar Hovercards library here.
