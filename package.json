@@ -25,10 +25,10 @@
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js --fix",
 		"lint:style": "wp-scripts lint-style --fix",
-		"lint": "run-s lint:*",
+		"lint": "run-s 'lint:*'",
 		"clean:build": "rm -rf build",
 		"clean:dist": "rm -rf dist",
-		"clean": "run-p clean:*"
+		"clean": "run-p 'clean:*'"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.8.0",
@@ -48,5 +48,6 @@
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^4.15.1",
 		"webpack-remove-empty-scripts": "^1.0.3"
-	}
+	},
+	"packageManager": "yarn@3.6.1"
 }
