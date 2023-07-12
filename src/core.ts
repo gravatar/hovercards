@@ -45,7 +45,7 @@ type Options = Partial< {
 
 const BASE_API_URL = 'https://secure.gravatar.com';
 
-const socialLinksOrder = [ 'gravatar', 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
+const socialLinksOrder = [ 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
 
 export default class Hovercards {
 	// Options
@@ -153,22 +153,13 @@ export default class Hovercards {
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
 		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
-		const socialLinks: Partial< Account >[] = [
-			{
-				url: profileUrl,
-				iconUrl: 'https://secure.gravatar.com/icons/gravatar.svg',
-				name: 'Gravatar',
-				shortname: 'gravatar',
-			},
-			...accounts,
-		];
-		const renderSocialLinks = socialLinks
+		const renderSocialLinks = accounts
 			.reduce( ( links, { url, shortname, iconUrl, name } ) => {
 				const idx = socialLinksOrder.indexOf( shortname );
 
 				if ( idx !== -1 ) {
 					links[ idx ] = `
-						<a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }" data-service-name=${ shortname }">
+						<a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }">
 							<img class="gravatar-hovercard__social-icon" src="${ iconUrl }" width="32px" height="32px" alt="${ name }" />
 						</a>
 					`;
@@ -193,7 +184,12 @@ export default class Hovercards {
 					${ aboutMe ? `<p class="gravatar-hovercard__about">${ aboutMe }</p>` : '' }
 				</div>
 				<div class="gravatar-hovercard__footer">
-					<div class="gravatar-hovercard__social-links">${ renderSocialLinks }</div>
+					<div class="gravatar-hovercard__social-links">
+						<a class="gravatar-hovercard__social-link" href="${ profileUrl }" data-service-name="gravatar">
+							<img class="gravatar-hovercard__social-icon" src="https://secure.gravatar.com/icons/gravatar.svg" width="32px" height="32px" alt="Gravatar" />
+						</a>
+						${ renderSocialLinks }
+					</div>
 					<a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>
 				</div>
 			</div>
