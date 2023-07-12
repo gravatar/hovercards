@@ -2,9 +2,51 @@
 
 Gravatar Hovercards is a library that allows you to add interactive hovercards to Gravatar profile images with ease ✨.
 
-## How to Contribute
+## Installation
 
-### For WPCOM
+TODO: Describe how to install the Gravatar Hovercards library here.
+
+## Vanilla Hovercards
+
+TODO: Describe the Vanilla Hovercards here.
+
+### Usage
+
+TODO: Describe how to use the Vanilla Hovercards here.
+
+### API
+
+TODO: Describe the Vanilla Hovercards API here.
+
+### How to Contribute
+
+TODO: Describe how to contribute to the Vanilla Hovercards library here.
+
+## React Hovercards
+
+TODO: Describe the React Hovercards here.
+
+### Usage
+
+TODO: Describe how to use the React Hovercards here.
+
+### API
+
+TODO: Describe the React Hovercards API here.
+
+### How to Contribute
+
+TODO: Describe how to contribute to the React Hovercards library here.
+
+## WPCOM Hovercards
+
+TODO: Describe the WPCOM Hovercards here.
+
+### Usage
+
+TODO: Describe how to use the WPCOM Hovercards here.
+
+### How to Contribute
 
 To contribute to the WPCOM Gravatar Hovercards library, ensure you have a Gravatar sandbox that's accessible via SSH using the `gravatar` handle.
 
@@ -39,3 +81,7 @@ yarn build:wpcom
 # This command both creates a build directory with the built files and synchronizes them with your Gravatar sandbox
 yarn build:sync-wpcom
 ```
+
+## License
+
+TODO: Describe the license of the Gravatar Hovercards library here.
