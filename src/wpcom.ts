@@ -84,6 +84,12 @@ window.Gravatar = {
 	},
 };
 
+/**
+ * Sends an event log to WPCOM stats.
+ *
+ * @param {string} name - The name of the event to send.
+ * @return {void}
+ */
 function sendStat( name: string ) {
 	const img = new Image( 1, 1 );
 	img.src = `https://pixel.wp.com/g.gif?v=wpcom2&x_grav-hover=${ name }&rand=${ Math.random() }-${ new Date().getTime() }`;
