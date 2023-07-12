@@ -1,4 +1,6 @@
 {
+	"$schema": "https://json.schemastore.org/tsconfig",
+
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
 		"noImplicitAny": true,

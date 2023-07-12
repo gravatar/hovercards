@@ -306,6 +306,8 @@ export default class Hovercards {
 	 * @private
 	 */
 	#hideHovercard( hash: string ) {
+		return;
+
 		const id = setTimeout( () => {
 			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
