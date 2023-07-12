@@ -6,6 +6,7 @@
 	"engines": {
 		"node": ">=16"
 	},
+	"packageManager": "yarn@3.6.1",
 	"homepage": "https://github.com/Automattic/gravatar-hovercards#readme",
 	"bugs": "https://github.com/Automattic/gravatar-hovercards/issues",
 	"repository": "https://github.com/Automattic/gravatar-hovercards",
@@ -49,6 +50,5 @@
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^4.15.1",
 		"webpack-remove-empty-scripts": "^1.0.3"
-	},
-	"packageManager": "yarn@3.6.1"
+	}
 }
