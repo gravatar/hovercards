@@ -97,6 +97,14 @@ export default class Hovercards {
 		this.#onHovercardHidden = onHovercardHidden;
 	}
 
+	/**
+	 * Queries Gravatar images within the target element.
+	 *
+	 * @param {HTMLElement} target           - The target element to query.
+	 * @param {string}      [ignoreSelector] - The selector to ignore specific images.
+	 * @return {HTMLImageElement[]}          - The queried Gravatar images.
+	 * @private
+	 */
 	#queryGravatarImages( target: HTMLElement, ignoreSelector?: string ) {
 		let images: HTMLImageElement[] = [];
 		const ignoreImages: HTMLImageElement[] = ignoreSelector
@@ -136,7 +144,15 @@ export default class Hovercards {
 		return this.#gravatarImages;
 	}
 
-	// It can also be used to render an independent hovercard
+	/**
+	 * Creates a hovercard element with the provided profile data.
+	 * Note: When using this method directly, ensure that the profile data is sanitized to prevent potential security vulnerabilities.
+	 *
+	 * @param {ProfileData} profileData       - The profile data to populate the hovercard.
+	 * @param {string}      [additionalClass] - Additional CSS class for the hovercard.
+	 * @return {HTMLDivElement}               - The created hovercard element.
+	 * @static
+	 */
 	static createHovercard( profileData: ProfileData, additionalClass?: string ) {
 		const {
 			hash,
@@ -198,6 +214,15 @@ export default class Hovercards {
 		return hovercard;
 	}
 
+	/**
+	 * Waits for a specified delay (based on `delayToShow`) to fetch the user's profile data,
+	 * and then shows the hovercard for the specified hash and image element.
+	 *
+	 * @param {string}           hash - The hash associated with the hovercard.
+	 * @param {HTMLImageElement} img  - The image element triggering the hovercard.
+	 * @return {void}
+	 * @private
+	 */
 	#showHovercard( hash: string, img: HTMLImageElement ) {
 		const id = setTimeout( async () => {
 			if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
@@ -273,6 +298,14 @@ export default class Hovercards {
 		this.#showHovercardTimeoutIds.set( hash, id );
 	}
 
+	/**
+	 * Waits for a specified delay (based on `delayToHide`) and hides the hovercard
+	 * for the specified hash.
+	 *
+	 * @param {string} hash - The hash associated with the hovercard.
+	 * @return {void}
+	 * @private
+	 */
 	#hideHovercard( hash: string ) {
 		const id = setTimeout( () => {
 			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
