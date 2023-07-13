@@ -169,14 +169,12 @@ export default class Hovercards {
 		hovercard.innerHTML = `
 			<div class="gravatar-hovercard__inner">
 				<div class="gravatar-hovercard__header">
-					<a class="gravatar-hovercard__avatar-link"></a>
-					<a class="gravatar-hovercard__name-location-link"></a>
+					<div class="gravatar-hovercard__avatar-link"></div>
+					<div class="gravatar-hovercard__name-location-link"></div>
 				</div>
 				<div class="gravatar-hovercard__footer">
-					<div class="gravatar-hovercard__social-links">
-						<a class="gravatar-hovercard__social-link"></a>
-					</div>
-					<a class="gravatar-hovercard__profile-link""></a>
+					<div class="gravatar-hovercard__social-link"></div>
+					<div class="gravatar-hovercard__profile-link""></div>
 				</div>
 			</div>
     `;
@@ -289,8 +287,6 @@ export default class Hovercards {
 				fetch( `${ BASE_API_URL }/${ hash }.json` )
 					.then( ( res ) => res.json() )
 					.then( ( data ) => {
-						throw new Error( data );
-
 						// API error handling
 						if ( ! data?.entry ) {
 							// The data will be an error message
