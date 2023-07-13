@@ -60,6 +60,7 @@
 
 	.gravatar-hovercard__avatar {
 		border-radius: 50%;
+		background-color: #eee;
 	}
 
 	.gravatar-hovercard__name-location-link {
@@ -113,5 +114,48 @@
 		&:hover {
 			text-decoration: none;
 		}
+	}
+}
+
+.gravatar-hovercard--skeleton {
+	a {
+		cursor: default;
+		pointer-events: none;
+	}
+
+	.gravatar-hovercard__avatar-link,
+	.gravatar-hovercard__name-location-link,
+	.gravatar-hovercard__social-link {
+		background-color: #eee;
+	}
+
+	.gravatar-hovercard__avatar-link {
+		width: 56px;
+		height: 56px;
+		border-radius: 50%;
+	}
+
+	.gravatar-hovercard__name-location-link {
+		height: 20px;
+		width: 50%;
+	}
+
+	.gravatar-hovercard__social-link {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+	}
+
+	.gravatar-hovercard__inner {
+		position: relative;
+	}
+
+	.gravatar-hovercard__error-message {
+		position: absolute;
+		font-size: 14px;
+		text-align: center;
+		color: #707070;
+		padding-right: 24px;
+		transform: translateY(150%);
 	}
 }

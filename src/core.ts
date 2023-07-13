@@ -147,6 +147,37 @@ export default class Hovercards {
 	}
 
 	/**
+	 * Creates a skeleton hovercard element.
+	 *
+	 * @param {string} hash - The hash associated with the hovercard.
+	 * @return {HTMLDivElement} - The created skeleton hovercard element.
+	 */
+	#createHovercardSkeleton( hash: string ) {
+		const hovercard = document.createElement( 'div' );
+		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
+		hovercard.className = `gravatar-hovercard gravatar-hovercard--skeleton${
+			this.#additionalClass ? ` ${ this.#additionalClass }` : ''
+		}`;
+
+		hovercard.innerHTML = `
+			<div class="gravatar-hovercard__inner">
+				<div class="gravatar-hovercard__header">
+					<a class="gravatar-hovercard__avatar-link"></a>
+					<a class="gravatar-hovercard__name-location-link"></a>
+				</div>
+				<div class="gravatar-hovercard__footer">
+					<div class="gravatar-hovercard__social-links">
+						<a class="gravatar-hovercard__social-link"></a>
+					</div>
+					<a class="gravatar-hovercard__profile-link"">View profile</a>
+				</div>
+			</div>
+    `;
+
+		return hovercard;
+	}
+
+	/**
 	 * Creates a hovercard element with the provided profile data.
 	 * Note: Ensure that the profile data is sanitized to prevent potential security vulnerabilities.
 	 *
@@ -226,52 +257,67 @@ export default class Hovercards {
 	 * @private
 	 */
 	#showHovercard( hash: string, img: HTMLImageElement ) {
-		const id = setTimeout( async () => {
+		const id = setTimeout( () => {
 			if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
 				return;
 			}
 
-			if ( ! this.#cachedProfiles.has( hash ) ) {
-				try {
-					this.#onFetchProfileStart( hash );
+			let hovercard: HTMLDivElement;
 
-					const res = await fetch( `${ BASE_API_URL }/${ hash }.json` );
-					const data = await res.json();
+			if ( this.#cachedProfiles.has( hash ) ) {
+				hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), this.#additionalClass );
+			} else {
+				hovercard = this.#createHovercardSkeleton( hash );
 
-					// API error handling
-					if ( ! data?.entry ) {
-						// The data will be an error message
-						throw new Error( data );
-					}
+				this.#onFetchProfileStart( hash );
 
-					const {
-						hash: fetchedHash,
-						thumbnailUrl,
-						preferredUsername,
-						displayName,
-						currentLocation,
-						aboutMe,
-						accounts,
-					} = data.entry[ 0 ];
+				fetch( `${ BASE_API_URL }/${ hash }.json` )
+					.then( ( res ) => res.json() )
+					.then( ( data ) => {
+						// API error handling
+						if ( ! data?.entry ) {
+							// The data will be an error message
+							throw new Error( data );
+						}
 
-					this.#cachedProfiles.set( hash, {
-						hash: fetchedHash,
-						thumbnailUrl,
-						preferredUsername,
-						displayName,
-						currentLocation,
-						aboutMe,
-						accounts,
+						const {
+							hash: fetchedHash,
+							thumbnailUrl,
+							preferredUsername,
+							displayName,
+							currentLocation,
+							aboutMe,
+							accounts,
+						} = data.entry[ 0 ];
+
+						this.#cachedProfiles.set( hash, {
+							hash: fetchedHash,
+							thumbnailUrl,
+							preferredUsername,
+							displayName,
+							currentLocation,
+							aboutMe,
+							accounts,
+						} );
+
+						const hovercardChildren = Hovercards.createHovercard(
+							this.#cachedProfiles.get( hash ),
+							this.#additionalClass
+						).firstElementChild;
+
+						hovercard.classList.remove( 'gravatar-hovercard--skeleton' );
+						hovercard.replaceChildren( hovercardChildren );
+
+						this.#onHovercardShown( this.#cachedProfiles.get( hash ), hovercard );
+					} )
+					.catch( ( error ) => {
+						hovercard.firstElementChild.innerHTML =
+							'<i class="gravatar-hovercard__error-message">Sorry, we weren’t able to load this Gravatar profile card. Please check your internet connection.</i>';
+
+						this.#onFetchProfilFailure( hash, error as Error );
 					} );
-
-					this.#onFetchProfileSuccess( this.#cachedProfiles.get( hash ) );
-				} catch ( error ) {
-					this.#onFetchProfilFailure( hash, error as Error );
-					return;
-				}
 			}
 
-			const hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), this.#additionalClass );
 			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
 			document.body.appendChild( hovercard );
 
@@ -293,8 +339,6 @@ export default class Hovercards {
 			// To bridge the gap between the image and the hovercard,
 			// ensuring that the hovercard remains visible when the mouse hovers over the gap
 			hovercard.style[ padding ] = `${ paddingValue }px`;
-
-			this.#onHovercardShown( this.#cachedProfiles.get( hash ), hovercard );
 		}, this.#delayToShow );
 
 		this.#showHovercardTimeoutIds.set( hash, id );

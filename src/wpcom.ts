@@ -26,16 +26,16 @@ window.Gravatar = {
 				const profileLink = hovercard.querySelector(
 					'.gravatar-hovercard__profile-link'
 				) as HTMLAnchorElement | null;
-				let profileLinkEventName = 'click_view_profile';
-
-				if ( this.my_hash === hash && ! aboutMe && profileLink ) {
-					profileLink.classList.add( 'gravatar-hovercard__profile-link--edit' );
-					profileLink.href = 'https://en.gravatar.com/profiles/edit';
-					profileLink.textContent = 'Edit your profile';
-					profileLinkEventName = 'click_edit_profile';
-				}
-
 				if ( profileLink ) {
+					let profileLinkEventName = 'click_view_profile';
+
+					if ( this.my_hash === hash && ! aboutMe ) {
+						profileLink.classList.add( 'gravatar-hovercard__profile-link--edit' );
+						profileLink.href = 'https://en.gravatar.com/profiles/edit';
+						profileLink.textContent = 'Edit your profile';
+						profileLinkEventName = 'click_edit_profile';
+					}
+
 					profileLink.onclick = () => sendStat( profileLinkEventName );
 				}
 
