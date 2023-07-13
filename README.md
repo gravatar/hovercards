@@ -36,7 +36,7 @@ TODO: Move this section to a CONTRIBUTING.md file and describe how to contribute
 
 ## WPCOM
 
-TODO: Create a WPCOM.md file and describe the WPCOM Gravatar Hovercards library here.
+TODO: Move it back to the Gravatar codebase once the vanilla JS has been published.
 
 ### Usage
 
