@@ -289,6 +289,8 @@ export default class Hovercards {
 				fetch( `${ BASE_API_URL }/${ hash }.json` )
 					.then( ( res ) => res.json() )
 					.then( ( data ) => {
+						throw new Error( data );
+
 						// API error handling
 						if ( ! data?.entry ) {
 							// The data will be an error message

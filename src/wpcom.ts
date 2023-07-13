@@ -67,7 +67,8 @@ window.Gravatar = {
 			},
 			onFetchProfileSuccess: () => {
 				sendStat( 'fetch' );
-				// Due to the loading skeleton, we should send the show event here
+				// Due to the loading skeleton, we should send the first "show" event here
+				// It will only be sent once in here, because of the data cache
 				sendStat( 'show' );
 			},
 			onFetchProfilFailure: () => sendStat( 'profile_404' ),
