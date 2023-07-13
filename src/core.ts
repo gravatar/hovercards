@@ -7,7 +7,7 @@ type Account = Record<
 >;
 
 interface ProfileData {
-	hash: string;
+	requestHash: string;
 	preferredUsername: string;
 	thumbnailUrl: string;
 	displayName: string;
@@ -16,7 +16,10 @@ interface ProfileData {
 	accounts?: Account[];
 }
 
-export type CreateHovercard = ( profileData: ProfileData, additionalClass?: string ) => HTMLDivElement;
+export type CreateHovercard = (
+	profileData: ProfileData,
+	options?: { additionalClass?: string; myHash?: string }
+) => HTMLDivElement;
 
 type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
@@ -26,7 +29,7 @@ type OnFetchProfileSuccess = ( profileData: ProfileData ) => void;
 
 type OnFetchProfilFailure = ( hash: string, error: Error ) => void;
 
-type OnHovercardShown = ( profileData: ProfileData, hovercard: HTMLDivElement ) => void;
+type OnHovercardShown = ( profileData: ProfileData | undefined, hovercard: HTMLDivElement ) => void;
 
 type OnHovercardHidden = ( profileData: ProfileData, hovercard: HTMLDivElement ) => void;
 
@@ -37,6 +40,7 @@ type Options = Partial< {
 	delayToShow: number;
 	delayToHide: number;
 	additionalClass: string;
+	myHash: string;
 	onQueryGravatarImg: OnQueryGravatarImg;
 	onFetchProfileStart: OnFetchProfileStart;
 	onFetchProfileSuccess: OnFetchProfileSuccess;
@@ -57,6 +61,7 @@ export default class Hovercards {
 	#delayToShow: number;
 	#delayToHide: number;
 	#additionalClass: string;
+	#myHash: string;
 	#onQueryGravatarImg: OnQueryGravatarImg;
 	#onFetchProfileStart: OnFetchProfileStart;
 	#onFetchProfileSuccess: OnFetchProfileSuccess;
@@ -78,6 +83,7 @@ export default class Hovercards {
 		delayToShow = 500,
 		delayToHide = 300,
 		additionalClass = '',
+		myHash = '',
 		onQueryGravatarImg = ( img ) => img,
 		onFetchProfileStart = () => {},
 		onFetchProfileSuccess = () => {},
@@ -91,6 +97,7 @@ export default class Hovercards {
 		this.#delayToShow = delayToShow;
 		this.#delayToHide = delayToHide;
 		this.#additionalClass = additionalClass;
+		this.#myHash = myHash;
 		this.#onQueryGravatarImg = onQueryGravatarImg;
 		this.#onFetchProfileStart = onFetchProfileStart;
 		this.#onFetchProfileSuccess = onFetchProfileSuccess;
@@ -169,7 +176,7 @@ export default class Hovercards {
 					<div class="gravatar-hovercard__social-links">
 						<a class="gravatar-hovercard__social-link"></a>
 					</div>
-					<a class="gravatar-hovercard__profile-link"">View profile</a>
+					<a class="gravatar-hovercard__profile-link""></a>
 				</div>
 			</div>
     `;
@@ -181,14 +188,15 @@ export default class Hovercards {
 	 * Creates a hovercard element with the provided profile data.
 	 * Note: Ensure that the profile data is sanitized to prevent potential security vulnerabilities.
 	 *
-	 * @param {ProfileData} profileData       - The profile data to populate the hovercard.
-	 * @param {string}      [additionalClass] - Additional CSS class for the hovercard.
+	 * @param {ProfileData} profileData               - The profile data to populate the hovercard.
+	 * @param {Object}      [options]                 - Optional parameters for the hovercard.
+	 * @param {string}      [options.additionalClass] - Additional CSS class for the hovercard.
+	 * @param {string}      [options.myHash]          - The hash associated with the user's Gravatar image.
 	 * @return {HTMLDivElement}               - The created hovercard element.
-	 * @static
 	 */
-	static createHovercard: CreateHovercard = ( profileData, additionalClass ) => {
+	static createHovercard: CreateHovercard = ( profileData, { additionalClass, myHash } = {} ) => {
 		const {
-			hash,
+			requestHash,
 			thumbnailUrl,
 			preferredUsername,
 			displayName,
@@ -198,7 +206,7 @@ export default class Hovercards {
 		} = profileData;
 
 		const hovercard = document.createElement( 'div' );
-		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
+		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ requestHash }`;
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
 		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
@@ -239,7 +247,11 @@ export default class Hovercards {
 						</a>
 						${ renderSocialLinks }
 					</div>
-					<a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>
+					${
+						! aboutMe && myHash === requestHash
+							? '<a class="gravatar-hovercard__profile-link gravatar-hovercard__profile-link--edit" href="https://en.gravatar.com/profiles/edit" target="_blank">Edit your profile</a>'
+							: `<a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>`
+					}
 				</div>
 			</div>
     `;
@@ -265,7 +277,10 @@ export default class Hovercards {
 			let hovercard: HTMLDivElement;
 
 			if ( this.#cachedProfiles.has( hash ) ) {
-				hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), this.#additionalClass );
+				hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), {
+					additionalClass: this.#additionalClass,
+					myHash: this.#myHash,
+				} );
 			} else {
 				hovercard = this.#createHovercardSkeleton( hash );
 
@@ -281,7 +296,7 @@ export default class Hovercards {
 						}
 
 						const {
-							hash: fetchedHash,
+							requestHash,
 							thumbnailUrl,
 							preferredUsername,
 							displayName,
@@ -291,7 +306,7 @@ export default class Hovercards {
 						} = data.entry[ 0 ];
 
 						this.#cachedProfiles.set( hash, {
-							hash: fetchedHash,
+							requestHash,
 							thumbnailUrl,
 							preferredUsername,
 							displayName,
@@ -300,15 +315,15 @@ export default class Hovercards {
 							accounts,
 						} );
 
-						const hovercardChildren = Hovercards.createHovercard(
-							this.#cachedProfiles.get( hash ),
-							this.#additionalClass
-						).firstElementChild;
+						const hovercardChildren = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), {
+							additionalClass: this.#additionalClass,
+							myHash: this.#myHash,
+						} ).firstElementChild;
 
 						hovercard.classList.remove( 'gravatar-hovercard--skeleton' );
 						hovercard.replaceChildren( hovercardChildren );
 
-						this.#onHovercardShown( this.#cachedProfiles.get( hash ), hovercard );
+						this.#onFetchProfileSuccess( this.#cachedProfiles.get( hash ) );
 					} )
 					.catch( ( error ) => {
 						hovercard.firstElementChild.innerHTML =
@@ -339,6 +354,8 @@ export default class Hovercards {
 			// To bridge the gap between the image and the hovercard,
 			// ensuring that the hovercard remains visible when the mouse hovers over the gap
 			hovercard.style[ padding ] = `${ paddingValue }px`;
+
+			this.#onHovercardShown( this.#cachedProfiles.get( hash ), hovercard );
 		}, this.#delayToShow );
 
 		this.#showHovercardTimeoutIds.set( hash, id );

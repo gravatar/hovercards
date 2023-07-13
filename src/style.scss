@@ -125,7 +125,8 @@
 
 	.gravatar-hovercard__avatar-link,
 	.gravatar-hovercard__name-location-link,
-	.gravatar-hovercard__social-link {
+	.gravatar-hovercard__social-link,
+	.gravatar-hovercard__profile-link {
 		background-color: #eee;
 	}
 
@@ -144,6 +145,11 @@
 		width: 32px;
 		height: 32px;
 		border-radius: 50%;
+	}
+
+	.gravatar-hovercard__profile-link {
+		height: 16px;
+		width: 76px;
 	}
 
 	.gravatar-hovercard__inner {

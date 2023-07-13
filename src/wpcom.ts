@@ -9,6 +9,7 @@ window.Gravatar = {
 	createHovercard: Hovercards.createHovercard,
 	init( container = 'body', ignore ) {
 		const hovercards = new Hovercards( {
+			myHash: this.my_hash,
 			onQueryGravatarImg: ( img ) => {
 				// Some themes/plugins/widgets are customizing Gravatar images based on these classes, so keep them for compatibility
 				img.classList.add( 'grav-hashed' );
@@ -20,23 +21,28 @@ window.Gravatar = {
 
 				return img;
 			},
-			onHovercardShown: ( { hash, aboutMe }, hovercard ) => {
-				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
+			onHovercardShown: ( profileData, hovercard ) => {
+				if ( ! profileData ) {
+					return;
+				}
 
-				const profileLink = hovercard.querySelector(
+				this.profile_cb(
+					profileData.requestHash,
+					`${ Hovercards.hovercardIdPrefix }${ profileData.requestHash }`
+				);
+
+				const viewProfileLink = hovercard.querySelector(
 					'.gravatar-hovercard__profile-link'
 				) as HTMLAnchorElement | null;
-				if ( profileLink ) {
-					let profileLinkEventName = 'click_view_profile';
+				if ( viewProfileLink ) {
+					viewProfileLink.onclick = () => sendStat( 'click_view_profile' );
+				}
 
-					if ( this.my_hash === hash && ! aboutMe ) {
-						profileLink.classList.add( 'gravatar-hovercard__profile-link--edit' );
-						profileLink.href = 'https://en.gravatar.com/profiles/edit';
-						profileLink.textContent = 'Edit your profile';
-						profileLinkEventName = 'click_edit_profile';
-					}
-
-					profileLink.onclick = () => sendStat( profileLinkEventName );
+				const editProfileLink = hovercard.querySelector(
+					'.gravatar-hovercard__profile-link--edit'
+				) as HTMLAnchorElement | null;
+				if ( editProfileLink ) {
+					editProfileLink.onclick = () => sendStat( 'click_edit_profile' );
 				}
 
 				const avatarLink = hovercard.querySelector(
@@ -62,7 +68,11 @@ window.Gravatar = {
 
 				sendStat( 'show' );
 			},
-			onFetchProfileSuccess: () => sendStat( 'fetch' ),
+			onFetchProfileSuccess: () => {
+				sendStat( 'fetch' );
+				// Due to the loading skeleton, we should send the show event here
+				sendStat( 'show' );
+			},
 			onFetchProfilFailure: () => sendStat( 'profile_404' ),
 		} );
 
