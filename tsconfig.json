@@ -2,34 +2,11 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 
 	"compilerOptions": {
-		"composite": true,
-		"disableReferencedProjectLoad": true,
-
-		"declaration": true,
-		"declarationMap": true,
-		"sourceMap": false,
-
-		"importHelpers": true,
-		"noEmitHelpers": true,
-		"skipLibCheck": true,
-
-		"lib": [ "ES2020", "DOM", "DOM.Iterable" ],
-		"module": "ES2020",
+		"allowSyntheticDefaultImports": true,
+		"noImplicitAny": true,
+		"module": "ESNext",
 		"target": "ES2020",
-		"esModuleInterop": true,
-		"jsx": "react-jsx",
-		"resolveJsonModule": true,
-
-		"strict": false,
-		"isolatedModules": true,
-
-		"moduleResolution": "node",
-		"forceConsistentCasingInFileNames": true,
-
-		"declarationDir": "build/types",
-		"outDir": "build/esm",
-		"rootDir": "src",
-		"types": []
+		"allowJs": true
 	},
 	"include": [ "src" ]
 }

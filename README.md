@@ -1,33 +1,83 @@
 # Gravatar Hovercards
 
-Standalone version of Gravatar hovercards, packaged up ready for NPM.
+Gravatar Hovercards is a library that allows you to add interactive hovercards to Gravatar profile images with ease ✨.
 
 ## Installation
 
-`yarn install`
+TODO: Describe how to install the Gravatar Hovercards library here.
 
-## Development
+## Vanilla JavaScript
 
-To run a local server:
+TODO: Describe the Vanilla Hovercards here.
 
-`yarn start`
+### Usage
 
-It can be accessed from:
+TODO: Describe how to use the Vanilla Hovercards here.
 
-http://localhost:9000/
+### API
 
-## Building
+TODO: Describe the Vanilla Hovercards API here.
 
-`yarn build`
+## React
 
-This will build ESM and CJS modules that export a `Gravatar` object. These are not added to `window` as globals.
+TODO: Describe the React Hovercards here.
 
-It also produces `dist/gprofiles.dev.js` and `dist/gprofiles.js`. This matches the existing `gprofiles.js` file, imports the `Gravatar` object and then exports it on `window` as a global.
+### Usage
 
-## Syncing
+TODO: Describe how to use the React Hovercards here.
 
-To build and sync changes to a Gravatar sandbox:
+### API
 
-`yarn build:sync`
+TODO: Describe the React Hovercards API here.
 
-Your sandbox will need to be available via SSH as `gravatar`.
+## How to Contribute
+
+TODO: Move this section to a CONTRIBUTING.md file and describe how to contribute to the Gravatar Hovercards library for both the Vanilla JavaScript and React libraries.
+
+## WPCOM
+
+TODO: Move it back to the Gravatar codebase once the vanilla JS has been published.
+
+### Usage
+
+TODO: Describe how to use the WPCOM Gravatar Hovercards library here.
+
+### How to Contribute
+
+To contribute to the WPCOM Gravatar Hovercards library, ensure you have a Gravatar sandbox that's accessible via SSH using the `gravatar` handle.
+
+#### Installation
+
+Install the project dependencies by running the following command:
+
+```bash
+yarn install
+```
+
+#### Development
+
+Kickstart library development by running the following command:
+
+```bash
+# This launches a development server, enabling you to start developing the hovercards via the `src` folder
+yarn start:wpcom
+
+# This creates a production-ready build of the library and synchronizes it with your Gravatar sandbox
+yarn start:sync-wpcom
+```
+
+#### Build
+
+Create a production-ready build of the library by running the following command:
+
+```bash
+# This creates a build directory that houses the built files
+yarn build:wpcom
+
+# This command both creates a build directory with the built files and synchronizes them with your Gravatar sandbox
+yarn build:sync-wpcom
+```
+
+## License
+
+TODO: Create a LICENSE.md file and describe the license of the Gravatar Hovercards library here.

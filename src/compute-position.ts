@@ -1,0 +1,114 @@
+export type Placement =
+	| 'top'
+	| 'top-start'
+	| 'top-end'
+	| 'bottom'
+	| 'bottom-start'
+	| 'bottom-end'
+	| 'left'
+	| 'left-start'
+	| 'left-end'
+	| 'right'
+	| 'right-start'
+	| 'right-end';
+
+type Options = Partial< {
+	placement: Placement;
+	offset: number;
+	autoFlip: boolean;
+} >;
+
+interface ReturnValues {
+	x: number;
+	y: number;
+	padding: 'paddingBottom' | 'paddingTop' | 'paddingRight' | 'paddingLeft';
+	paddingValue: number;
+}
+
+const paddingMap: Record< string, ReturnValues[ 'padding' ] > = {
+	top: 'paddingBottom',
+	bottom: 'paddingTop',
+	left: 'paddingRight',
+	right: 'paddingLeft',
+};
+
+/**
+ * Computes the position of a card relative to an image.
+ *
+ * @param {HTMLImageElement} img          - The image element.
+ * @param {HTMLDivElement}   card         - The card element.
+ * @param {Options}          [options={}] - The placement, offset, and auto-flip options.
+ * @return {ReturnValues}                 - The computed position values.
+ */
+export default function computingPosition(
+	img: HTMLImageElement,
+	card: HTMLDivElement,
+	{ placement = 'right', offset = 0, autoFlip = true }: Options = {}
+): ReturnValues {
+	const imgRect = img.getBoundingClientRect();
+	const cardRect = card.getBoundingClientRect();
+	const imgScrollT = imgRect.top + scrollY;
+	const imgScrollB = imgRect.bottom + scrollY;
+	const imgScrollR = imgRect.right + scrollX;
+	const imgScrollL = imgRect.left + scrollX;
+	let x = 0;
+	let y = 0;
+	let [ dir, align ] = placement.split( '-' );
+	offset = Math.max( 0, offset );
+
+	// Auto flip the card if there's not enough space
+	// If both sides have not enough space, then the card will be placed on the side with more space
+	if ( autoFlip ) {
+		const topSpace = imgRect.top;
+		const bottomSpace = innerHeight - imgRect.bottom;
+		const leftSpace = imgRect.left;
+		const rightSpace = innerWidth - imgRect.right;
+		const floatingSpaceV = cardRect.height + offset;
+		const floatingSpaceH = cardRect.width + offset;
+
+		if ( dir === 'top' && topSpace < floatingSpaceV && bottomSpace > topSpace ) {
+			dir = 'bottom';
+		}
+
+		if ( dir === 'bottom' && bottomSpace < floatingSpaceV && topSpace > bottomSpace ) {
+			dir = 'top';
+		}
+
+		if ( dir === 'left' && leftSpace < floatingSpaceH && rightSpace > leftSpace ) {
+			dir = 'right';
+		}
+
+		if ( dir === 'right' && rightSpace < floatingSpaceH && leftSpace > rightSpace ) {
+			dir = 'left';
+		}
+	}
+
+	// Calculate the position of the card
+	if ( dir === 'top' || dir === 'bottom' ) {
+		x = imgScrollL + imgRect.width / 2 - cardRect.width / 2;
+		// The bottom offset will be filled with the card's padding
+		y = dir === 'top' ? imgScrollT - cardRect.height - offset : imgScrollB;
+
+		if ( align === 'start' ) {
+			x = imgScrollL;
+		}
+
+		if ( align === 'end' ) {
+			x = imgScrollR - cardRect.width;
+		}
+	} else {
+		// The right offset will be filled with the card's padding
+		x = dir === 'right' ? imgScrollR : imgScrollL - cardRect.width - offset;
+		y = imgScrollT + imgRect.height / 2 - cardRect.height / 2;
+
+		if ( align === 'start' ) {
+			y = imgScrollT;
+		}
+
+		if ( align === 'end' ) {
+			y = imgScrollB - cardRect.height;
+		}
+	}
+
+	return { x, y, padding: paddingMap[ dir ], paddingValue: offset };
+}

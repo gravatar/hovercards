@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gravatar Hovercards</title>
+	</head>
+	<style>
+		main {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 5rem;
+			height: 100vh;
+		}
+	</style>
+	<body>
+		<main>
+			<div>
+				<img
+					src="https://secure.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&d=retro&r=g"
+					width="60px"
+					height="60px"
+					alt="Gravatar"
+				/>
+			</div>
+			<div>
+				<img
+					src="https://secure.gravatar.com/avatar/99c3338797c95c418d9996bd39931506?s=60&d=retro&r=g"
+					width="60px"
+					height="60px"
+					alt="Gravatar"
+				/>
+			</div>
+		</main>
+		<script>
+			addEventListener( 'DOMContentLoaded', () => {
+				// To test the empty about me case
+				Gravatar.my_hash = '99c3338797c95c418d9996bd39931506';
+				Gravatar.init();
+			} );
+		</script>
+	</body>
+</html>
