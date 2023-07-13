@@ -26,10 +26,7 @@ window.Gravatar = {
 					return;
 				}
 
-				this.profile_cb(
-					profileData.requestHash,
-					`${ Hovercards.hovercardIdPrefix }${ profileData.requestHash }`
-				);
+				this.profile_cb( profileData.hash, `${ Hovercards.hovercardIdPrefix }${ profileData.hash }` );
 
 				const viewProfileLink = hovercard.querySelector(
 					'.gravatar-hovercard__profile-link'

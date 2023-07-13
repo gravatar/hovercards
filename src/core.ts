@@ -7,7 +7,7 @@ type Account = Record<
 >;
 
 interface ProfileData {
-	requestHash: string;
+	hash: string;
 	preferredUsername: string;
 	thumbnailUrl: string;
 	displayName: string;
@@ -196,7 +196,7 @@ export default class Hovercards {
 	 */
 	static createHovercard: CreateHovercard = ( profileData, { additionalClass, myHash } = {} ) => {
 		const {
-			requestHash,
+			hash,
 			thumbnailUrl,
 			preferredUsername,
 			displayName,
@@ -206,7 +206,7 @@ export default class Hovercards {
 		} = profileData;
 
 		const hovercard = document.createElement( 'div' );
-		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ requestHash }`;
+		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
 		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
@@ -248,7 +248,7 @@ export default class Hovercards {
 						${ renderSocialLinks }
 					</div>
 					${
-						! aboutMe && myHash === requestHash
+						! aboutMe && myHash === hash
 							? '<a class="gravatar-hovercard__profile-link gravatar-hovercard__profile-link--edit" href="https://en.gravatar.com/profiles/edit" target="_blank">Edit your profile</a>'
 							: `<a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>`
 					}
@@ -296,7 +296,7 @@ export default class Hovercards {
 						}
 
 						const {
-							requestHash,
+							hash: fetchedHash,
 							thumbnailUrl,
 							preferredUsername,
 							displayName,
@@ -306,7 +306,7 @@ export default class Hovercards {
 						} = data.entry[ 0 ];
 
 						this.#cachedProfiles.set( hash, {
-							requestHash,
+							hash: fetchedHash,
 							thumbnailUrl,
 							preferredUsername,
 							displayName,
