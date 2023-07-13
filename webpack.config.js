@@ -6,9 +6,9 @@ const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 const isProduction = process.env.NODE_ENV === 'production';
-const isDevelopment = process.env.NODE_ENV === 'development';
 
-const config = {
+module.exports = {
+	mode: isProduction ? 'production' : 'development',
 	entry: {
 		'gprofiles-v2': './src/wpcom.ts',
 		'hovercard-v2.min': './src/style.scss',
@@ -23,7 +23,7 @@ const config = {
 	},
 	plugins: [
 		new RemoveEmptyScriptsPlugin(),
-		isDevelopment &&
+		! isProduction &&
 			new HtmlWebpackPlugin( {
 				template: 'index.html',
 			} ),
@@ -53,13 +53,4 @@ const config = {
 	resolve: {
 		extensions: [ '.tsx', '.ts', '.jsx', '.js' ],
 	},
-};
-
-module.exports = () => {
-	if ( isProduction ) {
-		config.mode = 'production';
-	} else {
-		config.mode = 'development';
-	}
-	return config;
 };

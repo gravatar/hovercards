@@ -62,7 +62,7 @@ Kickstart library development by running the following command:
 # This launches a development server, enabling you to start developing the hovercards via the `src` folder
 yarn start:wpcom
 
-# This creates a development build of the library and synchronizes it with your Gravatar sandbox
+# This creates a production-ready build of the library and synchronizes it with your Gravatar sandbox
 yarn start:sync-wpcom
 ```
 
