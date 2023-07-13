@@ -30,27 +30,19 @@ TODO: Describe how to use the React Hovercards here.
 
 TODO: Describe the React Hovercards API here.
 
+## How to Contribute
+
+TODO: Move this section to a CONTRIBUTING.md file and describe how to contribute to the Gravatar Hovercards library for both the Vanilla JavaScript and React libraries.
+
 ## WPCOM
 
-TODO: Describe the WPCOM Hovercards here.
+TODO: Create a WPCOM.md file and describe the WPCOM Gravatar Hovercards library here.
 
 ### Usage
 
-TODO: Describe how to use the WPCOM Hovercards here.
+TODO: Describe how to use the WPCOM Gravatar Hovercards library here.
 
-## How to Contribute
-
-TODO: Move this section to a CONTRIBUTING.md file.
-
-### Vanilla JavaScript
-
-TODO: Describe how to contribute to the Vanilla Hovercards here.
-
-### React
-
-TODO: Describe how to contribute to the React Hovercards here.
-
-### WPCOM
+### How to Contribute
 
 To contribute to the WPCOM Gravatar Hovercards library, ensure you have a Gravatar sandbox that's accessible via SSH using the `gravatar` handle.
 
@@ -74,7 +66,7 @@ yarn start:wpcom
 yarn start:sync-wpcom
 ```
 
-### Build
+#### Build
 
 Create a production-ready build of the library by running the following command:
 
