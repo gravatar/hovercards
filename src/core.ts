@@ -313,13 +313,13 @@ export default class Hovercards {
 							accounts,
 						} );
 
-						const hovercardChildren = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), {
+						const hovercardInner = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), {
 							additionalClass: this.#additionalClass,
 							myHash: this.#myHash,
 						} ).firstElementChild;
 
 						hovercard.classList.remove( 'gravatar-hovercard--skeleton' );
-						hovercard.replaceChildren( hovercardChildren );
+						hovercard.replaceChildren( hovercardInner );
 
 						this.#onFetchProfileSuccess( hash, this.#cachedProfiles.get( hash ) );
 					} )
