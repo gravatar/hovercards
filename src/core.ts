@@ -25,13 +25,13 @@ type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
 type OnFetchProfileStart = ( hash: string ) => void;
 
-type OnFetchProfileSuccess = ( profileData: ProfileData ) => void;
+type OnFetchProfileSuccess = ( hash: string, profileData: ProfileData ) => void;
 
 type OnFetchProfilFailure = ( hash: string, error: Error ) => void;
 
-type OnHovercardShown = ( profileData: ProfileData | undefined, hovercard: HTMLDivElement ) => void;
+type OnHovercardShown = ( hash: string, hovercard: HTMLDivElement ) => void;
 
-type OnHovercardHidden = ( profileData: ProfileData, hovercard: HTMLDivElement ) => void;
+type OnHovercardHidden = ( hash: string, hovercard: HTMLDivElement ) => void;
 
 type Options = Partial< {
 	placement: Placement;
@@ -321,7 +321,7 @@ export default class Hovercards {
 						hovercard.classList.remove( 'gravatar-hovercard--skeleton' );
 						hovercard.replaceChildren( hovercardChildren );
 
-						this.#onFetchProfileSuccess( this.#cachedProfiles.get( hash ) );
+						this.#onFetchProfileSuccess( hash, this.#cachedProfiles.get( hash ) );
 					} )
 					.catch( ( error ) => {
 						hovercard.firstElementChild.innerHTML =
@@ -353,7 +353,7 @@ export default class Hovercards {
 			// ensuring that the hovercard remains visible when the mouse hovers over the gap
 			hovercard.style[ padding ] = `${ paddingValue }px`;
 
-			this.#onHovercardShown( this.#cachedProfiles.get( hash ), hovercard );
+			this.#onHovercardShown( hash, hovercard );
 		}, this.#delayToShow );
 
 		this.#showHovercardTimeoutIds.set( hash, id );
@@ -372,7 +372,7 @@ export default class Hovercards {
 
 			if ( hovercard ) {
 				hovercard.remove();
-				this.#onHovercardHidden( this.#cachedProfiles.get( hash )!, hovercard as HTMLDivElement );
+				this.#onHovercardHidden( hash, hovercard as HTMLDivElement );
 			}
 		}, this.#delayToHide );
 

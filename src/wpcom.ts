@@ -21,12 +21,8 @@ window.Gravatar = {
 
 				return img;
 			},
-			onHovercardShown: ( profileData, hovercard ) => {
-				if ( ! profileData ) {
-					return;
-				}
-
-				this.profile_cb( profileData.hash, `${ Hovercards.hovercardIdPrefix }${ profileData.hash }` );
+			onHovercardShown: ( hash, hovercard ) => {
+				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
 
 				const viewProfileLink = hovercard.querySelector(
 					'.gravatar-hovercard__profile-link'
@@ -65,12 +61,7 @@ window.Gravatar = {
 
 				sendStat( 'show' );
 			},
-			onFetchProfileSuccess: () => {
-				sendStat( 'fetch' );
-				// Due to the loading skeleton, we should send the first "show" event here
-				// It will only be sent once in here, because of the data cache
-				sendStat( 'show' );
-			},
+			onFetchProfileSuccess: () => sendStat( 'fetch' ),
 			onFetchProfilFailure: () => sendStat( 'profile_404' ),
 		} );
 
