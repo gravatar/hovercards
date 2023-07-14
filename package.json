@@ -24,7 +24,7 @@
 		"start:wpcom": "webpack serve",
 		"start:sync-wpcom": "chokidar 'src/*.*' -c 'webpack && yarn build:sync-wpcom'",
 		"build:wpcom": "webpack --node-env=production",
-		"build:sync-wpcom": "yarn build:wpcom && rsync -az --delete build/*.js gravatar:public_html/js/ && rsync -az --delete build/*.css gravatar:public_html/dist/css/ && echo ✨ Done!",
+		"build:sync-wpcom": "yarn build:wpcom && rsync -az --delete build/* gravatar:public_html/js/hovercards/ && echo ✨ Done!",
 		"format": "wp-scripts format",
 		"type-check": "tsc --noEmit",
 		"lint:js": "wp-scripts lint-js --fix",

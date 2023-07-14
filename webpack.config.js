@@ -10,8 +10,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 module.exports = {
 	mode: isProduction ? 'production' : 'development',
 	entry: {
-		'gprofiles-v2': './src/wpcom.ts',
-		'hovercard-v2.min': './src/style.scss',
+		'hovercards.min': './src/wpcom.ts',
 	},
 	output: {
 		path: path.resolve( __dirname, 'build' ),
