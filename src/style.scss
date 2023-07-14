@@ -16,6 +16,7 @@
 	}
 
 	p,
+	i,
 	a {
 		font-family:
 			"SF Pro Text",
@@ -107,6 +108,15 @@
 		color: #1d4fc4;
 	}
 
+	.gravatar-hovercard__error-message {
+		position: absolute;
+		font-size: 14px;
+		text-align: center;
+		color: #707070;
+		padding-right: 24px;
+		transform: translateY(150%);
+	}
+
 	// Override WP theme styles
 	.gravatar-hovercard__profile-link {
 		text-decoration: underline;
@@ -149,14 +159,5 @@
 
 	.gravatar-hovercard__inner {
 		position: relative;
-	}
-
-	.gravatar-hovercard__error-message {
-		position: absolute;
-		font-size: 14px;
-		text-align: center;
-		color: #707070;
-		padding-right: 24px;
-		transform: translateY(150%);
 	}
 }
