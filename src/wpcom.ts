@@ -71,7 +71,7 @@ window.Gravatar = {
 		);
 
 		// Don't load the CSS if it's already loaded (e.g. dev mode)
-		if ( ! document.querySelector( 'link[href*="hovercard.min.css"]' ) ) {
+		if ( ! document.querySelector( 'link[href*="hovercard-v2.min.css"]' ) ) {
 			// Loading hovercards CSS
 			const hovercardsScript = document.querySelector( 'script[src*="/js/gprofiles."]' );
 			const bust = hovercardsScript ? hovercardsScript.getAttribute( 'src' )?.split( '?' )[ 1 ] : '';
