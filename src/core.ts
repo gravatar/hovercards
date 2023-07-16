@@ -1,5 +1,6 @@
 import type { Placement } from './compute-position';
 import computePosition from './compute-position';
+import { escUrl, escHtml } from './sanitizer';
 
 type Account = Record<
 	'domain' | 'display' | 'url' | 'iconUrl' | 'username' | 'verified' | 'name' | 'shortname',
@@ -204,7 +205,6 @@ export default class Hovercards {
 
 	/**
 	 * Creates a hovercard element with the provided profile data.
-	 * Note: Ensure that the profile data is sanitized to prevent potential security vulnerabilities.
 	 *
 	 * @param {ProfileData} profileData               - The profile data to populate the hovercard.
 	 * @param {Object}      [options]                 - Optional parameters for the hovercard.
@@ -226,15 +226,18 @@ export default class Hovercards {
 		const hovercard = document.createElement( 'div' );
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
-		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
+		const profileUrl = escUrl( `https://gravatar.com/${ preferredUsername }` );
+		const username = escHtml( displayName );
 		const renderSocialLinks = accounts
 			.reduce( ( links, { url, shortname, iconUrl, name } ) => {
 				const idx = socialLinksOrder.indexOf( shortname );
 
 				if ( idx !== -1 ) {
 					links[ idx ] = `
-						<a class="gravatar-hovercard__social-link" href="${ url }" target="_blank" data-service-name="${ shortname }">
-							<img class="gravatar-hovercard__social-icon" src="${ iconUrl }" width="32px" height="32px" alt="${ name }" />
+						<a class="gravatar-hovercard__social-link" href="${ escUrl( url ) }" target="_blank" data-service-name="${ shortname }">
+							<img class="gravatar-hovercard__social-icon" src="${ escUrl( iconUrl ) }" width="32px" height="32px" alt="${ escHtml(
+						name
+					) }" />
 						</a>
 					`;
 				}
@@ -247,15 +250,17 @@ export default class Hovercards {
 			<div class="gravatar-hovercard__inner">
 				<div class="gravatar-hovercard__header">
 					<a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
-						<img class="gravatar-hovercard__avatar" src="${ thumbnailUrl }" width="56px" height="56px" alt="${ displayName }" />
+						<img class="gravatar-hovercard__avatar" src="${ escUrl(
+							thumbnailUrl
+						) }" width="56px" height="56px" alt="${ username }" />
 					</a>
 					<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
-						<h4 class="gravatar-hovercard__name">${ displayName }</h4>
-						${ currentLocation ? `<p class="gravatar-hovercard__location">${ currentLocation }</p>` : '' }
+						<h4 class="gravatar-hovercard__name">${ username }</h4>
+						${ currentLocation ? `<p class="gravatar-hovercard__location">${ escHtml( currentLocation ) }</p>` : '' }
 					</a>
 				</div>
 				<div class="gravatar-hovercard__body">
-					${ aboutMe ? `<p class="gravatar-hovercard__about">${ aboutMe }</p>` : '' }
+					${ aboutMe ? `<p class="gravatar-hovercard__about">${ escHtml( aboutMe ) }</p>` : '' }
 				</div>
 				<div class="gravatar-hovercard__footer">
 					<div class="gravatar-hovercard__social-links">
