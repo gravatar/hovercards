@@ -218,7 +218,7 @@ export default class Hovercards {
 
 				if ( idx !== -1 ) {
 					links[ idx ] = `
-						<a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }">
+						<a class="gravatar-hovercard__social-link" href="${ url }" target="_blank" data-service-name="${ shortname }">
 							<img class="gravatar-hovercard__social-icon" src="${ iconUrl }" width="32px" height="32px" alt="${ name }" />
 						</a>
 					`;
@@ -244,7 +244,7 @@ export default class Hovercards {
 				</div>
 				<div class="gravatar-hovercard__footer">
 					<div class="gravatar-hovercard__social-links">
-						<a class="gravatar-hovercard__social-link" href="${ profileUrl }" data-service-name="gravatar">
+						<a class="gravatar-hovercard__social-link" href="${ profileUrl }" target="_blank" data-service-name="gravatar">
 							<img class="gravatar-hovercard__social-icon" src="https://secure.gravatar.com/icons/gravatar.svg" width="32px" height="32px" alt="Gravatar" />
 						</a>
 						${ renderSocialLinks }
