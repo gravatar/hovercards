@@ -52,6 +52,7 @@ type Options = Partial< {
 interface GravatarImg {
 	id: string;
 	hash: string;
+	params: string;
 	img: HTMLImageElement;
 }
 
@@ -137,7 +138,7 @@ export default class Hovercards {
 					return null;
 				}
 
-				const { hostname, pathname } = new URL( img.src );
+				const { hostname, pathname, searchParams: p } = new URL( img.src );
 
 				if ( ! hostname.endsWith( 'gravatar.com' ) ) {
 					return null;
@@ -149,9 +150,23 @@ export default class Hovercards {
 					return null;
 				}
 
+				const params = [];
+				let d = p.get( 'd' ) || p.get( 'default' );
+				d = d ? `d=${ d }` : '';
+				let r = p.get( 'r' ) || p.get( 'rating' );
+				r = r ? `r=${ r }` : '';
+
+				if ( d ) {
+					params.push( d );
+				}
+				if ( r ) {
+					params.push( r );
+				}
+
 				return {
 					id: `gravatar-hovercard-${ hash }-${ idx }`,
 					hash,
+					params: params.length ? `?${ params.join( '&' ) }` : '',
 					img: this.#onQueryGravatarImg( img ) || img,
 				};
 			} )
@@ -269,7 +284,7 @@ export default class Hovercards {
 	 * @return {void}
 	 * @private
 	 */
-	#showHovercard( { id, hash, img }: GravatarImg ) {
+	#showHovercard( { id, hash, params, img }: GravatarImg ) {
 		const timeoutId = setTimeout( () => {
 			if ( document.getElementById( id ) ) {
 				return;
@@ -278,10 +293,15 @@ export default class Hovercards {
 			let hovercard: HTMLDivElement;
 
 			if ( this.#cachedProfiles.has( hash ) ) {
-				hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), {
-					additionalClass: this.#additionalClass,
-					myHash: this.#myHash,
-				} );
+				const profile = this.#cachedProfiles.get( hash );
+
+				hovercard = Hovercards.createHovercard(
+					{ ...profile, thumbnailUrl: profile.thumbnailUrl + params },
+					{
+						additionalClass: this.#additionalClass,
+						myHash: this.#myHash,
+					}
+				);
 			} else {
 				hovercard = this.#createHovercardSkeleton();
 
@@ -316,10 +336,14 @@ export default class Hovercards {
 							accounts,
 						} );
 
-						const hovercardInner = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), {
-							additionalClass: this.#additionalClass,
-							myHash: this.#myHash,
-						} ).firstElementChild;
+						const profile = this.#cachedProfiles.get( hash );
+						const hovercardInner = Hovercards.createHovercard(
+							{ ...profile, thumbnailUrl: profile.thumbnailUrl + params },
+							{
+								additionalClass: this.#additionalClass,
+								myHash: this.#myHash,
+							}
+						).firstElementChild;
 
 						hovercard.classList.remove( 'gravatar-hovercard--skeleton' );
 						hovercard.replaceChildren( hovercardInner );
