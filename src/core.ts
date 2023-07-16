@@ -151,23 +151,14 @@ export default class Hovercards {
 					return null;
 				}
 
-				const params = [];
-				let d = p.get( 'd' ) || p.get( 'default' );
-				d = d ? `d=${ d }` : '';
-				let r = p.get( 'r' ) || p.get( 'rating' );
-				r = r ? `r=${ r }` : '';
-
-				if ( d ) {
-					params.push( d );
-				}
-				if ( r ) {
-					params.push( r );
-				}
+				const d = p.get( 'd' ) || p.get( 'default' );
+				const r = p.get( 'r' ) || p.get( 'rating' );
+				const params = [ d && `d=${ d }`, r && `r=${ r }` ].filter( Boolean ).join( '&' );
 
 				return {
 					id: `gravatar-hovercard-${ hash }-${ idx }`,
 					hash,
-					params: params.length ? `?${ params.join( '&' ) }` : '',
+					params: params ? `?=${ params }` : '',
 					img: this.#onQueryGravatarImg( img ) || img,
 				};
 			} )
