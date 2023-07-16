@@ -49,6 +49,12 @@ type Options = Partial< {
 	onHovercardHidden: OnHovercardHidden;
 } >;
 
+interface GravatarImg {
+	id: string;
+	hash: string;
+	img: HTMLImageElement;
+}
+
 const BASE_API_URL = 'https://secure.gravatar.com';
 
 const socialLinksOrder = [ 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
@@ -70,8 +76,7 @@ export default class Hovercards {
 	#onHovercardHidden: OnHovercardHidden;
 
 	// Variables
-	static readonly hovercardIdPrefix = 'gravatar-hovercard-';
-	#gravatarImages: HTMLImageElement[] = [];
+	#gravatarImages: GravatarImg[] = [];
 	#showHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
 	#hideHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
 	#cachedProfiles = new Map< string, ProfileData >();
@@ -127,7 +132,7 @@ export default class Hovercards {
 		}
 
 		this.#gravatarImages = images
-			.map( ( img ) => {
+			.map( ( img, idx ) => {
 				if ( ignoreImages.includes( img ) ) {
 					return null;
 				}
@@ -144,11 +149,13 @@ export default class Hovercards {
 					return null;
 				}
 
-				img.setAttribute( 'data-gravatar-hash', hash );
-
-				return this.#onQueryGravatarImg( img );
+				return {
+					id: `gravatar-hovercard-${ hash }-${ idx }`,
+					hash,
+					img: this.#onQueryGravatarImg( img ) || img,
+				};
 			} )
-			.filter( Boolean ) as HTMLImageElement[];
+			.filter( Boolean );
 
 		return this.#gravatarImages;
 	}
@@ -156,12 +163,10 @@ export default class Hovercards {
 	/**
 	 * Creates a skeleton hovercard element.
 	 *
-	 * @param {string} hash - The hash associated with the hovercard.
-	 * @return {HTMLDivElement} - The created skeleton hovercard element.
+	 * @return {HTMLDivElement} The created skeleton hovercard element.
 	 */
-	#createHovercardSkeleton( hash: string ) {
+	#createHovercardSkeleton() {
 		const hovercard = document.createElement( 'div' );
-		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
 		hovercard.className = `gravatar-hovercard gravatar-hovercard--skeleton${
 			this.#additionalClass ? ` ${ this.#additionalClass }` : ''
 		}`;
@@ -204,7 +209,6 @@ export default class Hovercards {
 		} = profileData;
 
 		const hovercard = document.createElement( 'div' );
-		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
 		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
@@ -261,14 +265,13 @@ export default class Hovercards {
 	 * Waits for a specified delay and fetches the user's profile data,
 	 * then shows the hovercard for the specified hash and image element.
 	 *
-	 * @param {string}           hash - The hash associated with the hovercard.
-	 * @param {HTMLImageElement} img  - The image element triggering the hovercard.
+	 * @param {GravatarImg} gravatarImg - The Gravatar image object.
 	 * @return {void}
 	 * @private
 	 */
-	#showHovercard( hash: string, img: HTMLImageElement ) {
-		const id = setTimeout( () => {
-			if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
+	#showHovercard( { id, hash, img }: GravatarImg ) {
+		const timeoutId = setTimeout( () => {
+			if ( document.getElementById( id ) ) {
 				return;
 			}
 
@@ -280,7 +283,7 @@ export default class Hovercards {
 					myHash: this.#myHash,
 				} );
 			} else {
-				hovercard = this.#createHovercardSkeleton( hash );
+				hovercard = this.#createHovercardSkeleton();
 
 				this.#onFetchProfileStart( hash );
 
@@ -331,14 +334,14 @@ export default class Hovercards {
 					} );
 			}
 
+			// Set the hovercard ID here to avoid the show / hide side effect
+			hovercard.id = id;
+			// Don't hide the hovercard when the mouse is over the hovercard from the image
+			hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutIds.get( id ) ) );
+			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( id ) );
+
 			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
 			document.body.appendChild( hovercard );
-
-			// Don't hide the hovercard when the mouse is over the hovercard from the image
-			hovercard.addEventListener( 'mouseenter', () =>
-				clearInterval( this.#hideHovercardTimeoutIds.get( hash ) )
-			);
-			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
 
 			const { x, y, padding, paddingValue } = computePosition( img, hovercard, {
 				placement: this.#placement,
@@ -356,61 +359,59 @@ export default class Hovercards {
 			this.#onHovercardShown( hash, hovercard );
 		}, this.#delayToShow );
 
-		this.#showHovercardTimeoutIds.set( hash, id );
+		this.#showHovercardTimeoutIds.set( id, timeoutId );
 	}
 
 	/**
 	 * Waits for a specified delay and hides the hovercard for the specified hash.
 	 *
-	 * @param {string} hash - The hash associated with the hovercard.
+	 * @param {string} id - The ID associated with the hovercard.
 	 * @return {void}
 	 * @private
 	 */
-	#hideHovercard( hash: string ) {
-		const id = setTimeout( () => {
-			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
+	#hideHovercard( id: string ) {
+		const timeoutId = setTimeout( () => {
+			const hovercard = document.getElementById( id );
 
 			if ( hovercard ) {
 				hovercard.remove();
-				this.#onHovercardHidden( hash, hovercard as HTMLDivElement );
+				this.#onHovercardHidden( id, hovercard as HTMLDivElement );
 			}
 		}, this.#delayToHide );
 
-		this.#hideHovercardTimeoutIds.set( hash, id );
+		this.#hideHovercardTimeoutIds.set( id, timeoutId );
 	}
 
 	/**
 	 * Handles the mouseenter event for Gravatar images.
 	 *
-	 * @param {MouseEvent} e - The mouseenter event object.
+	 * @param {MouseEvent} e           - The mouseenter event object.
+	 * @param              gravatarImg
 	 * @return {void}
 	 * @private
 	 */
-	#handleMouseEnter( e: MouseEvent ) {
+	#handleMouseEnter( e: MouseEvent, gravatarImg: GravatarImg ) {
 		e.stopImmediatePropagation();
 
-		const img = e.target as HTMLImageElement;
-		const hash = img.dataset.gravatarHash || '';
-
 		// Don't hide the hovercard when the mouse is over the image from the hovercard
-		clearInterval( this.#hideHovercardTimeoutIds.get( hash ) );
-		this.#showHovercard( hash, img );
+		clearInterval( this.#hideHovercardTimeoutIds.get( gravatarImg.id ) );
+		this.#showHovercard( gravatarImg );
 	}
 
 	/**
 	 * Handles the mouseleave event for Gravatar images.
 	 *
-	 * @param {MouseEvent} e - The mouseleave event object.
+	 * @param {MouseEvent} e              - The mouseleave event object.
+	 * @param              gravatarImg
+	 * @param              gravatarImg.id
 	 * @return {void}
 	 * @private
 	 */
-	#handleMouseLeave( e: MouseEvent ) {
+	#handleMouseLeave( e: MouseEvent, { id }: GravatarImg ) {
 		e.stopImmediatePropagation();
 
-		const hash = ( e.target as HTMLImageElement ).dataset.gravatarHash || '';
-
-		clearInterval( this.#showHovercardTimeoutIds.get( hash ) );
-		this.#hideHovercard( hash );
+		clearInterval( this.#showHovercardTimeoutIds.get( id ) );
+		this.#hideHovercard( id );
 	}
 
 	/**
@@ -427,11 +428,9 @@ export default class Hovercards {
 
 		this.unsetTarget();
 
-		const images = this.#queryGravatarImages( target, ignoreSelector );
-
-		images.forEach( ( img ) => {
-			img.addEventListener( 'mouseenter', this.#handleMouseEnter.bind( this ) );
-			img.addEventListener( 'mouseleave', this.#handleMouseLeave.bind( this ) );
+		this.#queryGravatarImages( target, ignoreSelector ).forEach( ( gravatarImg ) => {
+			gravatarImg.img.addEventListener( 'mouseenter', ( e ) => this.#handleMouseEnter( e, gravatarImg ) );
+			gravatarImg.img.addEventListener( 'mouseleave', ( e ) => this.#handleMouseLeave( e, gravatarImg ) );
 		} );
 	}
 
@@ -445,9 +444,9 @@ export default class Hovercards {
 			return;
 		}
 
-		this.#gravatarImages.forEach( ( img ) => {
-			img.removeEventListener( 'mouseenter', this.#handleMouseEnter );
-			img.removeEventListener( 'mouseleave', this.#handleMouseLeave );
+		this.#gravatarImages.forEach( ( { img } ) => {
+			img.removeEventListener( 'mouseenter', () => this.#handleMouseEnter );
+			img.removeEventListener( 'mouseleave', () => this.#handleMouseLeave );
 		} );
 
 		this.#gravatarImages = [];
