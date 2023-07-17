@@ -23,7 +23,7 @@ window.Gravatar = {
 				return img;
 			},
 			onHovercardShown: ( hash, hovercard ) => {
-				this.profile_cb( hash, `${ Hovercards.hovercardIdPrefix }${ hash }` );
+				this.profile_cb( hash, hovercard.id );
 
 				const viewProfileLink = hovercard.querySelector(
 					'.gravatar-hovercard__profile-link'

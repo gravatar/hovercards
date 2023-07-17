@@ -1,5 +1,6 @@
 import type { Placement } from './compute-position';
 import computePosition from './compute-position';
+import { escUrl, escHtml } from './sanitizer';
 
 type Account = Record<
 	'domain' | 'display' | 'url' | 'iconUrl' | 'username' | 'verified' | 'name' | 'shortname',
@@ -49,6 +50,13 @@ type Options = Partial< {
 	onHovercardHidden: OnHovercardHidden;
 } >;
 
+interface GravatarImg {
+	id: string;
+	hash: string;
+	params: string;
+	img: HTMLImageElement;
+}
+
 const BASE_API_URL = 'https://secure.gravatar.com';
 
 const socialLinksOrder = [ 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
@@ -70,8 +78,7 @@ export default class Hovercards {
 	#onHovercardHidden: OnHovercardHidden;
 
 	// Variables
-	static readonly hovercardIdPrefix = 'gravatar-hovercard-';
-	#gravatarImages: HTMLImageElement[] = [];
+	#gravatarImages: GravatarImg[] = [];
 	#showHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
 	#hideHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
 	#cachedProfiles = new Map< string, ProfileData >();
@@ -127,12 +134,12 @@ export default class Hovercards {
 		}
 
 		this.#gravatarImages = images
-			.map( ( img ) => {
+			.map( ( img, idx ) => {
 				if ( ignoreImages.includes( img ) ) {
 					return null;
 				}
 
-				const { hostname, pathname } = new URL( img.src );
+				const { hostname, pathname, searchParams: p } = new URL( img.src );
 
 				if ( ! hostname.endsWith( 'gravatar.com' ) ) {
 					return null;
@@ -144,11 +151,19 @@ export default class Hovercards {
 					return null;
 				}
 
-				img.setAttribute( 'data-gravatar-hash', hash );
+				const d = p.get( 'd' ) || p.get( 'default' );
+				const f = p.get( 'f' ) || p.get( 'forcedefault' );
+				const r = p.get( 'r' ) || p.get( 'rating' );
+				const params = [ d && `d=${ d }`, f && `f=${ f }`, r && `r=${ r }` ].filter( Boolean ).join( '&' );
 
-				return this.#onQueryGravatarImg( img );
+				return {
+					id: `gravatar-hovercard-${ hash }-${ idx }`,
+					hash,
+					params: params ? `?${ params }` : '',
+					img: this.#onQueryGravatarImg( img ) || img,
+				};
 			} )
-			.filter( Boolean ) as HTMLImageElement[];
+			.filter( Boolean );
 
 		return this.#gravatarImages;
 	}
@@ -156,12 +171,10 @@ export default class Hovercards {
 	/**
 	 * Creates a skeleton hovercard element.
 	 *
-	 * @param {string} hash - The hash associated with the hovercard.
-	 * @return {HTMLDivElement} - The created skeleton hovercard element.
+	 * @return {HTMLDivElement} The created skeleton hovercard element.
 	 */
-	#createHovercardSkeleton( hash: string ) {
+	#createHovercardSkeleton() {
 		const hovercard = document.createElement( 'div' );
-		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
 		hovercard.className = `gravatar-hovercard gravatar-hovercard--skeleton${
 			this.#additionalClass ? ` ${ this.#additionalClass }` : ''
 		}`;
@@ -184,7 +197,6 @@ export default class Hovercards {
 
 	/**
 	 * Creates a hovercard element with the provided profile data.
-	 * Note: Ensure that the profile data is sanitized to prevent potential security vulnerabilities.
 	 *
 	 * @param {ProfileData} profileData               - The profile data to populate the hovercard.
 	 * @param {Object}      [options]                 - Optional parameters for the hovercard.
@@ -204,18 +216,20 @@ export default class Hovercards {
 		} = profileData;
 
 		const hovercard = document.createElement( 'div' );
-		hovercard.id = `${ Hovercards.hovercardIdPrefix }${ hash }`;
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
-		const profileUrl = `https://gravatar.com/${ preferredUsername }`;
+		const profileUrl = escUrl( `https://gravatar.com/${ preferredUsername }` );
+		const username = escHtml( displayName );
 		const renderSocialLinks = accounts
 			.reduce( ( links, { url, shortname, iconUrl, name } ) => {
 				const idx = socialLinksOrder.indexOf( shortname );
 
 				if ( idx !== -1 ) {
 					links[ idx ] = `
-						<a class="gravatar-hovercard__social-link" href="${ url }" data-service-name="${ shortname }">
-							<img class="gravatar-hovercard__social-icon" src="${ iconUrl }" width="32px" height="32px" alt="${ name }" />
+						<a class="gravatar-hovercard__social-link" href="${ escUrl( url ) }" target="_blank" data-service-name="${ shortname }">
+							<img class="gravatar-hovercard__social-icon" src="${ escUrl( iconUrl ) }" width="32px" height="32px" alt="${ escHtml(
+						name
+					) }" />
 						</a>
 					`;
 				}
@@ -228,19 +242,21 @@ export default class Hovercards {
 			<div class="gravatar-hovercard__inner">
 				<div class="gravatar-hovercard__header">
 					<a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
-						<img class="gravatar-hovercard__avatar" src="${ thumbnailUrl }" width="56px" height="56px" alt="${ displayName }" />
+						<img class="gravatar-hovercard__avatar" src="${ escUrl(
+							thumbnailUrl
+						) }" width="56px" height="56px" alt="${ username }" />
 					</a>
 					<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
-						<h4 class="gravatar-hovercard__name">${ displayName }</h4>
-						${ currentLocation ? `<p class="gravatar-hovercard__location">${ currentLocation }</p>` : '' }
+						<h4 class="gravatar-hovercard__name">${ username }</h4>
+						${ currentLocation ? `<p class="gravatar-hovercard__location">${ escHtml( currentLocation ) }</p>` : '' }
 					</a>
 				</div>
 				<div class="gravatar-hovercard__body">
-					${ aboutMe ? `<p class="gravatar-hovercard__about">${ aboutMe }</p>` : '' }
+					${ aboutMe ? `<p class="gravatar-hovercard__about">${ escHtml( aboutMe ) }</p>` : '' }
 				</div>
 				<div class="gravatar-hovercard__footer">
 					<div class="gravatar-hovercard__social-links">
-						<a class="gravatar-hovercard__social-link" href="${ profileUrl }" data-service-name="gravatar">
+						<a class="gravatar-hovercard__social-link" href="${ profileUrl }" target="_blank" data-service-name="gravatar">
 							<img class="gravatar-hovercard__social-icon" src="https://secure.gravatar.com/icons/gravatar.svg" width="32px" height="32px" alt="Gravatar" />
 						</a>
 						${ renderSocialLinks }
@@ -261,26 +277,30 @@ export default class Hovercards {
 	 * Waits for a specified delay and fetches the user's profile data,
 	 * then shows the hovercard for the specified hash and image element.
 	 *
-	 * @param {string}           hash - The hash associated with the hovercard.
-	 * @param {HTMLImageElement} img  - The image element triggering the hovercard.
+	 * @param {GravatarImg} gravatarImg - The Gravatar image object.
 	 * @return {void}
 	 * @private
 	 */
-	#showHovercard( hash: string, img: HTMLImageElement ) {
-		const id = setTimeout( () => {
-			if ( document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` ) ) {
+	#showHovercard( { id, hash, params, img }: GravatarImg ) {
+		const timeoutId = setTimeout( () => {
+			if ( document.getElementById( id ) ) {
 				return;
 			}
 
 			let hovercard: HTMLDivElement;
 
 			if ( this.#cachedProfiles.has( hash ) ) {
-				hovercard = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), {
-					additionalClass: this.#additionalClass,
-					myHash: this.#myHash,
-				} );
+				const profile = this.#cachedProfiles.get( hash );
+
+				hovercard = Hovercards.createHovercard(
+					{ ...profile, thumbnailUrl: profile.thumbnailUrl + params },
+					{
+						additionalClass: this.#additionalClass,
+						myHash: this.#myHash,
+					}
+				);
 			} else {
-				hovercard = this.#createHovercardSkeleton( hash );
+				hovercard = this.#createHovercardSkeleton();
 
 				this.#onFetchProfileStart( hash );
 
@@ -313,10 +333,14 @@ export default class Hovercards {
 							accounts,
 						} );
 
-						const hovercardInner = Hovercards.createHovercard( this.#cachedProfiles.get( hash ), {
-							additionalClass: this.#additionalClass,
-							myHash: this.#myHash,
-						} ).firstElementChild;
+						const profile = this.#cachedProfiles.get( hash );
+						const hovercardInner = Hovercards.createHovercard(
+							{ ...profile, thumbnailUrl: profile.thumbnailUrl + params },
+							{
+								additionalClass: this.#additionalClass,
+								myHash: this.#myHash,
+							}
+						).firstElementChild;
 
 						hovercard.classList.remove( 'gravatar-hovercard--skeleton' );
 						hovercard.replaceChildren( hovercardInner );
@@ -331,14 +355,14 @@ export default class Hovercards {
 					} );
 			}
 
+			// Set the hovercard ID here to avoid the show / hide side effect
+			hovercard.id = id;
+			// Don't hide the hovercard when the mouse is over the hovercard from the image
+			hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutIds.get( id ) ) );
+			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( id ) );
+
 			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
 			document.body.appendChild( hovercard );
-
-			// Don't hide the hovercard when the mouse is over the hovercard from the image
-			hovercard.addEventListener( 'mouseenter', () =>
-				clearInterval( this.#hideHovercardTimeoutIds.get( hash ) )
-			);
-			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( hash ) );
 
 			const { x, y, padding, paddingValue } = computePosition( img, hovercard, {
 				placement: this.#placement,
@@ -356,61 +380,59 @@ export default class Hovercards {
 			this.#onHovercardShown( hash, hovercard );
 		}, this.#delayToShow );
 
-		this.#showHovercardTimeoutIds.set( hash, id );
+		this.#showHovercardTimeoutIds.set( id, timeoutId );
 	}
 
 	/**
 	 * Waits for a specified delay and hides the hovercard for the specified hash.
 	 *
-	 * @param {string} hash - The hash associated with the hovercard.
+	 * @param {string} id - The ID associated with the hovercard.
 	 * @return {void}
 	 * @private
 	 */
-	#hideHovercard( hash: string ) {
-		const id = setTimeout( () => {
-			const hovercard = document.getElementById( `${ Hovercards.hovercardIdPrefix }${ hash }` );
+	#hideHovercard( id: string ) {
+		const timeoutId = setTimeout( () => {
+			const hovercard = document.getElementById( id );
 
 			if ( hovercard ) {
 				hovercard.remove();
-				this.#onHovercardHidden( hash, hovercard as HTMLDivElement );
+				this.#onHovercardHidden( id, hovercard as HTMLDivElement );
 			}
 		}, this.#delayToHide );
 
-		this.#hideHovercardTimeoutIds.set( hash, id );
+		this.#hideHovercardTimeoutIds.set( id, timeoutId );
 	}
 
 	/**
 	 * Handles the mouseenter event for Gravatar images.
 	 *
-	 * @param {MouseEvent} e - The mouseenter event object.
+	 * @param {MouseEvent} e           - The mouseenter event object.
+	 * @param              gravatarImg
 	 * @return {void}
 	 * @private
 	 */
-	#handleMouseEnter( e: MouseEvent ) {
+	#handleMouseEnter( e: MouseEvent, gravatarImg: GravatarImg ) {
 		e.stopImmediatePropagation();
 
-		const img = e.target as HTMLImageElement;
-		const hash = img.dataset.gravatarHash || '';
-
 		// Don't hide the hovercard when the mouse is over the image from the hovercard
-		clearInterval( this.#hideHovercardTimeoutIds.get( hash ) );
-		this.#showHovercard( hash, img );
+		clearInterval( this.#hideHovercardTimeoutIds.get( gravatarImg.id ) );
+		this.#showHovercard( gravatarImg );
 	}
 
 	/**
 	 * Handles the mouseleave event for Gravatar images.
 	 *
-	 * @param {MouseEvent} e - The mouseleave event object.
+	 * @param {MouseEvent} e              - The mouseleave event object.
+	 * @param              gravatarImg
+	 * @param              gravatarImg.id
 	 * @return {void}
 	 * @private
 	 */
-	#handleMouseLeave( e: MouseEvent ) {
+	#handleMouseLeave( e: MouseEvent, { id }: GravatarImg ) {
 		e.stopImmediatePropagation();
 
-		const hash = ( e.target as HTMLImageElement ).dataset.gravatarHash || '';
-
-		clearInterval( this.#showHovercardTimeoutIds.get( hash ) );
-		this.#hideHovercard( hash );
+		clearInterval( this.#showHovercardTimeoutIds.get( id ) );
+		this.#hideHovercard( id );
 	}
 
 	/**
@@ -427,11 +449,9 @@ export default class Hovercards {
 
 		this.unsetTarget();
 
-		const images = this.#queryGravatarImages( target, ignoreSelector );
-
-		images.forEach( ( img ) => {
-			img.addEventListener( 'mouseenter', this.#handleMouseEnter.bind( this ) );
-			img.addEventListener( 'mouseleave', this.#handleMouseLeave.bind( this ) );
+		this.#queryGravatarImages( target, ignoreSelector ).forEach( ( gravatarImg ) => {
+			gravatarImg.img.addEventListener( 'mouseenter', ( e ) => this.#handleMouseEnter( e, gravatarImg ) );
+			gravatarImg.img.addEventListener( 'mouseleave', ( e ) => this.#handleMouseLeave( e, gravatarImg ) );
 		} );
 	}
 
@@ -445,9 +465,9 @@ export default class Hovercards {
 			return;
 		}
 
-		this.#gravatarImages.forEach( ( img ) => {
-			img.removeEventListener( 'mouseenter', this.#handleMouseEnter );
-			img.removeEventListener( 'mouseleave', this.#handleMouseLeave );
+		this.#gravatarImages.forEach( ( { img } ) => {
+			img.removeEventListener( 'mouseenter', () => this.#handleMouseEnter );
+			img.removeEventListener( 'mouseleave', () => this.#handleMouseLeave );
 		} );
 
 		this.#gravatarImages = [];

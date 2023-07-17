@@ -21,23 +21,61 @@
 					src="https://secure.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&d=retro&r=g"
 					width="60px"
 					height="60px"
-					alt="Gravatar"
 				/>
 			</div>
 			<div>
 				<img
-					src="https://secure.gravatar.com/avatar/99c3338797c95c418d9996bd39931506?s=60&d=retro&r=g"
+					src="https://secure.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&d=retro"
 					width="60px"
 					height="60px"
-					alt="Gravatar"
 				/>
 			</div>
+			<div>
+				<img
+					src="https://secure.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&f=y"
+					width="60px"
+					height="60px"
+				/>
+			</div>
+			<div>
+				<img
+					src="https://secure.gravatar.com/avatar/99c3338797c95c418d9996bd39931506"
+					width="60px"
+					height="60px"
+				/>
+			</div>
+			<div>
+				<img
+					src="https://secure.gravatar.com/avatar/d538859cbc5da94681f81bd1380cac96?s=60&d=retro&r=g"
+					width="60px"
+					height="60px"
+				/>
+			</div>
+			<div id="inline-hovercard"></div>
 		</main>
 		<script>
 			addEventListener( 'DOMContentLoaded', () => {
 				// To test the empty about me case
 				Gravatar.my_hash = '99c3338797c95c418d9996bd39931506';
 				Gravatar.init();
+
+				// To test sanitization
+				document.getElementById( 'inline-hovercard' ).appendChild( Gravatar.createHovercard( {
+					hash: '767fc9c115a1b989744c755db47feb60',
+					thumbnailUrl: 'https://secure.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&d=retro&r=g&esc=^^',
+					preferredUsername: 'matt',
+					displayName: '<i>Matt</i>',
+					currentLocation: '<i>San Francisco, CA</i>',
+					aboutMe: '<i>Test</i>',
+					accounts: [
+						{
+							url: "http://twitter.com/photomatt?esc=^^",
+							iconUrl: "https://secure.gravatar.com/icons/twitter-alt.svg?esc=^^",
+							name: "<i>Twitter</i>",
+							shortname: "twitter"
+						}
+					],
+				} ) );
 			} );
 		</script>
 	</body>
