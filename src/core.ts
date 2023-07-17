@@ -158,7 +158,7 @@ export default class Hovercards {
 				return {
 					id: `gravatar-hovercard-${ hash }-${ idx }`,
 					hash,
-					params: params ? `?=${ params }` : '',
+					params: params ? `?${ params }` : '',
 					img: this.#onQueryGravatarImg( img ) || img,
 				};
 			} )
