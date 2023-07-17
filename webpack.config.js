@@ -1,7 +1,6 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
 const path = require( 'path' );
-const RemoveEmptyScriptsPlugin = require( 'webpack-remove-empty-scripts' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
@@ -10,8 +9,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 module.exports = {
 	mode: isProduction ? 'production' : 'development',
 	entry: {
-		'gprofiles-v2': './src/wpcom.ts',
-		'hovercard-v2.min': './src/style.scss',
+		'hovercards.min': './src/wpcom.ts',
 	},
 	output: {
 		path: path.resolve( __dirname, 'build' ),
@@ -22,7 +20,6 @@ module.exports = {
 		host: 'localhost',
 	},
 	plugins: [
-		new RemoveEmptyScriptsPlugin(),
 		! isProduction &&
 			new HtmlWebpackPlugin( {
 				template: 'index.html',

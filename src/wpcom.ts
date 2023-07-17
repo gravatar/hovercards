@@ -1,4 +1,5 @@
 import Hovercards from './core';
+import './style.scss';
 
 window.Gravatar = {
 	// It'll be assigned by WPCOM
@@ -71,13 +72,15 @@ window.Gravatar = {
 		);
 
 		// Don't load the CSS if it's already loaded (e.g. dev mode)
-		if ( ! document.querySelector( 'link[href*="hovercard-v2.min.css"]' ) ) {
+		if ( ! document.querySelector( 'link[href*="hovercards.min.css"]' ) ) {
 			// Loading hovercards CSS
-			const hovercardsScript = document.querySelector( 'script[src*="/js/gprofiles."]' );
+			const hovercardsScript = document.querySelector( 'script[src*="/js/hovercards/hovercards"]' );
 			const bust = hovercardsScript ? hovercardsScript.getAttribute( 'src' )?.split( '?' )[ 1 ] : '';
 			document.head.insertAdjacentHTML(
 				'beforeend',
-				`<link rel="stylesheet" id="gravatar-card-css" href="https://0.gravatar.com/dist/css/hovercard-v2.min.css?${ bust }" />`
+				`<link rel="stylesheet" id="gravatar-card-css" href="https://0.gravatar.com/js/hovercards/hovercards.min.css${
+					bust && '?' + bust
+				}" />`
 			);
 		}
 	},
