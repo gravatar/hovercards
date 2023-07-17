@@ -152,8 +152,9 @@ export default class Hovercards {
 				}
 
 				const d = p.get( 'd' ) || p.get( 'default' );
+				const f = p.get( 'f' ) || p.get( 'forcedefault' );
 				const r = p.get( 'r' ) || p.get( 'rating' );
-				const params = [ d && `d=${ d }`, r && `r=${ r }` ].filter( Boolean ).join( '&' );
+				const params = [ d && `d=${ d }`, f && `f=${ f }`, r && `r=${ r }` ].filter( Boolean ).join( '&' );
 
 				return {
 					id: `gravatar-hovercard-${ hash }-${ idx }`,
