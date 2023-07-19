@@ -22,7 +22,7 @@
 	"types": "dist/index.d.ts",
 	"main": "dist/index.js",
 	"module": "dist/index.esm.js",
-	"umd": "dist/index.umd.js",
+	"unpkg": "dist/index.umd.js",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
