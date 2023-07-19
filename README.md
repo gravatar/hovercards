@@ -15,6 +15,9 @@ $ npm install @automattic/gravatar-hovercards
 It also supports [UNPKG](https://unpkg.com/) CDN.
 
 ```html
+<!-- Import the hovercard styles -->
+<link rel="stylesheet" href="https://unpkg.com/@automattic/gravatar-hovercards/dist/styles.min.css">
+<!-- Import the hovercards library -->
 <script src="https://unpkg.com/@automattic/gravatar-hovercards" defer></script>
 <script>
   // Gravatar hovercards is available as a global variable
