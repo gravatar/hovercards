@@ -1,8 +1,6 @@
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
-// Test
-
 module.exports = {
 	mode: 'development',
 	entry: './playground/main.ts',
