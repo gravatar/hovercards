@@ -49,6 +49,9 @@ const cjsConfig = {
 		},
 	},
 	target: 'node',
+	optimization: {
+		minimize: false,
+	},
 };
 
 const esmConfig = {
