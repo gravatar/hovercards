@@ -198,7 +198,7 @@ We're constantly working to improve Gravatar Hovercards. Upcoming features inclu
 
 ### Contribute to Gravatar Hovercards
 
-We welcome everyone to contribute to this open-source project. To contribute, please follow the guidelines outlined in the [CONTRIBUTING.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CONTRIBUTING.md) file and adhere to our [Code of Conduct](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CODE-OF-CONDUCT.md). Your contributions are greatly appreciated 💙.
+We welcome everyone to contribute to this open-source project. To contribute, please follow the guidelines outlined in the [CONTRIBUTING.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CONTRIBUTING.md) file. Your contributions are greatly appreciated 💙.
 
 ## License
 
