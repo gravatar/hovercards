@@ -63,6 +63,9 @@ const esmConfig = {
 	experiments: {
 		outputModule: true,
 	},
+	optimization: {
+		minimize: false,
+	},
 };
 
 const mjsConfig = {
