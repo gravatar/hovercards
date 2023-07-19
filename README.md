@@ -7,15 +7,15 @@ Gravatar Hovercards is a stylish, easy-to-use library that brings [Gravatar](htt
 You can install this package with [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/).
 
 ```bash
-$ yarn add @gravatar/hovercards
+$ yarn add @automattic/gravatar-hovercards
 # or
-$ npm install @gravatar/hovercards
+$ npm install @automattic/gravatar-hovercards
 ```
 
 It also supports [UNPKG](https://unpkg.com/) CDN.
 
 ```html
-<script src="https://unpkg.com/@gravatar/hovercards" defer></script>
+<script src="https://unpkg.com/@automattic/gravatar-hovercards" defer></script>
 <script>
   // Gravatar hovercards is available as a global variable
   console.log( Gravatar.HovercardsCore );
@@ -41,9 +41,9 @@ In the HTML of your webpage, the Gravatar images should look like this:
 Now you can use the library to convert your Gravatar images into interactive hovercards:
 
 ```js
-import { HovercardsCore } from '@gravatar/hovercards';
+import { HovercardsCore } from '@automattic/gravatar-hovercards';
 // Import the hovercard styles
-import '@gravatar/hovercards/dist/styles.min.css';
+import '@automattic/gravatar-hovercards/dist/styles.min.css';
 
 document.addEventListener( 'DOMContentLoaded', () => {
   // Initialize the hovercards library with the desired options
@@ -141,7 +141,7 @@ The `HovercardsCore` class provides the following methods:
 This method generates a hovercard element using the provided profile data. It accepts the `profileData` parameter, which represents the data needed to populate the hovercard, and an optional options object that can include properties such as [`additionalClass`](#additionalclass-string) and [`myHash`](#myhash-string). It's useful when you want to display static hovercards on your website.
 
 ```js
-import { HovercardsCore } from '@gravatar/hovercards';
+import { HovercardsCore } from '@automattic/gravatar-hovercards';
 
 const hovercard = HovercardsCore.createHovercard( {
   hash: '...',
@@ -168,7 +168,7 @@ This method sets the target element for the hovercards. The target parameter spe
 Example usage:
 
 ```js
-import { HovercardsCore } from '@gravatar/hovercards';
+import { HovercardsCore } from '@automattic/gravatar-hovercards';
 
 const hovercards = new HovercardsCore();
 

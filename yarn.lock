@@ -22,6 +22,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@automattic/gravatar-hovercards@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@automattic/gravatar-hovercards@workspace:."
+  dependencies:
+    "@wordpress/scripts": ^26.8.0
+    autoprefixer: ^10.4.14
+    chokidar-cli: ^3.0.0
+    css-loader: ^6.8.1
+    html-webpack-plugin: ^5.5.3
+    husky: ^8.0.0
+    lint-staged: ^13.2.3
+    mini-css-extract-plugin: ^2.7.6
+    npm-run-all: ^4.1.5
+    postcss: ^8.4.26
+    postcss-loader: ^7.3.3
+    rimraf: ^5.0.1
+    sass: ^1.63.6
+    sass-loader: ^13.3.2
+    style-loader: ^3.3.3
+    ts-loader: ^9.4.4
+    typescript: ^5.1.6
+    webpack: ^5.88.1
+    webpack-cli: ^5.1.4
+    webpack-dev-server: ^4.15.1
+    webpack-remove-empty-scripts: ^1.0.3
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/code-frame@npm:7.22.5"
@@ -1576,34 +1604,6 @@ __metadata:
   checksum: fc539583226a28f5677356e9f00d2789c34253f076643d2e32888250e509a4e13aafe0880cb2425139051de0f3a48d25bfc5afa96b7304f203b706c17340e3cf
   languageName: node
   linkType: hard
-
-"@gravatar/hovercards@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@gravatar/hovercards@workspace:."
-  dependencies:
-    "@wordpress/scripts": ^26.8.0
-    autoprefixer: ^10.4.14
-    chokidar-cli: ^3.0.0
-    css-loader: ^6.8.1
-    html-webpack-plugin: ^5.5.3
-    husky: ^8.0.0
-    lint-staged: ^13.2.3
-    mini-css-extract-plugin: ^2.7.6
-    npm-run-all: ^4.1.5
-    postcss: ^8.4.26
-    postcss-loader: ^7.3.3
-    rimraf: ^5.0.1
-    sass: ^1.63.6
-    sass-loader: ^13.3.2
-    style-loader: ^3.3.3
-    ts-loader: ^9.4.4
-    typescript: ^5.1.6
-    webpack: ^5.88.1
-    webpack-cli: ^5.1.4
-    webpack-dev-server: ^4.15.1
-    webpack-remove-empty-scripts: ^1.0.3
-  languageName: unknown
-  linkType: soft
 
 "@hapi/hoek@npm:^9.0.0":
   version: 9.3.0

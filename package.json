@@ -1,5 +1,5 @@
 {
-	"name": "@gravatar/hovercards",
+	"name": "@automattic/gravatar-hovercards",
 	"version": "0.5.0",
 	"description": "Enrich your site with interactive hovercards, bringing Gravatar profiles to life one hover at a time!",
 	"homepage": "https://github.com/Automattic/gravatar-hovercards#readme",
