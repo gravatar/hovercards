@@ -2,12 +2,9 @@ import type { Placement } from './compute-position';
 import computePosition from './compute-position';
 import { escUrl, escHtml } from './sanitizer';
 
-type Account = Record<
-	'domain' | 'display' | 'url' | 'iconUrl' | 'username' | 'verified' | 'name' | 'shortname',
-	string
->;
+export type Account = Record< 'url' | 'shortname' | 'iconUrl' | 'name', string >;
 
-interface ProfileData {
+export interface ProfileData {
 	hash: string;
 	preferredUsername: string;
 	thumbnailUrl: string;
@@ -22,19 +19,23 @@ export type CreateHovercard = (
 	options?: { additionalClass?: string; myHash?: string }
 ) => HTMLDivElement;
 
-type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
+export type SetTarget = ( target: HTMLElement, ignoreSelector?: string ) => void;
 
-type OnFetchProfileStart = ( hash: string ) => void;
+export type UnsetTarget = () => void;
 
-type OnFetchProfileSuccess = ( hash: string, profileData: ProfileData ) => void;
+export type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
-type OnFetchProfilFailure = ( hash: string, error: Error ) => void;
+export type OnFetchProfileStart = ( hash: string ) => void;
 
-type OnHovercardShown = ( hash: string, hovercard: HTMLDivElement ) => void;
+export type OnFetchProfileSuccess = ( hash: string, profileData: ProfileData ) => void;
 
-type OnHovercardHidden = ( hash: string, hovercard: HTMLDivElement ) => void;
+export type OnFetchProfilFailure = ( hash: string, error: Error ) => void;
 
-type Options = Partial< {
+export type OnHovercardShown = ( hash: string, hovercard: HTMLDivElement ) => void;
+
+export type OnHovercardHidden = ( hash: string, hovercard: HTMLDivElement ) => void;
+
+export type Options = Partial< {
 	placement: Placement;
 	offset: number;
 	autoFlip: boolean;
@@ -263,7 +264,7 @@ export default class Hovercards {
 					</div>
 					${
 						! aboutMe && myHash === hash
-							? '<a class="gravatar-hovercard__profile-link gravatar-hovercard__profile-link--edit" href="https://en.gravatar.com/profiles/edit" target="_blank">Edit your profile</a>'
+							? '<a class="gravatar-hovercard__profile-link gravatar-hovercard__profile-link--edit" href="https://gravatar.com/profiles/edit" target="_blank">Edit your profile</a>'
 							: `<a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>`
 					}
 				</div>
@@ -330,7 +331,12 @@ export default class Hovercards {
 							displayName,
 							currentLocation,
 							aboutMe,
-							accounts,
+							accounts: accounts?.map( ( { url, shortname, iconUrl, name }: Account ) => ( {
+								url,
+								shortname,
+								iconUrl,
+								name,
+							} ) ),
 						} );
 
 						const profile = this.#cachedProfiles.get( hash );
@@ -442,7 +448,7 @@ export default class Hovercards {
 	 * @param {string}      [ignoreSelector] - The selector to ignore specific images.
 	 * @return {void}
 	 */
-	setTarget( target: HTMLElement, ignoreSelector?: string ) {
+	setTarget: SetTarget = ( target, ignoreSelector ) => {
 		if ( ! target ) {
 			return;
 		}
@@ -453,14 +459,14 @@ export default class Hovercards {
 			gravatarImg.img.addEventListener( 'mouseenter', ( e ) => this.#handleMouseEnter( e, gravatarImg ) );
 			gravatarImg.img.addEventListener( 'mouseleave', ( e ) => this.#handleMouseLeave( e, gravatarImg ) );
 		} );
-	}
+	};
 
 	/**
 	 * Unsets the target element and removes event listeners from Gravatar images.
 	 *
 	 * @return {void}
 	 */
-	unsetTarget() {
+	unsetTarget: UnsetTarget = () => {
 		if ( ! this.#gravatarImages.length ) {
 			return;
 		}
@@ -471,5 +477,5 @@ export default class Hovercards {
 		} );
 
 		this.#gravatarImages = [];
-	}
+	};
 }
