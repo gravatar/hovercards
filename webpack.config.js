@@ -84,7 +84,7 @@ const umdConfig = {
 	entry: './src/index.ts',
 	output: {
 		...commonConfig.output,
-		filename: 'index.umd.js',
+		filename: 'index.umd.min.js',
 		library: {
 			name: 'Gravatar',
 			type: 'umd',
