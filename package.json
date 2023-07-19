@@ -38,7 +38,7 @@
 		"start": "webpack serve --config ./webpack.config.playground.js",
 		"build": "yarn clean && yarn build:types && webpack --node-env=production",
 		"build:dev": "yarn build --node-env=development",
-		"build:types": "tsc --declaration --emitDeclarationOnly --declarationMap",
+		"build:types": "tsc --declaration --declarationMap --emitDeclarationOnly",
 		"format": "wp-scripts format",
 		"type-check": "tsc --noEmit",
 		"lint:js": "wp-scripts lint-js --fix",
