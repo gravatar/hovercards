@@ -354,6 +354,8 @@ export default class Hovercards {
 						this.#onFetchProfileSuccess( hash, this.#cachedProfiles.get( hash ) );
 					} )
 					.catch( ( error ) => {
+						// TODO: Handle more error cases, e.g. "User not found"
+
 						hovercard.firstElementChild.innerHTML =
 							'<i class="gravatar-hovercard__error-message">Sorry, we weren’t able to load this Gravatar profile card. Please check your internet connection.</i>';
 
