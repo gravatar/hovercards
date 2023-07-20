@@ -1,31 +1,18 @@
-// Generated using webpack-cli https://github.com/webpack/webpack-cli
-
 const path = require( 'path' );
-const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const RemoveEmptyScriptsPlugin = require( 'webpack-remove-empty-scripts' );
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-module.exports = {
+const commonConfig = {
 	mode: isProduction ? 'production' : 'development',
-	entry: {
-		'hovercards.min': './src/wpcom.ts',
-	},
+	devtool: isProduction ? 'source-map' : 'eval-source-map',
+	watch: ! isProduction,
+	entry: './src/index.ts',
 	output: {
-		path: path.resolve( __dirname, 'build' ),
-		clean: true,
+		path: path.resolve( __dirname, 'dist' ),
 	},
-	devServer: {
-		open: true,
-		host: 'localhost',
-	},
-	plugins: [
-		! isProduction &&
-			new HtmlWebpackPlugin( {
-				template: 'index.html',
-			} ),
-		new MiniCssExtractPlugin(),
-	],
+	plugins: [ new RemoveEmptyScriptsPlugin(), new MiniCssExtractPlugin() ],
 	module: {
 		rules: [
 			{
@@ -51,3 +38,66 @@ module.exports = {
 		extensions: [ '.tsx', '.ts', '.jsx', '.js' ],
 	},
 };
+
+const cjsConfig = {
+	...commonConfig,
+	output: {
+		...commonConfig.output,
+		filename: 'index.js',
+		library: {
+			type: 'commonjs2',
+		},
+	},
+	target: 'node',
+	optimization: {
+		minimize: false,
+	},
+};
+
+const esmConfig = {
+	...commonConfig,
+	output: {
+		...commonConfig.output,
+		filename: 'index.esm.js',
+		library: {
+			type: 'module',
+		},
+	},
+	experiments: {
+		outputModule: true,
+	},
+	optimization: {
+		minimize: false,
+	},
+};
+
+const mjsConfig = {
+	...esmConfig,
+	output: {
+		...esmConfig.output,
+		filename: 'index.mjs',
+	},
+};
+
+const umdConfig = {
+	...commonConfig,
+	entry: './src/index.ts',
+	output: {
+		...commonConfig.output,
+		filename: 'index.umd.min.js',
+		library: {
+			name: 'Gravatar',
+			type: 'umd',
+			umdNamedDefine: true,
+		},
+	},
+};
+
+const styleConfig = {
+	...commonConfig,
+	entry: {
+		'style.min': './src/style.scss',
+	},
+};
+
+module.exports = [ cjsConfig, esmConfig, mjsConfig, umdConfig, styleConfig ];

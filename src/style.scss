@@ -69,6 +69,7 @@
 	}
 
 	.gravatar-hovercard__name {
+
 		@include ellipsis(2);
 
 		font-family: Helvetica, Arial, Tahoma, sans-serif;
@@ -79,6 +80,7 @@
 	}
 
 	.gravatar-hovercard__location {
+
 		@include ellipsis(1);
 
 		opacity: 0.6;
@@ -89,6 +91,7 @@
 	}
 
 	.gravatar-hovercard__about {
+
 		@include ellipsis(3);
 	}
 
@@ -108,18 +111,11 @@
 		color: #1d4fc4;
 	}
 
-	.gravatar-hovercard__error-message {
-		position: absolute;
-		text-align: center;
-		color: #707070;
-		padding-right: 24px;
-		transform: translateY(140%);
-	}
-
 	// Override WP theme styles
 	.gravatar-hovercard__profile-link {
 		text-decoration: underline;
 
+		/* stylelint-disable no-descending-specificity */
 		&:hover {
 			text-decoration: none;
 		}
@@ -127,6 +123,7 @@
 }
 
 .gravatar-hovercard--skeleton {
+
 	.gravatar-hovercard__avatar-link,
 	.gravatar-hovercard__name-location-link,
 	.gravatar-hovercard__social-link,
@@ -158,5 +155,13 @@
 
 	.gravatar-hovercard__inner {
 		position: relative;
+	}
+
+	.gravatar-hovercard__error-message {
+		position: absolute;
+		top: calc(50% - 21px);
+		text-align: center;
+		color: #707070;
+		padding-right: 24px;
 	}
 }

@@ -6,8 +6,13 @@
 		"noImplicitAny": true,
 		"module": "ESNext",
 		"target": "ES2020",
+		// Comment it out to test the `.mjs` output
+		"moduleResolution": "NodeNext",
 		"allowJs": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"outDir": "dist"
 	},
-	"include": [ "src" ]
+	"include": [ "src" ],
+	// TODO: Remove this when we moving `wpcom.ts` to the Gravatar codebase
+	"exclude": [ "node_modules", "src/wpcom.ts" ]
 }

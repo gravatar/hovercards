@@ -1,12 +1,7 @@
 {
-	"name": "gravatar-hovercards",
+	"name": "@automattic/gravatar-hovercards",
 	"version": "0.5.0",
-	"description": "Add interactive hovercards to Gravatar profile images with ease.",
-	"main": "dist/index.js",
-	"engines": {
-		"node": ">=16"
-	},
-	"packageManager": "yarn@3.6.1",
+	"description": "Enrich your site with interactive hovercards, bringing Gravatar profiles to life one hover at a time!",
 	"homepage": "https://github.com/Automattic/gravatar-hovercards#readme",
 	"bugs": "https://github.com/Automattic/gravatar-hovercards/issues",
 	"repository": "https://github.com/Automattic/gravatar-hovercards",
@@ -18,22 +13,45 @@
 		"profile",
 		"gravatar-profile",
 		"hovercard",
-		"hovercards"
+		"hovercards",
+		"gravatar-hovercards"
+	],
+	"packageManager": "yarn@3.6.1",
+	"engines": {
+		"node": ">=16"
+	},
+	"types": "dist/index.d.ts",
+	"main": "dist/index.js",
+	"module": "dist/index.esm.js",
+	"unpkg": "dist/index.umd.min.js",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.mjs",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"dist"
 	],
 	"scripts": {
-		"start:wpcom": "webpack serve",
-		"start:sync-wpcom": "chokidar 'src/*.*' -c 'webpack && yarn build:sync-wpcom'",
-		"build:wpcom": "webpack --node-env=production",
-		"build:sync-wpcom": "yarn build:wpcom && rsync -az --delete build/* gravatar:public_html/js/hovercards/ && echo ✨ Done!",
+		"start": "webpack serve --config ./webpack.config.playground.js",
+		"build": "yarn clean && yarn build:types && webpack --node-env=production",
+		"build:dev": "yarn build --node-env=development",
+		"build:types": "tsc --declaration --declarationMap --emitDeclarationOnly",
 		"format": "wp-scripts format",
 		"type-check": "tsc --noEmit",
 		"lint:js": "wp-scripts lint-js --fix",
 		"lint:style": "wp-scripts lint-style --fix",
 		"lint:md:docs": "wp-scripts lint-md-docs --fix",
-		"lint": "run-s 'lint:*'",
-		"clean:build": "rm -rf build",
-		"clean:dist": "rm -rf dist",
-		"clean": "run-p 'clean:*'"
+		"lint": "run-p 'lint:*'",
+		"clean": "rimraf dist",
+		"start:wpcom": "webpack serve --config ./webpack.config.wpcom.js",
+		"start:sync-wpcom": "chokidar 'src/*.*' -c 'webpack && yarn build:sync-wpcom'",
+		"build:wpcom": "webpack --config ./webpack.config.wpcom.js --node-env=production",
+		"build:sync-wpcom": "yarn build:wpcom && rsync -az --delete build/* gravatar:public_html/js/hovercards/ && echo ✨ Done!",
+		"prepare": "husky install"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.8.0",
@@ -41,10 +59,13 @@
 		"chokidar-cli": "^3.0.0",
 		"css-loader": "^6.8.1",
 		"html-webpack-plugin": "^5.5.3",
+		"husky": "^8.0.0",
+		"lint-staged": "^13.2.3",
 		"mini-css-extract-plugin": "^2.7.6",
 		"npm-run-all": "^4.1.5",
-		"postcss": "^8.4.25",
+		"postcss": "^8.4.26",
 		"postcss-loader": "^7.3.3",
+		"rimraf": "^5.0.1",
 		"sass": "^1.63.6",
 		"sass-loader": "^13.3.2",
 		"style-loader": "^3.3.3",
@@ -52,6 +73,7 @@
 		"typescript": "^5.1.6",
 		"webpack": "^5.88.1",
 		"webpack-cli": "^5.1.4",
-		"webpack-dev-server": "^4.15.1"
+		"webpack-dev-server": "^4.15.1",
+		"webpack-remove-empty-scripts": "^1.0.3"
 	}
 }
