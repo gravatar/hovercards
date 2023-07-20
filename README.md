@@ -1,15 +1,19 @@
 # Gravatar Hovercards
 
-Gravatar Hovercards is a stylish, easy-to-use library that brings [Gravatar](https://gravatar.com/) profiles to life on your website. It seamlessly converts [Gravatar images](http://gravatar.com/site/implement/images/) into interactive hovercards, providing immediate profile previews. As an ideal tool for any web platform, Gravatar Hovercards greatly enhances user engagement and interaction. Moreover, this library provides support for [TypeScript](https://www.typescriptlang.org/) to enhance developer experience (DX).
+Gravatar Hovercards is an easy-to-use library that brings [Gravatar](https://gravatar.com/) profiles to your website. It converts static [Gravatar images](http://gravatar.com/site/implement/images/) into interactive hovercards, increasing user engagement.
 
 ## Installation
 
 You can install this package with [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/).
 
 ```bash
-$ yarn add @automattic/gravatar-hovercards
-# or
-$ npm install @automattic/gravatar-hovercards
+yarn add @automattic/gravatar-hovercards
+```
+
+or
+
+```bash
+npm install @automattic/gravatar-hovercards
 ```
 
 It also supports [UNPKG](https://unpkg.com/) CDN.
@@ -39,8 +43,6 @@ In the HTML of your webpage, the Gravatar images should look like this:
 </div>
 ```
 
-> For improved security, we strongly recommend using the [SHA-256 algorithm](https://www.simplilearn.com/tutorials/cyber-security-tutorial/sha-256-algorithm) to hash your email address.
-
 Now you can use the library to convert your Gravatar images into interactive hovercards:
 
 ```js
@@ -62,8 +64,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 ```
 
 ## API
-
-This library provides a simple API that allows you to enhance Gravatar profiles on your website effortlessly ✨.
 
 ### Options
 
@@ -95,7 +95,7 @@ Additional class names to be added to the outermost element of the hovercard. Th
 
 #### `myHash: string = ''`
 
-It enables personalized hovercard features for **the current user**. It allows displaying customized options like "Edit your profile" when the user's "about me" field is empty on their [Gravatar editing page](https://gravatar.com/profiles/edit). 
+It enables personalized hovercard features for **the current user**. It allows displaying customized options like "Edit your profile" when the user's "about me" field is empty on their [Gravatar editing page](https://gravatar.com/profiles/edit).
 
 #### `onQueryGravatarImg: ( img: HTMLImageElement ) => HTMLImageElement`
 
@@ -125,7 +125,7 @@ interface ProfileData {
 
 #### `OnFetchProfilFailure: ( hash: string, error: Error ) => void`
 
-This callback function is triggered when the library fails to fetch a Gravatar profile. It takes the Gravatar hash and the error as parameters. Note that this function is executed only once per Gravatar hash due to the caching mechanism.
+This callback function is triggered when the library fails to fetch a Gravatar profile. It takes the Gravatar hash and the error as parameters. Note this function is executed only once per Gravatar hash due to the caching mechanism.
 
 #### `OnHovercardShown: ( hash: string, hovercard: HTMLDivElement ) => void`
 
@@ -190,22 +190,10 @@ hovercards.setTarget( document.body, '.ignore img[src*="gravatar.com/"]' );
 
 This method removes the target element for the hovercards, disabling the hovercard functionality.
 
-## Upcoming Features
-
-We're constantly working to improve Gravatar Hovercards. Upcoming features include:
-
-- [ ] A dedicated React component
-- [ ] A specific React hook
-
-👀 Keep an eye out for these additions that will broaden the usability of our library!
-
 ### Contribute to Gravatar Hovercards
 
-We welcome everyone to contribute to this open-source project. To contribute, please follow the guidelines outlined in the [CONTRIBUTING.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CONTRIBUTING.md) file. Your contributions are greatly appreciated 💙.
+We welcome contributions to this project. Please follow the guidelines outlined in the [CONTRIBUTING.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CONTRIBUTING.md) file.
 
 ## License
 
 Gravatar Hovercards is licensed under [GNU General Public License v2 (or later)](https://github.com/Automattic/gravatar-hovercards/blob/trunk/LICENSE.md).
-
-<!-- markdownlint-disable-next-line -->
-<br/><br/><p align="center"><img src="https://s.w.org/style/images/codeispoetry.png?1" alt="Code is Poetry." /></p>
