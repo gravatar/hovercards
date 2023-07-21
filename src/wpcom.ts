@@ -65,10 +65,10 @@ window.Gravatar = {
 				sendStat( 'show' );
 			},
 			onFetchProfileSuccess: () => sendStat( 'fetch' ),
-			onFetchProfilFailure: () => sendStat( 'profile_404' ),
+			onFetchProfileFailure: () => sendStat( 'profile_404' ),
 		} );
 
-		hovercards.setTarget(
+		hovercards.attach(
 			document.querySelector( container ) as HTMLElement,
 			ignore ? `${ ignore } img[src*="gravatar.com/"]` : ''
 		);

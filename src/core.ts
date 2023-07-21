@@ -19,9 +19,9 @@ export type CreateHovercard = (
 	options?: { additionalClass?: string; myHash?: string }
 ) => HTMLDivElement;
 
-export type SetTarget = ( target: HTMLElement, ignoreSelector?: string ) => void;
+export type Attach = ( target: HTMLElement, ignoreSelector?: string ) => void;
 
-export type UnsetTarget = () => void;
+export type Detach = () => void;
 
 export type OnQueryGravatarImg = ( img: HTMLImageElement ) => HTMLImageElement;
 
@@ -29,7 +29,7 @@ export type OnFetchProfileStart = ( hash: string ) => void;
 
 export type OnFetchProfileSuccess = ( hash: string, profileData: ProfileData ) => void;
 
-export type OnFetchProfilFailure = ( hash: string, error: Error ) => void;
+export type OnFetchProfileFailure = ( hash: string, error: Error ) => void;
 
 export type OnHovercardShown = ( hash: string, hovercard: HTMLDivElement ) => void;
 
@@ -46,7 +46,7 @@ export type Options = Partial< {
 	onQueryGravatarImg: OnQueryGravatarImg;
 	onFetchProfileStart: OnFetchProfileStart;
 	onFetchProfileSuccess: OnFetchProfileSuccess;
-	onFetchProfilFailure: OnFetchProfilFailure;
+	onFetchProfileFailure: OnFetchProfileFailure;
 	onHovercardShown: OnHovercardShown;
 	onHovercardHidden: OnHovercardHidden;
 } >;
@@ -74,7 +74,7 @@ export default class Hovercards {
 	#onQueryGravatarImg: OnQueryGravatarImg;
 	#onFetchProfileStart: OnFetchProfileStart;
 	#onFetchProfileSuccess: OnFetchProfileSuccess;
-	#onFetchProfilFailure: OnFetchProfilFailure;
+	#onFetchProfileFailure: OnFetchProfileFailure;
 	#onHovercardShown: OnHovercardShown;
 	#onHovercardHidden: OnHovercardHidden;
 
@@ -95,7 +95,7 @@ export default class Hovercards {
 		onQueryGravatarImg = ( img ) => img,
 		onFetchProfileStart = () => {},
 		onFetchProfileSuccess = () => {},
-		onFetchProfilFailure = () => {},
+		onFetchProfileFailure = () => {},
 		onHovercardShown = () => {},
 		onHovercardHidden = () => {},
 	}: Options = {} ) {
@@ -109,7 +109,7 @@ export default class Hovercards {
 		this.#onQueryGravatarImg = onQueryGravatarImg;
 		this.#onFetchProfileStart = onFetchProfileStart;
 		this.#onFetchProfileSuccess = onFetchProfileSuccess;
-		this.#onFetchProfilFailure = onFetchProfilFailure;
+		this.#onFetchProfileFailure = onFetchProfileFailure;
 		this.#onHovercardShown = onHovercardShown;
 		this.#onHovercardHidden = onHovercardHidden;
 	}
@@ -356,11 +356,11 @@ export default class Hovercards {
 					.catch( ( error ) => {
 						hovercard.firstElementChild.innerHTML = `<i class="gravatar-hovercard__error-message">${
 							error.message === 'User not found'
-								? 'Sorry, we weren’t able to load this Gravatar profile card.'
-								: 'Sorry, we weren’t able to load this Gravatar profile card. Please check your internet connection.'
+								? "Sorry, we weren't able to load this Gravatar profile card."
+								: "Sorry, we weren't able to load this Gravatar profile card. Please check your internet connection."
 						}</i>`;
 
-						this.#onFetchProfilFailure( hash, error as Error );
+						this.#onFetchProfileFailure( hash, error as Error );
 					} );
 			}
 
@@ -445,18 +445,18 @@ export default class Hovercards {
 	}
 
 	/**
-	 * Sets the target element and attaches event listeners to Gravatar images within the target element.
+	 * Attaches event listeners to Gravatar images within the target element.
 	 *
 	 * @param {HTMLElement} target           - The target element to set.
 	 * @param {string}      [ignoreSelector] - The selector to ignore specific images.
 	 * @return {void}
 	 */
-	setTarget: SetTarget = ( target, ignoreSelector ) => {
+	attach: Attach = ( target, ignoreSelector ) => {
 		if ( ! target ) {
 			return;
 		}
 
-		this.unsetTarget();
+		this.detach();
 
 		this.#queryGravatarImages( target, ignoreSelector ).forEach( ( gravatarImg ) => {
 			gravatarImg.img.addEventListener( 'mouseenter', ( e ) => this.#handleMouseEnter( e, gravatarImg ) );
@@ -465,11 +465,11 @@ export default class Hovercards {
 	};
 
 	/**
-	 * Unsets the target element and removes event listeners from Gravatar images.
+	 * Removes event listeners from Gravatar images and resets the stored list of images.
 	 *
 	 * @return {void}
 	 */
-	unsetTarget: UnsetTarget = () => {
+	detach: Detach = () => {
 		if ( ! this.#gravatarImages.length ) {
 			return;
 		}

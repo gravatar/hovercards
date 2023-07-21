@@ -6,6 +6,7 @@ module.exports = {
 	entry: './playground/main.ts',
 	devServer: {
 		open: true,
+		watchFiles: [ 'playground' ],
 	},
 	plugins: [
 		new HtmlWebpackPlugin( {

@@ -51,15 +51,15 @@ import { HovercardsCore } from '@automattic/gravatar-hovercards';
 import '@automattic/gravatar-hovercards/dist/styles.min.css';
 
 document.addEventListener( 'DOMContentLoaded', () => {
-  // Initialize the hovercards library with the desired options
+  // Start the hovercards feature with your preferred settings
   const hovercards = new HovercardsCore( { /* Options */ } );
 
-  // Set a specific Gravatar image as the target for the hovercard
-  hovercards.setTarget( document.getElementById( 'avatar-1' ) );
-  // Alternatively, set a container as the target and create hovercards for images inside it
-  hovercards.setTarget( document.getElementById( 'container' ) );
-  // If you want hovercards for images throughout the entire page, set the body as the target
-  hovercards.setTarget( document.body );
+  // Make hovercards work on a specific Gravatar image
+  hovercards.attach( document.getElementById( 'avatar-1' ) );
+  // Alternatively, make hovercards work on all Gravatar images within a specific container
+  hovercards.attach( document.getElementById( 'container' ) );
+  // If you want hovercards on all Gravatar images across the entire page, use `document.body` as the target
+  hovercards.attach( document.body );
 } );
 ```
 
@@ -123,7 +123,7 @@ interface ProfileData {
 }
 ```
 
-#### `OnFetchProfilFailure: ( hash: string, error: Error ) => void`
+#### `OnFetchProfileFailure: ( hash: string, error: Error ) => void`
 
 This callback function is triggered when the library fails to fetch a Gravatar profile. It takes the Gravatar hash and the error as parameters. Note this function is executed only once per Gravatar hash due to the caching mechanism.
 
@@ -164,9 +164,9 @@ const hovercard = HovercardsCore.createHovercard( {
 document.getElementById( 'container' ).appendChild( hovercard );
 ```
 
-#### `setTarget( target: HTMLElement, ignoreSelector?: string ): void`
+#### `attach( target: HTMLElement, ignoreSelector?: string ): void`
 
-This method sets the target element for the hovercards. The target parameter specifies the element that will trigger the hovercard, and the optional `ignoreSelector` parameter allows you to specify Gravatar images that should be ignored.
+This method applies the hovercard feature to the specified target element. The target parameter specifies the element that will trigger the hovercard, and the optional `ignoreSelector` parameter allows you to specify Gravatar images that should be ignored.
 
 Example usage:
 
@@ -175,20 +175,22 @@ import { HovercardsCore } from '@automattic/gravatar-hovercards';
 
 const hovercards = new HovercardsCore();
 
-// Set a specific Gravatar image as the target for the hovercard
-hovercards.setTarget( document.getElementById( 'avatar-1' ) );
-// Alternatively, set a container as the target and create hovercards for images inside it
-hovercards.setTarget( document.getElementById( 'container' ) );
-// If you want hovercards for images throughout the entire page, set the body as the target
-hovercards.setTarget( document.body );
+// Make hovercards work on a specific Gravatar image
+hovercards.attach( document.getElementById( 'avatar-1' ) );
+// Alternatively, make hovercards work on all Gravatar images within a specific container
+hovercards.attach( document.getElementById( 'container' ) );
+// If you want hovercards on all Gravatar images across the entire page, use `document.body` as the target
+hovercards.attach( document.body );
 
 // Ignore Gravatar images that match the specified `ignoreSelector`
-hovercards.setTarget( document.body, '.ignore img[src*="gravatar.com/"]' );
+hovercards.attach( document.body, '.ignore img[src*="gravatar.com/"]' );
 ```
 
-#### `unsetTarget(): void`
+> Note: Each `attach()` call automatically detaches hovercards from their current target before attaching to the new one.
 
-This method removes the target element for the hovercards, disabling the hovercard functionality.
+#### `detach(): void`
+
+This method detaches the hovercards from their current target element, thereby disabling the hovercard functionality.
 
 ### Contribute to Gravatar Hovercards
 

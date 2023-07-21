@@ -1,4 +1,4 @@
-import type { Options, SetTarget } from '../dist';
+import type { Options, Attach } from '../dist';
 import { HovercardsCore } from '../dist';
 import '../dist/style.min.css';
 
@@ -12,10 +12,10 @@ addEventListener( 'DOMContentLoaded', () => {
 	const hovercards = new HovercardsCore( options );
 
 	// To test type
-	const setTarget: SetTarget = ( target, ignore ) => {
-		hovercards.setTarget( target, ignore );
+	const attach: Attach = ( target, ignore ) => {
+		hovercards.attach( target, ignore );
 	};
-	setTarget( document.body );
+	attach( document.body );
 
 	// To test sanitization
 	document.getElementById( 'inline-hovercard' )?.appendChild(
