@@ -1,7 +1,7 @@
 {
 	"name": "@automattic/gravatar-hovercards",
 	"version": "0.5.0",
-	"description": "Enrich your site with interactive hovercards, bringing Gravatar profiles to life one hover at a time!",
+	"description": "Add profile hovercards to Gravatar images.",
 	"homepage": "https://github.com/Automattic/gravatar-hovercards#readme",
 	"bugs": "https://github.com/Automattic/gravatar-hovercards/issues",
 	"repository": "https://github.com/Automattic/gravatar-hovercards",
@@ -30,7 +30,11 @@
 			"import": "./dist/index.mjs",
 			"default": "./dist/index.js"
 		},
-		"./package.json": "./package.json"
+		"./package.json": "./package.json",
+		"./dist/style.min.css": {
+			"import": "./dist/style.min.css",
+			"require": "./dist/style.min.css"
+		}
 	},
 	"files": [
 		"dist"
@@ -47,16 +51,11 @@
 		"lint:md:docs": "wp-scripts lint-md-docs --fix",
 		"lint": "run-p 'lint:*'",
 		"clean": "rimraf dist",
-		"start:wpcom": "webpack serve --config ./webpack.config.wpcom.js",
-		"start:sync-wpcom": "chokidar 'src/*.*' -c 'webpack && yarn build:sync-wpcom'",
-		"build:wpcom": "webpack --config ./webpack.config.wpcom.js --node-env=production",
-		"build:sync-wpcom": "yarn build:wpcom && rsync -az --delete build/* gravatar:public_html/js/hovercards/ && echo ✨ Done!",
 		"prepare": "husky install"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.8.0",
 		"autoprefixer": "^10.4.14",
-		"chokidar-cli": "^3.0.0",
 		"css-loader": "^6.8.1",
 		"html-webpack-plugin": "^5.5.3",
 		"husky": "^8.0.0",

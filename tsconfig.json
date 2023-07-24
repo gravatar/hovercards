@@ -12,7 +12,5 @@
 		"skipLibCheck": true,
 		"outDir": "dist"
 	},
-	"include": [ "src" ],
-	// TODO: Remove this when we moving `wpcom.ts` to the Gravatar codebase
-	"exclude": [ "node_modules", "src/wpcom.ts" ]
+	"include": [ "src" ]
 }

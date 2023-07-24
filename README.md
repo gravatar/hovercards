@@ -20,7 +20,7 @@ It also supports [UNPKG](https://unpkg.com/) CDN.
 
 ```html
 <!-- Import the hovercard styles -->
-<link rel="stylesheet" href="https://unpkg.com/@automattic/gravatar-hovercards/dist/styles.min.css">
+<link rel="stylesheet" href="https://unpkg.com/@automattic/gravatar-hovercards/dist/style.min.css">
 <!-- Import the hovercards library -->
 <script src="https://unpkg.com/@automattic/gravatar-hovercards" defer></script>
 <script>
@@ -48,7 +48,7 @@ Now you can use the library to convert your Gravatar images into interactive hov
 ```js
 import { HovercardsCore } from '@automattic/gravatar-hovercards';
 // Import the hovercard styles
-import '@automattic/gravatar-hovercards/dist/styles.min.css';
+import '@automattic/gravatar-hovercards/dist/style.min.css';
 
 document.addEventListener( 'DOMContentLoaded', () => {
   // Start the hovercards feature with your preferred settings
