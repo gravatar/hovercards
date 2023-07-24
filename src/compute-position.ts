@@ -33,24 +33,24 @@ const paddingMap: Record< string, ReturnValues[ 'padding' ] > = {
 };
 
 /**
- * Computes the position of a card relative to an image.
+ * Computes the position of a card relative to a ref element.
  *
- * @param {HTMLImageElement} img          - The image element.
- * @param {HTMLDivElement}   card         - The card element.
- * @param {Options}          [options={}] - The placement, offset, and auto-flip options.
- * @return {ReturnValues}                 - The computed position values.
+ * @param {HTMLElement}    ref          - The ref element.
+ * @param {HTMLDivElement} card         - The card element.
+ * @param {Options}        [options={}] - The placement, offset, and auto-flip options.
+ * @return {ReturnValues}               - The computed position values.
  */
 export default function computingPosition(
-	img: HTMLImageElement,
+	ref: HTMLElement,
 	card: HTMLDivElement,
 	{ placement = 'right', offset = 0, autoFlip = true }: Options = {}
 ): ReturnValues {
-	const imgRect = img.getBoundingClientRect();
+	const refRect = ref.getBoundingClientRect();
 	const cardRect = card.getBoundingClientRect();
-	const imgScrollT = imgRect.top + scrollY;
-	const imgScrollB = imgRect.bottom + scrollY;
-	const imgScrollR = imgRect.right + scrollX;
-	const imgScrollL = imgRect.left + scrollX;
+	const refScrollT = refRect.top + scrollY;
+	const refScrollB = refRect.bottom + scrollY;
+	const refScrollR = refRect.right + scrollX;
+	const refScrollL = refRect.left + scrollX;
 	let x = 0;
 	let y = 0;
 	let [ dir, align ] = placement.split( '-' );
@@ -59,10 +59,10 @@ export default function computingPosition(
 	// Auto flip the card if there's not enough space
 	// If both sides have not enough space, then the card will be placed on the side with more space
 	if ( autoFlip ) {
-		const topSpace = imgRect.top;
-		const bottomSpace = innerHeight - imgRect.bottom;
-		const leftSpace = imgRect.left;
-		const rightSpace = innerWidth - imgRect.right;
+		const topSpace = refRect.top;
+		const bottomSpace = innerHeight - refRect.bottom;
+		const leftSpace = refRect.left;
+		const rightSpace = innerWidth - refRect.right;
 		const floatingSpaceV = cardRect.height + offset;
 		const floatingSpaceH = cardRect.width + offset;
 
@@ -85,28 +85,28 @@ export default function computingPosition(
 
 	// Calculate the position of the card
 	if ( dir === 'top' || dir === 'bottom' ) {
-		x = imgScrollL + imgRect.width / 2 - cardRect.width / 2;
+		x = refScrollL + refRect.width / 2 - cardRect.width / 2;
 		// The bottom offset will be filled with the card's padding
-		y = dir === 'top' ? imgScrollT - cardRect.height - offset : imgScrollB;
+		y = dir === 'top' ? refScrollT - cardRect.height - offset : refScrollB;
 
 		if ( align === 'start' ) {
-			x = imgScrollL;
+			x = refScrollL;
 		}
 
 		if ( align === 'end' ) {
-			x = imgScrollR - cardRect.width;
+			x = refScrollR - cardRect.width;
 		}
 	} else {
 		// The right offset will be filled with the card's padding
-		x = dir === 'right' ? imgScrollR : imgScrollL - cardRect.width - offset;
-		y = imgScrollT + imgRect.height / 2 - cardRect.height / 2;
+		x = dir === 'right' ? refScrollR : refScrollL - cardRect.width - offset;
+		y = refScrollT + refRect.height / 2 - cardRect.height / 2;
 
 		if ( align === 'start' ) {
-			y = imgScrollT;
+			y = refScrollT;
 		}
 
 		if ( align === 'end' ) {
-			y = imgScrollB - cardRect.height;
+			y = refScrollB - cardRect.height;
 		}
 	}
 

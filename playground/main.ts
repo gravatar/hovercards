@@ -12,10 +12,10 @@ addEventListener( 'DOMContentLoaded', () => {
 	const hovercards = new HovercardsCore( options );
 
 	// To test type
-	const attach: Attach = ( target, ignore ) => {
-		hovercards.attach( target, ignore );
+	const attach: Attach = ( target, opts ) => {
+		hovercards.attach( target, opts );
 	};
-	attach( document.body );
+	attach( document.body, { ignoreSelector: '' } );
 
 	// To test sanitization
 	document.getElementById( 'inline-hovercard' )?.appendChild(

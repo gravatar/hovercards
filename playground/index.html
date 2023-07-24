@@ -13,26 +13,17 @@
 			gap: 5rem;
 			height: 100vh;
 		}
+
+		#attr {
+			color: blue;
+			cursor: pointer;
+		}
 	</style>
 	<body>
 		<main>
 			<div>
 				<img
 					src="https://www.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&d=retro&r=g"
-					width="60px"
-					height="60px"
-				/>
-			</div>
-			<div>
-				<img
-					src="https://www.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&d=retro"
-					width="60px"
-					height="60px"
-				/>
-			</div>
-			<div>
-				<img
-					src="https://www.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&f=y"
 					width="60px"
 					height="60px"
 				/>
@@ -53,11 +44,13 @@
 			</div>
 			<div>
 				<img
+					id="img"
 					src="https://www.gravatar.com/avatar/d538859cbc5da94681f81bd1380cac96?s=60&d=retro&r=g"
 					width="60px"
 					height="60px"
 				/>
 			</div>
+			<div id="attr" data-gravatar-hash="d538859cbc5da94681f81bd1380cac96?s=60&d=retro&r=g">@WellyTest</div>
 			<div id="inline-hovercard"></div>
 		</main>
 	</body>

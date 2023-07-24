@@ -5,7 +5,7 @@ export type {
 	CreateHovercard,
 	Attach,
 	Detach,
-	OnQueryGravatarImg,
+	OnQueryHovercardRef,
 	OnFetchProfileStart,
 	OnFetchProfileSuccess,
 	OnFetchProfileFailure,
