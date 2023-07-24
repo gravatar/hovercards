@@ -2,6 +2,8 @@
 
 Gravatar Hovercards is an easy-to-use library that brings [Gravatar](https://gravatar.com/) profiles to your website. It converts static [Gravatar images](#1-static-gravatar-images) or [elements `data-gravatar-hash` attribute](#2-elements-with-data-gravatar-hash-attribute) into interactive hovercards, increasing user engagement.
 
+<img src="https://github.com/Automattic/gravatar-hovercards/raw/add/screenshot/screenshot.png" width="400" />
+
 ## Installation
 
 You can install this package with [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/).
