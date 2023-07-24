@@ -20,20 +20,12 @@ addEventListener( 'DOMContentLoaded', () => {
 	// To test sanitization
 	document.getElementById( 'inline-hovercard' )?.appendChild(
 		HovercardsCore.createHovercard( {
-			hash: '767fc9c115a1b989744c755db47feb60',
-			thumbnailUrl: 'https://secure.gravatar.com/avatar/767fc9c115a1b989744c755db47feb60?s=60&d=retro&r=g&esc=^^',
+			hash: 'd538859cbc5da94681f81bd1380cac96',
+			thumbnailUrl: 'https://www.gravatar.com/avatar/d538859cbc5da94681f81bd1380cac96?s=60&d=retro&r=g&esc=^^',
 			preferredUsername: 'matt',
-			displayName: '<i>Matt</i>',
-			currentLocation: '<i>San Francisco, CA</i>',
-			aboutMe: '<i>Test</i>',
-			accounts: [
-				{
-					url: 'http://twitter.com/photomatt?esc=^^',
-					iconUrl: 'https://secure.gravatar.com/icons/twitter-alt.svg?esc=^^',
-					name: '<i>Twitter</i>',
-					shortname: 'twitter',
-				},
-			],
+			displayName: '<i>gyp</i>',
+			currentLocation: '<i>Earth</i>',
+			aboutMe: '<i>Test</i>, &amp;, &lt;, &gt;, &quot;, &#39;, &#x60;',
 		} )
 	);
 } );

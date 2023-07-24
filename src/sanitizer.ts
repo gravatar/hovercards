@@ -8,7 +8,10 @@ export function escHtml( str: string ) {
 		'`': '&#x60;',
 	};
 
-	return str.replace( /[&<>"'`]/g, ( match ) => htmlEntities[ match ] );
+	// Don't escape if already escaped.
+	return str.replace( /&(amp|lt|gt|quot|#39|x60);|[\&<>"'`]/g, ( match ) =>
+		match[ 0 ] === '&' ? match : htmlEntities[ match ]
+	);
 }
 
 export function escUrl( url: string ) {
