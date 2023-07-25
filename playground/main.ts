@@ -7,7 +7,7 @@ addEventListener( 'DOMContentLoaded', () => {
 	const options: Options = {
 		placement: 'right',
 		// To test the empty about me case
-		myHash: '767fc9c115a1b989744c755db47feb60',
+		myHash: '99c3338797c95c418d9996bd39931506',
 	};
 	const hovercards = new HovercardsCore( options );
 
@@ -22,7 +22,7 @@ addEventListener( 'DOMContentLoaded', () => {
 		HovercardsCore.createHovercard( {
 			hash: 'd538859cbc5da94681f81bd1380cac96',
 			thumbnailUrl: 'https://www.gravatar.com/avatar/d538859cbc5da94681f81bd1380cac96?s=60&d=retro&r=g&esc=^^',
-			preferredUsername: 'matt',
+			preferredUsername: 'wellycybertech',
 			displayName: '<i>gyp</i>',
 			currentLocation: '<i>Earth</i>',
 			aboutMe: '<i>Test</i>, &amp;, &lt;, &gt;, &quot;, &#39;, &#x60;',

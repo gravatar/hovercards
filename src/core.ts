@@ -237,6 +237,7 @@ export default class Hovercards {
 
 		const profileUrl = escUrl( `https://gravatar.com/${ preferredUsername }` );
 		const username = escHtml( displayName );
+		const isEditProfile = ! aboutMe && myHash === hash;
 		const renderSocialLinks = accounts
 			.reduce( ( links, { url, shortname, iconUrl, name } ) => {
 				const idx = socialLinksOrder.indexOf( shortname );
@@ -278,11 +279,16 @@ export default class Hovercards {
 						</a>
 						${ renderSocialLinks }
 					</div>
-					${
-						! aboutMe && myHash === hash
-							? '<a class="gravatar-hovercard__profile-link gravatar-hovercard__profile-link--edit" href="https://gravatar.com/profiles/edit" target="_blank">Edit your profile</a>'
-							: `<a class="gravatar-hovercard__profile-link" href="${ profileUrl }" target="_blank">View profile</a>`
-					}
+					<a
+						class="gravatar-hovercard__profile-link${ isEditProfile ? ' gravatar-hovercard__profile-link--edit' : '' }"
+						href="${ isEditProfile ? 'https://gravatar.com/profiles/edit' : profileUrl }"
+						target="_blank"
+					>
+						<span>${ isEditProfile ? 'Edit your profile' : 'View profile' }</span>
+						<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+							<path d="M12.6667 8.33338L9.16666 12.1667M12.6667 8.33338L2.66666 8.33338M12.6667 8.33338L9.16666 4.83338" stroke-width="1.5"/>
+						</svg>
+					</a>
 				</div>
 			</div>
     `;

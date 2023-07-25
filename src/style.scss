@@ -1,9 +1,17 @@
+$color-black: #000;
+$color-white: #fff;
+$color-super-light-gray: #eee;
+$color-light-gray: #d8dbdd;
+$color-gray: #707070;
+$color-blue: #1d4fc4;
+
 @mixin ellipsis($lineCount: 1) {
 	display: -webkit-box;
 	-webkit-line-clamp: $lineCount;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	word-break: break-word;
 }
 
 .gravatar-hovercard {
@@ -31,7 +39,7 @@
 			sans-serif;
 		font-size: 14px;
 		line-height: 1.5;
-		color: #000;
+		color: $color-black;
 	}
 
 	.gravatar-hovercard__inner {
@@ -41,8 +49,8 @@
 		width: 400px;
 		height: 213px;
 		padding: 24px 24px 16px;
-		background-color: #fff;
-		border: 1px solid #d8dbdd;
+		background-color: $color-white;
+		border: 1px solid $color-light-gray;
 		border-radius: 4px;
 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 		box-sizing: border-box;
@@ -61,7 +69,8 @@
 
 	.gravatar-hovercard__avatar {
 		border-radius: 50%;
-		background-color: #eee;
+		background-color: $color-super-light-gray;
+		max-width: 56px;
 	}
 
 	.gravatar-hovercard__name-location-link {
@@ -75,15 +84,15 @@
 		font-family: Helvetica, Arial, Tahoma, sans-serif;
 		font-size: 18px;
 		font-weight: 600;
-		line-height: 1.2;
-		color: #000;
+		line-height: 1.25;
+		color: $color-black;
 	}
 
 	.gravatar-hovercard__location {
 
 		@include ellipsis(1);
 
-		opacity: 0.6;
+		color: $color-gray;
 	}
 
 	.gravatar-hovercard__body {
@@ -104,20 +113,26 @@
 	.gravatar-hovercard__social-links {
 		display: flex;
 		align-items: center;
-		gap: 10px;
+		gap: 8px;
+	}
+
+	.gravatar-hovercard__profile-link {
+		display: flex;
+		align-items: center;
+		color: $color-gray;
+		text-decoration: none;
+		gap: 4px;
+
+		path {
+			stroke: $color-gray;
+		}
 	}
 
 	.gravatar-hovercard__profile-link--edit {
-		color: #1d4fc4;
-	}
+		color: $color-blue;
 
-	// Override WP theme styles
-	.gravatar-hovercard__profile-link {
-		text-decoration: underline;
-
-		/* stylelint-disable no-descending-specificity */
-		&:hover {
-			text-decoration: none;
+		path {
+			stroke: $color-blue;
 		}
 	}
 }
@@ -128,7 +143,7 @@
 	.gravatar-hovercard__name-location-link,
 	.gravatar-hovercard__social-link,
 	.gravatar-hovercard__profile-link {
-		background-color: #eee;
+		background-color: $color-super-light-gray;
 	}
 
 	.gravatar-hovercard__avatar-link {
@@ -150,7 +165,7 @@
 
 	.gravatar-hovercard__profile-link {
 		height: 16px;
-		width: 76px;
+		width: 96px;
 	}
 
 	.gravatar-hovercard__inner {
@@ -161,7 +176,7 @@
 		position: absolute;
 		top: calc(50% - 21px);
 		text-align: center;
-		color: #707070;
+		color: $color-gray;
 		padding-right: 24px;
 	}
 }
