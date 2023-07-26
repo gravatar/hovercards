@@ -1,6 +1,7 @@
 import type { Placement } from './compute-position';
 import computePosition from './compute-position';
 import { escUrl, escHtml } from './sanitizer';
+import __ from './i18n';
 
 export type Account = Record< 'url' | 'shortname' | 'iconUrl' | 'name', string >;
 
@@ -16,7 +17,7 @@ export interface ProfileData {
 
 export type CreateHovercard = (
 	profileData: ProfileData,
-	options?: { additionalClass?: string; myHash?: string }
+	options?: { additionalClass?: string; myHash?: string; i18n?: Record< string, string > }
 ) => HTMLDivElement;
 
 export type Attach = ( target: HTMLElement, options?: { dataAttributeName?: string; ignoreSelector?: string } ) => void;
@@ -43,6 +44,7 @@ export type Options = Partial< {
 	delayToHide: number;
 	additionalClass: string;
 	myHash: string;
+	i18n: Record< string, string >;
 	onQueryHovercardRef: OnQueryHovercardRef;
 	onFetchProfileStart: OnFetchProfileStart;
 	onFetchProfileSuccess: OnFetchProfileSuccess;
@@ -77,6 +79,7 @@ export default class Hovercards {
 	#onFetchProfileFailure: OnFetchProfileFailure;
 	#onHovercardShown: OnHovercardShown;
 	#onHovercardHidden: OnHovercardHidden;
+	#i18n: Record< string, string > = {};
 
 	// Variables
 	#hovercardRefs: HovercardRef[] = [];
@@ -98,6 +101,7 @@ export default class Hovercards {
 		onFetchProfileFailure = () => {},
 		onHovercardShown = () => {},
 		onHovercardHidden = () => {},
+		i18n = {},
 	}: Options = {} ) {
 		this.#placement = placement;
 		this.#autoFlip = autoFlip;
@@ -112,6 +116,7 @@ export default class Hovercards {
 		this.#onFetchProfileFailure = onFetchProfileFailure;
 		this.#onHovercardShown = onHovercardShown;
 		this.#onHovercardHidden = onHovercardHidden;
+		this.#i18n = i18n;
 	}
 
 	/**
@@ -219,9 +224,10 @@ export default class Hovercards {
 	 * @param {Object}      [options]                 - Optional parameters for the hovercard.
 	 * @param {string}      [options.additionalClass] - Additional CSS class for the hovercard.
 	 * @param {string}      [options.myHash]          - The hash of the current user.
+	 * @param {Object}      [options.i18n]            - The i18n object.
 	 * @return {HTMLDivElement}               - The created hovercard element.
 	 */
-	static createHovercard: CreateHovercard = ( profileData, { additionalClass, myHash } = {} ) => {
+	static createHovercard: CreateHovercard = ( profileData, { additionalClass, myHash, i18n = {} } = {} ) => {
 		const {
 			hash,
 			thumbnailUrl,
@@ -284,7 +290,7 @@ export default class Hovercards {
 						href="${ isEditProfile ? 'https://gravatar.com/profiles/edit' : profileUrl }"
 						target="_blank"
 					>
-						<span>${ isEditProfile ? 'Edit your profile' : 'View profile' }</span>
+						<span>${ isEditProfile ? __( i18n, 'Edit your profile' ) : __( i18n, 'View profile' ) }</span>
 						<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
 							<path d="M12.6667 8.33338L9.16666 12.1667M12.6667 8.33338L2.66666 8.33338M12.6667 8.33338L9.16666 4.83338" stroke-width="1.5"/>
 						</svg>
@@ -320,6 +326,7 @@ export default class Hovercards {
 					{
 						additionalClass: this.#additionalClass,
 						myHash: this.#myHash,
+						i18n: this.#i18n,
 					}
 				);
 			} else {
@@ -367,6 +374,7 @@ export default class Hovercards {
 							{
 								additionalClass: this.#additionalClass,
 								myHash: this.#myHash,
+								i18n: this.#i18n,
 							}
 						).firstElementChild;
 
@@ -378,8 +386,11 @@ export default class Hovercards {
 					.catch( ( error ) => {
 						hovercard.firstElementChild.innerHTML = `<i class="gravatar-hovercard__error-message">${
 							error.message === 'User not found'
-								? "Sorry, we weren't able to load this Gravatar profile card."
-								: "Sorry, we weren't able to load this Gravatar profile card. Please check your internet connection."
+								? __( this.#i18n, "Sorry, we weren't able to load this Gravatar profile card." )
+								: __(
+										this.#i18n,
+										"Sorry, we weren't able to load this Gravatar profile card. Please check your internet connection."
+								  )
 						}</i>`;
 
 						this.#onFetchProfileFailure( hash, error as Error );

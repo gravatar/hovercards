@@ -141,6 +141,10 @@ The delay in milliseconds before the hovercard is shown.
 
 The delay in milliseconds before the hovercard is hidden.
 
+### `i18n: Record< string, string >`
+
+Translated text strings to use instead of the default English.
+
 #### `additionalClass: string = ''`
 
 Additional class names to be added to the outermost element of the hovercard. This is useful for customizing the styling of the hovercard.
@@ -165,13 +169,13 @@ The `profileData` parameter is an object that contains the following properties:
 
 ```ts
 interface ProfileData {
-	hash: string;
-	preferredUsername: string;
-	thumbnailUrl: string;
-	displayName: string;
-	currentLocation?: string;
-	aboutMe?: string;
-	accounts?: Record< 'url' | 'shortname' | 'iconUrl' | 'name', string >[];
+    hash: string;
+    preferredUsername: string;
+    thumbnailUrl: string;
+    displayName: string;
+    currentLocation?: string;
+    aboutMe?: string;
+    accounts?: Record< 'url' | 'shortname' | 'iconUrl' | 'name', string >[];
 }
 ```
 
@@ -191,7 +195,7 @@ This callback function is triggered when the hovercard is hidden. It takes the G
 
 The `HovercardsCore` class provides the following methods:
 
-#### `(static) createHovercard( profileData: ProfileData, options?: { additionalClass?: string; myHash?: string } ): HTMLDivElement`
+#### `(static) createHovercard( profileData: ProfileData, options?: { additionalClass?: string; myHash?: string, i18n?: Record< string, string > } ): HTMLDivElement`
 
 This method generates a hovercard element using the provided profile data. It accepts the `profileData` parameter, which represents the data needed to populate the hovercard, and an optional options object that can include properties such as [`additionalClass`](#additionalclass-string) and [`myHash`](#myhash-string). It's useful when you want to display static hovercards on your website.
 
@@ -228,6 +232,25 @@ This method attaches the hovercards to the specified target element, thereby ena
 #### `detach(): void`
 
 This method detaches the hovercards from their current target element, thereby disabling the hovercard functionality.
+
+### Translations
+
+A few items of text are used when displaying a hovercard. The library contains English by default, but you can supply your own translations through the use of the `i18n` option.
+
+The following phrases are used:
+
+- `Edit your profile`
+- `View profile`
+- `Sorry, we weren't able to load this Gravatar profile card.`
+- `Sorry, we weren't able to load this Gravatar profile card. Please check your internet connection.`
+
+The `i18n` option is an object that maps from the English text to the language of your choice (even another English phrase, if you wish to change the text).
+
+```js
+{
+  'Edit your profile': 'Modifier votre profil'
+}
+```
 
 ### Contribute to Gravatar Hovercards
 

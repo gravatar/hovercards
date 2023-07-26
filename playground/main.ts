@@ -8,6 +8,9 @@ addEventListener( 'DOMContentLoaded', () => {
 		placement: 'right',
 		// To test the empty about me case
 		myHash: '99c3338797c95c418d9996bd39931506',
+		i18n: {
+			'View profile': 'View profile 😜',
+		},
 	};
 	const hovercards = new HovercardsCore( options );
 
