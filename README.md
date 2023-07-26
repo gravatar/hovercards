@@ -1,12 +1,12 @@
 # Gravatar Hovercards
 
-Gravatar Hovercards is an easy-to-use library that brings [Gravatar](https://gravatar.com/) profiles to your website. It converts static [Gravatar images](#1-static-gravatar-images) or [elements `data-gravatar-hash` attribute](#2-elements-with-data-gravatar-hash-attribute) into interactive hovercards, increasing user engagement.
+Gravatar Hovercards is an easy-to-use library that brings [Gravatar](https://gravatar.com/) profiles to your website. It converts static [Gravatar images](#1-gravatar-images), or any element with the [`data-gravatar-hash` attribute](#2-elements-with-data-gravatar-hash-attribute) into interactive hovercards.
 
 <img src="https://github.com/Automattic/gravatar-hovercards/blob/trunk/screenshot.png?raw=true" width="400" />
 
 ## Installation
 
-You can install this package with [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/).
+Install the package with [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/).
 
 ```bash
 yarn add @automattic/gravatar-hovercards
@@ -18,13 +18,14 @@ or
 npm install @automattic/gravatar-hovercards
 ```
 
-It also supports [UNPKG](https://unpkg.com/) CDN.
+It also supports [UNPKG](https://unpkg.com/).
 
 ```html
 <!-- Import the hovercard styles -->
 <link rel="stylesheet" href="https://unpkg.com/@automattic/gravatar-hovercards/dist/style.min.css">
 <!-- Import the hovercards library -->
 <script src="https://unpkg.com/@automattic/gravatar-hovercards" defer></script>
+
 <script>
   // Gravatar hovercards is available as a global variable
   console.log( Gravatar.HovercardsCore );
@@ -33,86 +34,84 @@ It also supports [UNPKG](https://unpkg.com/) CDN.
 
 ## Usage
 
-You can integrate Gravatar profiles into your website in two ways.
+You can add hovercards to your page by either using existing Gravatar images, or by adding a data attribute to any element.
 
-### 1. Static Gravatar Images
+### 1. Gravatar Images
 
-Ensure that your website includes Gravatar images. The URLs of these images should contain hashed email addresses. For more information, please refer to the [Gravatar Images Implementation Guide](http://gravatar.com/site/implement/images/).
+Ensure your page includes Gravatar images. The URLs of these images should contain hashed email addresses. For more information, refer to the [gravatar images implementation guide](http://gravatar.com/site/implement/images/).
 
-In the HTML of your webpage, the Gravatar images should look like this:
+For example:
 
 ```html
 <div id="container">
-  <img id="avatar-1" src="https://www.gravatar.com/avatar/<HASHED_EMAIL_ADDRESS>" alt="Gravatar Image">
-  <img id="avatar-2" src="https://www.gravatar.com/avatar/<HASHED_EMAIL_ADDRESS>" alt="Gravatar Image">
-  <!-- Image URL with specified parameters -->
-  <img id="avatar-3" src="https://www.gravatar.com/avatar/<HASHED_EMAIL_ADDRESS>?s=250&d=retro&r=pg" alt="Gravatar Image">
+    <img id="avatar-1" src="https://www.gravatar.com/avatar/<HASHED_EMAIL_ADDRESS>" alt="Gravatar Image">
+    <img id="avatar-2" src="https://www.gravatar.com/avatar/<HASHED_EMAIL_ADDRESS>" alt="Gravatar Image">
+
+    <!-- Image URL with specified parameters -->
+    <img id="avatar-3" src="https://www.gravatar.com/avatar/<HASHED_EMAIL_ADDRESS>?s=250&d=retro&r=pg" alt="Gravatar Image">
 </div>
 ```
 
-Now you can use the library to convert your Gravatar images into interactive hovercards:
+These can be turned into hovercards:
 
 ```js
 import { HovercardsCore } from '@automattic/gravatar-hovercards';
-// Import the hovercard styles
 import '@automattic/gravatar-hovercards/dist/style.min.css';
 
 document.addEventListener( 'DOMContentLoaded', () => {
-  // Start the hovercards feature with your preferred settings
-  const hovercards = new HovercardsCore( { /* Options */ } );
+    // Start the hovercards feature with your preferred settings
+    const hovercards = new HovercardsCore( { /* Options */ } );
 
-  // Make hovercards work on a specific Gravatar image
-  hovercards.attach( document.getElementById( 'avatar-1' ) );
-  // Alternatively, make hovercards work on all Gravatar images within a specific container
-  hovercards.attach( document.getElementById( 'container' ) );
-  // If you want hovercards on all Gravatar images across the entire page, use `document.body` as the target
-  hovercards.attach( document.body );
+    // Make hovercards work on a specific Gravatar image
+    hovercards.attach( document.getElementById( 'avatar-1' ) );
 
-  // You can exclude certain Gravatar images from hovercards by using `ignoreSelector`
-  hovercards.attach( document.body, { ignoreSelector: '.ignore img[src*="gravatar.com/"]' } );
+    // Alternatively, make hovercards work on all Gravatar images within a specific container
+    hovercards.attach( document.getElementById( 'container' ) );
+
+    // If you want hovercards on all Gravatar images across the entire page, use `document.body` as the target
+    hovercards.attach( document.body );
+
+    // You can exclude certain Gravatar images from hovercards by using `ignoreSelector`
+    hovercards.attach( document.body, { ignoreSelector: '.ignore img[src*="gravatar.com/"]' } );
 } );
 ```
 
 ### 2. Elements with `data-gravatar-hash` Attribute
 
-Alternatively, you can use the `data-gravatar-hash` attribute to specify the Gravatar hash for an element. The Gravatar Hovercards library will automatically convert the element into an interactive hovercard.
+Alternatively, use the `data-gravatar-hash` attribute to specify the Gravatar hash for any element. This will automatically be converted into an interactive hovercard.
 
-> Note: When using the data attribute with a Gravatar image, the data takes priority.
+> Note: The data attributes takes priority over the image URL.
 
-In the HTML of your webpage, the elements should look like this:
+For example:
 
 ```html
 <div id="container">
-  <div id="ref-1" data-gravatar-hash="<HASHED_EMAIL_ADDRESS>">@Meow</div>
-  <div id="ref-2" data-gravatar-hash="<HASHED_EMAIL_ADDRESS>">@Woof</div>
-  <!-- A hash with specified parameters -->
-  <div id="ref-3" data-gravatar-hash="<HASHED_EMAIL_ADDRESS>?s=250&d=retro&r=pg">@Haha</div>
+    <div id="ref-1" data-gravatar-hash="<HASHED_EMAIL_ADDRESS>">@Meow</div>
+    <div id="ref-2" data-gravatar-hash="<HASHED_EMAIL_ADDRESS>">@Woof</div>
+
+    <!-- A hash with specified parameters -->
+    <div id="ref-3" data-gravatar-hash="<HASHED_EMAIL_ADDRESS>?s=250&d=retro&r=pg">@Haha</div>
 </div>
 ```
 
-Now, to convert these elements into interactive hovercards, use the Gravatar Hovercards library as follows:
+To convert these elements into interactive hovercards:
 
 ```js
 import { HovercardsCore } from '@automattic/gravatar-hovercards';
-// Import the hovercard styles
 import '@automattic/gravatar-hovercards/dist/styles.min.css';
 
 document.addEventListener( 'DOMContentLoaded', () => {
-  // Start the hovercards feature with your preferred settings
-  const hovercards = new HovercardsCore( { /* Options */ } );
+    // Start the hovercards feature with your preferred settings
+    const hovercards = new HovercardsCore( { /* Options */ } );
 
-  // Make hovercards work on a specific ref element
-  hovercards.attach( document.getElementById( 'ref-1' ) );
-  // Alternatively, make hovercards work on all ref elements within a specific container
-  hovercards.attach( document.getElementById( 'container' ) );
-  // If you want hovercards on all ref elements across the entire page, use `document.body` as the target
-  hovercards.attach( document.body );
+    // Attach hovercards on a specific image
+    hovercards.attach( document.getElementById( 'ref-1' ) );
 
-  // You can change the `data-gravatar-hash` attribute name by using `dataAttributeName`
-  // For example, if you want to use `data-my-custom-name` instead of `data-gravatar-hash`
-  hovercards.attach( document.body, { dataAttributeName: 'my-custom-name' } );
-  // For some reason you want to disable this feature, you can set `dataAttributeName` to an empty string
-  hovercards.attach( document.body, { dataAttributeName: '' } );
+    // Attach to all images within a container
+    hovercards.attach( document.getElementById( 'container' ) );
+
+    // Attach to all images on the page
+    hovercards.attach( document.body );
 } );
 ```
 
@@ -132,7 +131,7 @@ Determines whether the hovercard's placement should automatically flip when ther
 
 #### `offset: number = 10`
 
-The offset of the hovercard relative to the target element.
+The offset of the hovercard relative to the target element, in pixels.
 
 #### `delayToShow: number = 500`
 
@@ -176,15 +175,15 @@ interface ProfileData {
 }
 ```
 
-#### `OnFetchProfileFailure: ( hash: string, error: Error ) => void`
+#### `onFetchProfileFailure: ( hash: string, error: Error ) => void`
 
 This callback function is triggered when the library fails to fetch a Gravatar profile. It takes the Gravatar hash and the error as parameters. Note this function is executed only once per Gravatar hash due to the caching mechanism.
 
-#### `OnHovercardShown: ( hash: string, hovercard: HTMLDivElement ) => void`
+#### `onHovercardShown: ( hash: string, hovercard: HTMLDivElement ) => void`
 
 This callback function is triggered when the hovercard is shown. It takes the Gravatar hash and the hovercard element as parameters.
 
-#### `OnHovercardHidden: ( hash: string, hovercard: HTMLDivElement ) => void`
+#### `onHovercardHidden: ( hash: string, hovercard: HTMLDivElement ) => void`
 
 This callback function is triggered when the hovercard is hidden. It takes the Gravatar hash and the hovercard element as parameters.
 
@@ -200,18 +199,18 @@ This method generates a hovercard element using the provided profile data. It ac
 import { HovercardsCore } from '@automattic/gravatar-hovercards';
 
 const hovercard = HovercardsCore.createHovercard( {
-  hash: '...',
-  preferredUsername: '...',
-  thumbnailUrl: '...',
-  displayName: '...',
-  currentLocation: '...',
-  aboutMe: '...',
-  accounts: [ {
-    url: '...',
-    shortname: '...',
-    iconUrl: '...',
-    name: '...',
-  } ],
+    hash: '...',
+    preferredUsername: '...',
+    thumbnailUrl: '...',
+    displayName: '...',
+    currentLocation: '...',
+    aboutMe: '...',
+    accounts: [ {
+        url: '...',
+        shortname: '...',
+        iconUrl: '...',
+        name: '...',
+    } ],
 } );
 
 document.getElementById( 'container' ).appendChild( hovercard );
