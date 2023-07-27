@@ -1,6 +1,5 @@
 import type { Options, Attach } from '../dist';
-import { HovercardsCore } from '../dist';
-import '../dist/style.min.css';
+import { Hovercards } from '../dist';
 
 addEventListener( 'DOMContentLoaded', () => {
 	// To test types
@@ -12,7 +11,7 @@ addEventListener( 'DOMContentLoaded', () => {
 			'View profile': 'View profile 😜',
 		},
 	};
-	const hovercards = new HovercardsCore( options );
+	const hovercards = new Hovercards( options );
 
 	// To test type
 	const attach: Attach = ( target, opts ) => {
@@ -22,7 +21,7 @@ addEventListener( 'DOMContentLoaded', () => {
 
 	// To test sanitization
 	document.getElementById( 'inline-hovercard' )?.appendChild(
-		HovercardsCore.createHovercard( {
+		Hovercards.createHovercard( {
 			hash: 'd538859cbc5da94681f81bd1380cac96',
 			thumbnailUrl: 'https://www.gravatar.com/avatar/d538859cbc5da94681f81bd1380cac96?s=60&d=retro&r=g&esc=^^',
 			preferredUsername: 'wellycybertech',

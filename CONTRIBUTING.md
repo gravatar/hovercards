@@ -18,7 +18,7 @@ The general development workflow is as follows:
 
 1. Fork and clone the repository.
 2. Install the dependencies by running `yarn install`. Make sure your Node version matches the minimum requirement specified in the `package.json` file.
-3. Build the library in development mode using `yarn build:dev`. This command compiles the code and watches for changes.
+3. Build the library in development mode using `yarn build:watch`. This command compiles the code and watches for changes.
 4. **In a new terminal**, start a local server with `yarn start`. Now you can modify the code in the `src` folder and test it (or the output formats) in the `playground` directory.
 5. Update or add the related types if necessary.
 6. If needed, update the relevant documentation such as [README.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/README.md) or [CONTRIBUTING.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CONTRIBUTING.md).
@@ -30,8 +30,11 @@ Below is a list of available scripts. You can run them using `yarn <script>`:
 
 - `start`: Starts a local server to test the library in development mode.
 - `build`: Builds the library in production mode, creating the `dist` folder with bundled files.
-- `build:dev`: Builds the library in development mode, creating the `dist` folder with bundled files and watching for changes.
+- `build:dev`: Builds the library in development mode, creating the `dist` folder with bundled files.
+- `build:watch`: Builds the library in development mode and watches for changes.
 - `build:types`: Builds the library types.
+- `build:core`: Builds the library in production mode for Vanilla JavaScript.
+- `build:react`: Builds the library in production mode for React.
 - `format`: Formats the code using the [`format`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/#format) script of `@wordpress/scripts`.
 - `type-check`: Checks the types using [TypeScript](https://www.typescriptlang.org/).
 - `lint:js`: Lints the JavaScript / TypeScript code using the [`lint:js`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/#lint-js) script of `@wordpress/scripts`.
@@ -42,7 +45,7 @@ Below is a list of available scripts. You can run them using `yarn <script>`:
 
 ### PR Merge Policy
 
-- Pull Requests (PRs) must receive approval from at least one reviewer before they can be merged into the `trunk` branch.
+- Pull Requests (PRs) must pass all automated tests and receive approval from at least one reviewer before they can be merged into the `trunk` branch.
 - Who is responsible for merging the approved PRs?
     - For PRs authored by external individuals who do not have push permissions, the reviewer who approved the PR will handle the merging process.
     - For PRs authored by contributors who have push permissions, the author of the PR will merge their own PR.

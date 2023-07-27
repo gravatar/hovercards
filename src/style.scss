@@ -174,7 +174,9 @@ $color-blue: #1d4fc4;
 
 	.gravatar-hovercard__error-message {
 		position: absolute;
-		top: calc(50% - 21px);
+		left: 0;
+		top: calc(50% - 10px);
+		width: 100%;
 		text-align: center;
 		color: $color-gray;
 		padding-right: 24px;

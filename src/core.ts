@@ -386,10 +386,10 @@ export default class Hovercards {
 					.catch( ( error ) => {
 						hovercard.firstElementChild.innerHTML = `<i class="gravatar-hovercard__error-message">${
 							error.message === 'User not found'
-								? __( this.#i18n, "Sorry, we weren't able to load this Gravatar profile card." )
+								? __( this.#i18n, 'Sorry, we are unable to load this Gravatar profile.' )
 								: __(
 										this.#i18n,
-										"Sorry, we weren't able to load this Gravatar profile card. Please check your internet connection."
+										'Sorry, we are unable to load this Gravatar profile. Please check your internet connection.'
 								  )
 						}</i>`;
 
