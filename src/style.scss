@@ -168,17 +168,13 @@ $color-blue: #1d4fc4;
 		width: 96px;
 	}
 
-	.gravatar-hovercard__inner {
-		position: relative;
+	.gravatar-hovercard__inner--error {
+		align-items: center;
+		justify-content: start;
+		gap: 34px;
 	}
 
 	.gravatar-hovercard__error-message {
-		position: absolute;
-		left: 0;
-		top: calc(50% - 10px);
-		width: 100%;
-		text-align: center;
 		color: $color-gray;
-		padding-right: 24px;
 	}
 }

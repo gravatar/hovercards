@@ -251,7 +251,7 @@ export default class Hovercards {
 				if ( idx !== -1 ) {
 					links[ idx ] = `
 						<a class="gravatar-hovercard__social-link" href="${ escUrl( url ) }" target="_blank" data-service-name="${ shortname }">
-							<img class="gravatar-hovercard__social-icon" src="${ escUrl( iconUrl ) }" width="32px" height="32px" alt="${ escHtml(
+							<img class="gravatar-hovercard__social-icon" src="${ escUrl( iconUrl ) }" width="32" height="32" alt="${ escHtml(
 						name
 					) }" />
 						</a>
@@ -266,9 +266,7 @@ export default class Hovercards {
 			<div class="gravatar-hovercard__inner">
 				<div class="gravatar-hovercard__header">
 					<a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
-						<img class="gravatar-hovercard__avatar" src="${ escUrl(
-							thumbnailUrl
-						) }" width="56px" height="56px" alt="${ username }" />
+						<img class="gravatar-hovercard__avatar" src="${ escUrl( thumbnailUrl ) }" width="56" height="56" alt="${ username }" />
 					</a>
 					<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
 						<h4 class="gravatar-hovercard__name">${ username }</h4>
@@ -281,7 +279,7 @@ export default class Hovercards {
 				<div class="gravatar-hovercard__footer">
 					<div class="gravatar-hovercard__social-links">
 						<a class="gravatar-hovercard__social-link" href="${ profileUrl }" target="_blank" data-service-name="gravatar">
-							<img class="gravatar-hovercard__social-icon" src="https://secure.gravatar.com/icons/gravatar.svg" width="32px" height="32px" alt="Gravatar" />
+							<img class="gravatar-hovercard__social-icon" src="https://secure.gravatar.com/icons/gravatar.svg" width="32" height="32" alt="Gravatar" />
 						</a>
 						${ renderSocialLinks }
 					</div>
@@ -384,14 +382,18 @@ export default class Hovercards {
 						this.#onFetchProfileSuccess( hash, this.#cachedProfiles.get( hash ) );
 					} )
 					.catch( ( error ) => {
-						hovercard.firstElementChild.innerHTML = `<i class="gravatar-hovercard__error-message">${
-							error.message === 'User not found'
-								? __( this.#i18n, 'Sorry, we are unable to load this Gravatar profile.' )
-								: __(
-										this.#i18n,
-										'Sorry, we are unable to load this Gravatar profile. Please check your internet connection.'
-								  )
-						}</i>`;
+						hovercard.firstElementChild.classList.add( 'gravatar-hovercard__inner--error' );
+						hovercard.firstElementChild.innerHTML = `
+							<img class="gravatar-hovercard__avatar" src="https://2.gravatar.com/avatar/${ hash }${ params }" width="56" height="56" alt="Avatar" />
+							<i class="gravatar-hovercard__error-message">${
+								error.message === 'User not found'
+									? __( this.#i18n, 'Sorry, we are unable to load this Gravatar profile.' )
+									: __(
+											this.#i18n,
+											'Sorry, we are unable to load this Gravatar profile. Please check your internet connection.'
+									  )
+							}</i>
+						`;
 
 						this.#onFetchProfileFailure( hash, error as Error );
 					} );
