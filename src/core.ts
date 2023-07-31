@@ -241,7 +241,7 @@ export default class Hovercards {
 		const hovercard = document.createElement( 'div' );
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
-		const profileUrl = escUrl( `https://gravatar.com/${ preferredUsername }` );
+		const profileUrl = escUrl( `https://gravatar.com/${ preferredUsername }?utm_source=hovercard` );
 		const username = escHtml( displayName );
 		const isEditProfile = ! aboutMe && myHash === hash;
 		const renderSocialLinks = accounts
@@ -285,7 +285,7 @@ export default class Hovercards {
 					</div>
 					<a
 						class="gravatar-hovercard__profile-link${ isEditProfile ? ' gravatar-hovercard__profile-link--edit' : '' }"
-						href="${ isEditProfile ? 'https://gravatar.com/profiles/edit' : profileUrl }"
+						href="${ isEditProfile ? 'https://gravatar.com/profiles/edit?utm_source=hovercard' : profileUrl }"
 						target="_blank"
 					>
 						<span class="gravatar-hovercard__profile-link-text">${ isEditProfile ? __( i18n, 'Edit your profile' ) : __( i18n, 'View profile' ) }</span>
