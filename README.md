@@ -26,19 +26,19 @@ This Gravatar Hovercards library supports both Vanilla JavaScript (including [Ty
 Add the package to your project:
 
 ```bash
-yarn add @automattic/gravatar-hovercards
+yarn add @gravatar/hovercards
 ```
 
 or
 
 ```bash
-npm install @automattic/gravatar-hovercards
+npm install @gravatar/hovercards
 ```
 
 For React, also add `react` and `react-dom` (`v16.8.0` or above):
 
 ```bash
-yarn add react react-dom @automattic/gravatar-hovercards
+yarn add react react-dom @gravatar/hovercards
 ```
 
 ### Install with UNPKG
@@ -47,10 +47,10 @@ For Vanilla JavaScript, import the library as shown below:
 
 ```html
 <!-- Import the hovercard styles -->
-<link rel="stylesheet" href="https://unpkg.com/@automattic/gravatar-hovercards/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@gravatar/hovercards/dist/style.css">
 
 <!-- Import the hovercards library -->
-<script src="https://unpkg.com/@automattic/gravatar-hovercards" defer></script>
+<script src="https://unpkg.com/@gravatar/hovercards" defer></script>
 
 <script>
   // The library is accessible as a global variable
@@ -61,13 +61,13 @@ For Vanilla JavaScript, import the library as shown below:
 For React, import the library as shown below:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@automattic/gravatar-hovercards/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@gravatar/hovercards/dist/style.css">
 
 <!-- Ensure React and ReactDOM are imported before the library -->
 <script src="https://unpkg.com/react" defer></script>
 <script src="https://unpkg.com/react-dom" defer></script>
 <!-- Import the React hovercards library -->
-<script src="https://unpkg.com/@automattic/gravatar-hovercards/dist/index.react.umd.js" defer></script>
+<script src="https://unpkg.com/@gravatar/hovercards/dist/index.react.umd.js" defer></script>
 
 <script>
   console.log( Gravatar );
@@ -99,9 +99,9 @@ For example:
 These can be turned into hovercards:
 
 ```js
-import { Hovercards } from '@automattic/gravatar-hovercards';
+import { Hovercards } from '@gravatar/hovercards';
 // Import the hovercard styles
-import '@automattic/gravatar-hovercards/dist/style.css';
+import '@gravatar/hovercards/dist/style.css';
 
 document.addEventListener( 'DOMContentLoaded', () => {
     // Start the hovercards feature with your preferred settings
@@ -142,8 +142,8 @@ For example:
 To convert these elements into interactive hovercards:
 
 ```js
-import { Hovercards } from '@automattic/gravatar-hovercards';
-import '@automattic/gravatar-hovercards/dist/styles.min.css';
+import { Hovercards } from '@gravatar/hovercards';
+import '@gravatar/hovercards/dist/styles.css';
 
 document.addEventListener( 'DOMContentLoaded', () => {
     // Start the hovercards feature with your preferred settings
@@ -245,7 +245,7 @@ The `Hovercards` class provides the following methods:
 This method generates a hovercard element using the provided profile data. It accepts the `profileData` parameter, which represents the data needed to populate the hovercard, and an optional options object that can include properties such as [`additionalClass`](#additionalclass-string) and [`myHash`](#myhash-string). It's useful when you want to display static hovercards on your website.
 
 ```js
-import { Hovercards } from '@automattic/gravatar-hovercards';
+import { Hovercards } from '@gravatar/hovercards';
 
 const hovercard = Hovercards.createHovercard( {
     hash: '...',
@@ -290,9 +290,9 @@ Here is a basic example:
 
 ```jsx
 // Import the React component
-import { Hovercards } from '@automattic/gravatar-hovercards/react';
+import { Hovercards } from '@gravatar/hovercards/react';
 // Import the hovercard styles
-import '@automattic/gravatar-hovercards/dist/style.css';
+import '@gravatar/hovercards/dist/style.css';
 
 function App() {
     // ...
@@ -316,8 +316,8 @@ function App() {
 To attach hovercards to the whole page or a specific element, use the [`attach`](#attach-htmlelement) prop:
 
 ```jsx
-import { Hovercards } from '@automattic/gravatar-hovercards/react';
-import '@automattic/gravatar-hovercards/dist/style.css';
+import { Hovercards } from '@gravatar/hovercards/react';
+import '@gravatar/hovercards/dist/style.css';
 
 function App() {
     // ...
@@ -371,9 +371,9 @@ Here are some basic examples of how to use the React hook:
 ```jsx
 import { useEffect, useRef } from 'react';
 // Import the React hook
-import { useHovercards } from '@automattic/gravatar-hovercards/react';
+import { useHovercards } from '@gravatar/hovercards/react';
 // Import the hovercard styles
-import '@automattic/gravatar-hovercards/dist/style.css';
+import '@gravatar/hovercards/dist/style.css';
 
 function App() {
     const { attach } = useHovercards( { /* Options */ } );
@@ -406,8 +406,8 @@ You can also use the hook to create a custom component:
 ```jsx
 import sha256 from 'js-sha256';
 import { useEffect, useRef } from 'react';
-import { useHovercards } from '@automattic/gravatar-hovercards/react';
-import '@automattic/gravatar-hovercards/dist/style.css';
+import { useHovercards } from '@gravatar/hovercards/react';
+import '@gravatar/hovercards/dist/style.css';
 
 // A custom Avatar component for convenience
 function Avatar( { email } ) {
@@ -434,8 +434,8 @@ The hook accepts the same options and methods as the `Hovercards` class. Please 
 
 This library is written in TypeScript and comes with type definitions. You can check the following files for the available types:
 
-- [For Vanilla JavaScript](https://github.com/Automattic/gravatar-hovercards/blob/trunk/src/index.ts)
-- [For React](https://github.com/Automattic/gravatar-hovercards/blob/trunk/src/index.react.ts)
+- [For Vanilla JavaScript](https://github.com/gravatar/hovercards/blob/trunk/src/index.ts)
+- [For React](https://github.com/gravatar/hovercards/blob/trunk/src/index.react.ts)
 
 ## Translations
 
@@ -458,8 +458,8 @@ The `i18n` option is an object that maps from the English text to the language o
 
 ## Contribute to Gravatar Hovercards
 
-We welcome contributions to this project. Please follow the guidelines outlined in the [CONTRIBUTING.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CONTRIBUTING.md) file.
+We welcome contributions to this project. Please follow the guidelines outlined in the [CONTRIBUTING.md](https://github.com/gravatar/hovercards/blob/trunk/CONTRIBUTING.md) file.
 
 ## License
 
-Gravatar Hovercards is licensed under [GNU General Public License v2 (or later)](https://github.com/Automattic/gravatar-hovercards/blob/trunk/LICENSE.md).
+Gravatar Hovercards is licensed under [GNU General Public License v2 (or later)](https://github.com/gravatar/hovercards/blob/trunk/LICENSE.md).
