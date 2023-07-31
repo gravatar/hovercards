@@ -63,29 +63,30 @@ interface HovercardRef {
 const BASE_API_URL = 'https://secure.gravatar.com';
 
 const socialLinksOrder = [ 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
+const dc = document;
 
 export default class Hovercards {
 	// Options
-	#placement: Placement;
-	#offset: number;
-	#autoFlip: boolean;
-	#delayToShow: number;
-	#delayToHide: number;
-	#additionalClass: string;
-	#myHash: string;
-	#onQueryHovercardRef: OnQueryHovercardRef;
-	#onFetchProfileStart: OnFetchProfileStart;
-	#onFetchProfileSuccess: OnFetchProfileSuccess;
-	#onFetchProfileFailure: OnFetchProfileFailure;
-	#onHovercardShown: OnHovercardShown;
-	#onHovercardHidden: OnHovercardHidden;
-	#i18n: Record< string, string > = {};
+	_placement: Placement;
+	_offset: number;
+	_autoFlip: boolean;
+	_delayToShow: number;
+	_delayToHide: number;
+	_additionalClass: string;
+	_myHash: string;
+	_onQueryHovercardRef: OnQueryHovercardRef;
+	_onFetchProfileStart: OnFetchProfileStart;
+	_onFetchProfileSuccess: OnFetchProfileSuccess;
+	_onFetchProfileFailure: OnFetchProfileFailure;
+	_onHovercardShown: OnHovercardShown;
+	_onHovercardHidden: OnHovercardHidden;
+	_i18n: Record< string, string > = {};
 
 	// Variables
-	#hovercardRefs: HovercardRef[] = [];
-	#showHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
-	#hideHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
-	#cachedProfiles = new Map< string, ProfileData >();
+	_hovercardRefs: HovercardRef[] = [];
+	_showHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
+	_hideHovercardTimeoutIds = new Map< string, ReturnType< typeof setTimeout > >();
+	_cachedProfiles = new Map< string, ProfileData >();
 
 	constructor( {
 		placement = 'right',
@@ -103,20 +104,20 @@ export default class Hovercards {
 		onHovercardHidden = () => {},
 		i18n = {},
 	}: Options = {} ) {
-		this.#placement = placement;
-		this.#autoFlip = autoFlip;
-		this.#offset = offset;
-		this.#delayToShow = delayToShow;
-		this.#delayToHide = delayToHide;
-		this.#additionalClass = additionalClass;
-		this.#myHash = myHash;
-		this.#onQueryHovercardRef = onQueryHovercardRef;
-		this.#onFetchProfileStart = onFetchProfileStart;
-		this.#onFetchProfileSuccess = onFetchProfileSuccess;
-		this.#onFetchProfileFailure = onFetchProfileFailure;
-		this.#onHovercardShown = onHovercardShown;
-		this.#onHovercardHidden = onHovercardHidden;
-		this.#i18n = i18n;
+		this._placement = placement;
+		this._autoFlip = autoFlip;
+		this._offset = offset;
+		this._delayToShow = delayToShow;
+		this._delayToHide = delayToHide;
+		this._additionalClass = additionalClass;
+		this._myHash = myHash;
+		this._onQueryHovercardRef = onQueryHovercardRef;
+		this._onFetchProfileStart = onFetchProfileStart;
+		this._onFetchProfileSuccess = onFetchProfileSuccess;
+		this._onFetchProfileFailure = onFetchProfileFailure;
+		this._onHovercardShown = onHovercardShown;
+		this._onHovercardHidden = onHovercardHidden;
+		this._i18n = i18n;
 	}
 
 	/**
@@ -128,10 +129,10 @@ export default class Hovercards {
 	 * @return {HTMLElement[]} - The queried hovercard refs.
 	 * @private
 	 */
-	#queryHovercardRefs( target: HTMLElement, dataAttributeName: string, ignoreSelector?: string ) {
+	_queryHovercardRefs( target: HTMLElement, dataAttributeName: string, ignoreSelector?: string ) {
 		let refs: HTMLElement[] = [];
 		const camelAttrName = dataAttributeName.replace( /-([a-z])/g, ( g ) => g[ 1 ].toUpperCase() );
-		const ignoreRefs = ignoreSelector ? Array.from( document.querySelectorAll( ignoreSelector ) ) : [];
+		const ignoreRefs = ignoreSelector ? Array.from( dc.querySelectorAll( ignoreSelector ) ) : [];
 
 		if (
 			target.dataset[ camelAttrName ] ||
@@ -150,7 +151,7 @@ export default class Hovercards {
 			}
 		}
 
-		this.#hovercardRefs = refs
+		this._hovercardRefs = refs
 			.map( ( ref, idx ) => {
 				if ( ignoreRefs.includes( ref ) ) {
 					return null;
@@ -182,12 +183,12 @@ export default class Hovercards {
 					id: `gravatar-hovercard-${ hash }-${ idx }`,
 					hash,
 					params: params ? `?${ params }` : '',
-					ref: this.#onQueryHovercardRef( ref ) || ref,
+					ref: this._onQueryHovercardRef( ref ) || ref,
 				};
 			} )
 			.filter( Boolean );
 
-		return this.#hovercardRefs;
+		return this._hovercardRefs;
 	}
 
 	/**
@@ -195,10 +196,10 @@ export default class Hovercards {
 	 *
 	 * @return {HTMLDivElement} The created skeleton hovercard element.
 	 */
-	#createHovercardSkeleton() {
-		const hovercard = document.createElement( 'div' );
+	_createHovercardSkeleton() {
+		const hovercard = dc.createElement( 'div' );
 		hovercard.className = `gravatar-hovercard gravatar-hovercard--skeleton${
-			this.#additionalClass ? ` ${ this.#additionalClass }` : ''
+			this._additionalClass ? ` ${ this._additionalClass }` : ''
 		}`;
 
 		hovercard.innerHTML = `
@@ -238,7 +239,7 @@ export default class Hovercards {
 			accounts = [],
 		} = profileData;
 
-		const hovercard = document.createElement( 'div' );
+		const hovercard = dc.createElement( 'div' );
 		hovercard.className = `gravatar-hovercard${ additionalClass ? ` ${ additionalClass }` : '' }`;
 
 		const profileUrl = escUrl( `https://gravatar.com/${ preferredUsername }?utm_source=hovercard` );
@@ -308,29 +309,29 @@ export default class Hovercards {
 	 * @return {void}
 	 * @private
 	 */
-	#showHovercard( { id, hash, params, ref }: HovercardRef ) {
+	_showHovercard( { id, hash, params, ref }: HovercardRef ) {
 		const timeoutId = setTimeout( () => {
-			if ( document.getElementById( id ) ) {
+			if ( dc.getElementById( id ) ) {
 				return;
 			}
 
 			let hovercard: HTMLDivElement;
 
-			if ( this.#cachedProfiles.has( hash ) ) {
-				const profile = this.#cachedProfiles.get( hash );
+			if ( this._cachedProfiles.has( hash ) ) {
+				const profile = this._cachedProfiles.get( hash );
 
 				hovercard = Hovercards.createHovercard(
 					{ ...profile, thumbnailUrl: profile.thumbnailUrl + params },
 					{
-						additionalClass: this.#additionalClass,
-						myHash: this.#myHash,
-						i18n: this.#i18n,
+						additionalClass: this._additionalClass,
+						myHash: this._myHash,
+						i18n: this._i18n,
 					}
 				);
 			} else {
-				hovercard = this.#createHovercardSkeleton();
+				hovercard = this._createHovercardSkeleton();
 
-				this.#onFetchProfileStart( hash );
+				this._onFetchProfileStart( hash );
 
 				fetch( `${ BASE_API_URL }/${ hash }.json` )
 					.then( ( res ) => res.json() )
@@ -351,7 +352,7 @@ export default class Hovercards {
 							accounts,
 						} = data.entry[ 0 ];
 
-						this.#cachedProfiles.set( hash, {
+						this._cachedProfiles.set( hash, {
 							hash: fetchedHash,
 							thumbnailUrl,
 							preferredUsername,
@@ -366,20 +367,20 @@ export default class Hovercards {
 							} ) ),
 						} );
 
-						const profile = this.#cachedProfiles.get( hash );
+						const profile = this._cachedProfiles.get( hash );
 						const hovercardInner = Hovercards.createHovercard(
 							{ ...profile, thumbnailUrl: profile.thumbnailUrl + params },
 							{
-								additionalClass: this.#additionalClass,
-								myHash: this.#myHash,
-								i18n: this.#i18n,
+								additionalClass: this._additionalClass,
+								myHash: this._myHash,
+								i18n: this._i18n,
 							}
 						).firstElementChild;
 
 						hovercard.classList.remove( 'gravatar-hovercard--skeleton' );
 						hovercard.replaceChildren( hovercardInner );
 
-						this.#onFetchProfileSuccess( hash, this.#cachedProfiles.get( hash ) );
+						this._onFetchProfileSuccess( hash, this._cachedProfiles.get( hash ) );
 					} )
 					.catch( ( error ) => {
 						hovercard.firstElementChild.classList.add( 'gravatar-hovercard__inner--error' );
@@ -387,31 +388,31 @@ export default class Hovercards {
 							<img class="gravatar-hovercard__avatar" src="https://2.gravatar.com/avatar/${ hash }${ params }" width="56" height="56" alt="Avatar" />
 							<i class="gravatar-hovercard__error-message">${
 								error.message === 'User not found'
-									? __( this.#i18n, 'Sorry, we are unable to load this Gravatar profile.' )
+									? __( this._i18n, 'Sorry, we are unable to load this Gravatar profile.' )
 									: __(
-											this.#i18n,
+											this._i18n,
 											'Sorry, we are unable to load this Gravatar profile. Please check your internet connection.'
 									  )
 							}</i>
 						`;
 
-						this.#onFetchProfileFailure( hash, error as Error );
+						this._onFetchProfileFailure( hash, error as Error );
 					} );
 			}
 
 			// Set the hovercard ID here to avoid the show / hide side effect
 			hovercard.id = id;
 			// Don't hide the hovercard when the mouse is over the hovercard from the ref
-			hovercard.addEventListener( 'mouseenter', () => clearInterval( this.#hideHovercardTimeoutIds.get( id ) ) );
-			hovercard.addEventListener( 'mouseleave', () => this.#hideHovercard( id ) );
+			hovercard.addEventListener( 'mouseenter', () => clearInterval( this._hideHovercardTimeoutIds.get( id ) ) );
+			hovercard.addEventListener( 'mouseleave', () => this._hideHovercard( id ) );
 
-			// Placing the hovercard at the top-level of the document to avoid being clipped by overflow
-			document.body.appendChild( hovercard );
+			// Placing the hovercard at the top-level of the dc to avoid being clipped by overflow
+			dc.body.appendChild( hovercard );
 
 			const { x, y, padding, paddingValue } = computePosition( ref, hovercard, {
-				placement: this.#placement,
-				offset: this.#offset,
-				autoFlip: this.#autoFlip,
+				placement: this._placement,
+				offset: this._offset,
+				autoFlip: this._autoFlip,
 			} );
 
 			hovercard.style.position = 'absolute';
@@ -421,10 +422,10 @@ export default class Hovercards {
 			// ensuring that the hovercard remains visible when the mouse hovers over the gap
 			hovercard.style[ padding ] = `${ paddingValue }px`;
 
-			this.#onHovercardShown( hash, hovercard );
-		}, this.#delayToShow );
+			this._onHovercardShown( hash, hovercard );
+		}, this._delayToShow );
 
-		this.#showHovercardTimeoutIds.set( id, timeoutId );
+		this._showHovercardTimeoutIds.set( id, timeoutId );
 	}
 
 	/**
@@ -434,17 +435,17 @@ export default class Hovercards {
 	 * @return {void}
 	 * @private
 	 */
-	#hideHovercard( id: string ) {
+	_hideHovercard( id: string ) {
 		const timeoutId = setTimeout( () => {
-			const hovercard = document.getElementById( id );
+			const hovercard = dc.getElementById( id );
 
 			if ( hovercard ) {
 				hovercard.remove();
-				this.#onHovercardHidden( id, hovercard as HTMLDivElement );
+				this._onHovercardHidden( id, hovercard as HTMLDivElement );
 			}
-		}, this.#delayToHide );
+		}, this._delayToHide );
 
-		this.#hideHovercardTimeoutIds.set( id, timeoutId );
+		this._hideHovercardTimeoutIds.set( id, timeoutId );
 	}
 
 	/**
@@ -455,12 +456,12 @@ export default class Hovercards {
 	 * @return {void}
 	 * @private
 	 */
-	#handleMouseEnter( e: MouseEvent, hovercardRef: HovercardRef ) {
+	_handleMouseEnter( e: MouseEvent, hovercardRef: HovercardRef ) {
 		e.stopImmediatePropagation();
 
 		// Don't hide the hovercard when the mouse is over the ref from the hovercard
-		clearInterval( this.#hideHovercardTimeoutIds.get( hovercardRef.id ) );
-		this.#showHovercard( hovercardRef );
+		clearInterval( this._hideHovercardTimeoutIds.get( hovercardRef.id ) );
+		this._showHovercard( hovercardRef );
 	}
 
 	/**
@@ -472,11 +473,11 @@ export default class Hovercards {
 	 * @return {void}
 	 * @private
 	 */
-	#handleMouseLeave( e: MouseEvent, { id }: HovercardRef ) {
+	_handleMouseLeave( e: MouseEvent, { id }: HovercardRef ) {
 		e.stopImmediatePropagation();
 
-		clearInterval( this.#showHovercardTimeoutIds.get( id ) );
-		this.#hideHovercard( id );
+		clearInterval( this._showHovercardTimeoutIds.get( id ) );
+		this._hideHovercard( id );
 	}
 
 	/**
@@ -495,9 +496,9 @@ export default class Hovercards {
 
 		this.detach();
 
-		this.#queryHovercardRefs( target, dataAttributeName, ignoreSelector ).forEach( ( hovercardRef ) => {
-			hovercardRef.ref.addEventListener( 'mouseenter', ( e ) => this.#handleMouseEnter( e, hovercardRef ) );
-			hovercardRef.ref.addEventListener( 'mouseleave', ( e ) => this.#handleMouseLeave( e, hovercardRef ) );
+		this._queryHovercardRefs( target, dataAttributeName, ignoreSelector ).forEach( ( hovercardRef ) => {
+			hovercardRef.ref.addEventListener( 'mouseenter', ( e ) => this._handleMouseEnter( e, hovercardRef ) );
+			hovercardRef.ref.addEventListener( 'mouseleave', ( e ) => this._handleMouseLeave( e, hovercardRef ) );
 		} );
 	};
 
@@ -507,15 +508,15 @@ export default class Hovercards {
 	 * @return {void}
 	 */
 	detach: Detach = () => {
-		if ( ! this.#hovercardRefs.length ) {
+		if ( ! this._hovercardRefs.length ) {
 			return;
 		}
 
-		this.#hovercardRefs.forEach( ( { ref } ) => {
-			ref.removeEventListener( 'mouseenter', () => this.#handleMouseEnter );
-			ref.removeEventListener( 'mouseleave', () => this.#handleMouseLeave );
+		this._hovercardRefs.forEach( ( { ref } ) => {
+			ref.removeEventListener( 'mouseenter', () => this._handleMouseEnter );
+			ref.removeEventListener( 'mouseleave', () => this._handleMouseLeave );
 		} );
 
-		this.#hovercardRefs = [];
+		this._hovercardRefs = [];
 	};
 }
