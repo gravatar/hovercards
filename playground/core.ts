@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+
 import type { Options, Attach } from '../dist';
 import { Hovercards } from '../dist';
 

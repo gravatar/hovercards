@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+
 import { createRoot } from 'react-dom/client';
 import React, { useRef, useEffect } from 'react';
 

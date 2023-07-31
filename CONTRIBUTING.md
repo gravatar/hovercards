@@ -22,7 +22,8 @@ The general development workflow is as follows:
 4. **In a new terminal**, start a local server with `yarn start`. Now you can modify the code in the `src` folder and test it (or the output formats) in the `playground` directory.
 5. Update or add the related types if necessary.
 6. If needed, update the relevant documentation such as [README.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/README.md) or [CONTRIBUTING.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CONTRIBUTING.md).
-7. Create a Pull Request with your changes.
+7. Commit your changes and check if all the automated tests pass. (You can fix linting errors by running `yarn lint:<TYPE> --fix`)
+8. Create a Pull Request with your changes.
 
 ### Scripts
 
