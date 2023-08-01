@@ -1,6 +1,6 @@
 {
   "git": {
-    "requireBranch": "release-ci",
+    "requireBranch": "trunk",
     "commitMessage": "chore: release v${version}",
     "changelog": "npx auto-changelog --stdout --commit-limit false -u --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs"
   },
@@ -16,6 +16,7 @@
   },
   "hooks": {
     "before:init": [
+      "git pull",
       "yarn build",
       "yarn clean:release",
       "mkdir -p release/hovercards",

@@ -1,6 +1,16 @@
 name: Release & Publish to NPM
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: 'Version type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 jobs:
   release:
@@ -30,7 +40,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Release
-        run: yarn release --ci
+        run: yarn release ${{ github.event.inputs.increment }} --ci
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

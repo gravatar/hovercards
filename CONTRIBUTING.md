@@ -42,7 +42,10 @@ Below is a list of available scripts. You can run them using `yarn <script>`:
 - `lint:style`: Lints the Sass / CSS code using the [`lint:style`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/#lint-style) script of `@wordpress/scripts`.
 - `lint:md:docs`: Lints the Markdown files using the [`lint:md:docs`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/#lint-md-docs) script of `@wordpress/scripts`.
 - `lint`: Runs all the linters.
-- `clean`: Removes the `dist` folder.
+- `clean:dist`: Removes the `dist` folder.
+- `clean:release`: Removes the `release` folder.
+- `clean`: Removes all the generated folders (e.g. `dist`, `release`).
+- `release`: Creates a new release of the library.
 
 ### PR Merge Policy
 
@@ -50,3 +53,10 @@ Below is a list of available scripts. You can run them using `yarn <script>`:
 - Who is responsible for merging the approved PRs?
     - For PRs authored by external individuals who do not have push permissions, the reviewer who approved the PR will handle the merging process.
     - For PRs authored by contributors who have push permissions, the author of the PR will merge their own PR.
+
+## Release Process
+
+We're using [release-it](https://github.com/release-it/release-it) to automate the release process for both [NPM](https://npm.im/@gravatar/hovercards) and [GitHub](https://github.com/gravatar/hovercards/releases). There're two ways to create a new release:
+
+- Locally: Run `yarn release` and follow the instructions.
+- GitHub action: TBD
