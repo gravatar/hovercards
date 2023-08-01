@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@gravatar/hovercards)](https://npm.im/@gravatar/hovercards)
 [![build](https://img.shields.io/github/actions/workflow/status/gravatar/hovercards/build-test.yml)](https://github.com/gravatar/hovercards/actions/workflows/build-test.yml)
-[![package size](https://badgen.net/bundlephobia/minzip/@gravatar/hovercards)](https://bundlephobia.com/package/@gravatar/hovercards)
+[![package size](https://img.shields.io/bundlephobia/minzip/@gravatar/hovercards?label=minzipped%20size)](https://bundlephobia.com/package/@gravatar/hovercards)
 [![downloads](https://img.shields.io/npm/dm/@gravatar/hovercards)](https://npmtrends.com/@gravatar/hovercards)
 [![downloads](https://img.shields.io/npm/dt/@gravatar/hovercards)](https://npmtrends.com/@gravatar/hovercards)
 
