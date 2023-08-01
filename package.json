@@ -1,10 +1,10 @@
 {
-	"name": "@automattic/gravatar-hovercards",
+	"name": "@gravatar/hovercards",
 	"version": "0.5.0",
 	"description": "Add profile hovercards to Gravatar images.",
-	"homepage": "https://github.com/Automattic/gravatar-hovercards#readme",
-	"bugs": "https://github.com/Automattic/gravatar-hovercards/issues",
-	"repository": "https://github.com/Automattic/gravatar-hovercards",
+	"homepage": "https://github.com/gravatar/hovercards#readme",
+	"bugs": "https://github.com/gravatar/hovercards/issues",
+	"repository": "https://github.com/gravatar/hovercards",
 	"author": "Automattic",
 	"license": "GPL-2.0-or-later",
 	"keywords": [

@@ -4,7 +4,7 @@
 
 ## Questions, Issue Reporting, and Feature Suggestions
 
-Please [submit an issue](https://github.com/Automattic/gravatar-hovercards/issues/new/choose) with all pertinent details and context to help us fully understand your report or suggestion. To avoid duplication, kindly check for existing issues or feature requests similar to yours before filing a new one.
+Please [submit an issue](https://github.com/gravatar/hovercards/issues/new/choose) with all pertinent details and context to help us fully understand your report or suggestion. To avoid duplication, kindly check for existing issues or feature requests similar to yours before filing a new one.
 
 ## Code Contributions
 
@@ -17,13 +17,14 @@ Gravatar Hovercards is developed using [TypeScript](https://www.typescriptlang.o
 The general development workflow is as follows:
 
 1. Fork and clone the repository.
-2. Install the dependencies by running `yarn install`. Make sure your Node version matches the minimum requirement specified in the `package.json` file.
-3. Build the library in development mode using `yarn build:watch`. This command compiles the code and watches for changes.
-4. **In a new terminal**, start a local server with `yarn start`. Now you can modify the code in the `src` folder and test it (or the output formats) in the `playground` directory.
-5. Update or add the related types if necessary.
-6. If needed, update the relevant documentation such as [README.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/README.md) or [CONTRIBUTING.md](https://github.com/Automattic/gravatar-hovercards/blob/trunk/CONTRIBUTING.md).
-7. Commit your changes and check if all the automated tests pass. (You can fix linting errors by running `yarn lint:<TYPE> --fix`)
-8. Create a Pull Request with your changes.
+2. Create a new branch, using [the branch naming scheme](https://github.com/Automattic/wp-calypso/blob/trunk/docs/git-workflow.md#branch-naming-scheme), e.g. `add/a-cool-feature` or `fix/100-a-bug`.
+3. Install the dependencies by running `yarn install`. Make sure your Node version matches the minimum requirement specified in the `package.json` file.
+4. Build the library in development mode using `yarn build:watch`. This command compiles the code and watches for changes.
+5. **In a new terminal**, start a local server with `yarn start`. Now you can modify the code in the `src` folder and test it (or the output formats) in the `playground` directory.
+6. Update or add the related types if necessary.
+7. If needed, update the relevant documentation such as [README.md](https://github.com/gravatar/hovercards/blob/trunk/README.md) or [CONTRIBUTING.md](https://github.com/gravatar/hovercards/blob/trunk/CONTRIBUTING.md).
+8. Commit your changes and check if all the automated tests pass. (You can fix linting errors by running `yarn lint:<TYPE> --fix`)
+9. Create a Pull Request with your changes.
 
 ### Scripts
 
