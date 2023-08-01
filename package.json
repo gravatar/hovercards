@@ -51,11 +51,11 @@
 	],
 	"scripts": {
 		"start": "webpack serve --config ./webpack/config.playground.js",
-		"build": "yarn clean && run-p 'build:types' 'build:core' 'build:react'",
+		"build": "yarn clean:dist && run-p 'build:types' 'build:core' 'build:react'",
 		"build:types": "tsc --declaration --declarationMap --emitDeclarationOnly",
 		"build:core": "webpack --config ./webpack/config.core.js --node-env=production",
 		"build:react": "webpack --config ./webpack/config.react.js --node-env=production",
-		"build:dev": "yarn clean && run-p 'build:types' 'build:core --node-env=development' 'build:react --node-env=development'",
+		"build:dev": "yarn clean:dist && run-p 'build:types' 'build:core --node-env=development' 'build:react --node-env=development'",
 		"build:watch": "yarn build:dev && watch 'yarn build:dev' ./src",
 		"format": "wp-scripts format",
 		"type-check": "tsc --noEmit",
@@ -63,7 +63,9 @@
 		"lint:style": "wp-scripts lint-style",
 		"lint:md:docs": "wp-scripts lint-md-docs",
 		"lint": "run-p 'lint:*'",
-		"clean": "rimraf dist",
+		"clean:dist": "rimraf dist",
+		"clean:release": "rimraf release",
+		"clean": "run-p 'clean:*'",
 		"prepare": "husky install",
 		"release": "release-it"
 	},
@@ -98,26 +100,5 @@
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^4.15.1",
 		"webpack-remove-empty-scripts": "^1.0.3"
-	},
-	"release-it": {
-		"git": {
-			"requireBranch": "trunk"
-		},
-		"github": {
-			"release": true,
-			"assets": [
-				"release/gravatar-hovercards.zip"
-			]
-		},
-		"npm": false,
-		"hooks": {
-			"before:init": [
-				"yarn build",
-				"rm -rf release",
-				"mkdir -p release/gravatar-hovercards",
-				"cp -r dist/* release/gravatar-hovercards",
-				"(cd release; zip -r gravatar-hovercards.zip  gravatar-hovercards/*)"
-			]
-		}
 	}
 }
