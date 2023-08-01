@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       increment:
+        type: choice
         description: 'Version type'
         required: true
-        type: choice
         options:
           - patch
           - minor
