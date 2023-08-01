@@ -17,7 +17,7 @@ Gravatar Hovercards is developed using [TypeScript](https://www.typescriptlang.o
 The general development workflow is as follows:
 
 1. Fork and clone the repository.
-2. Create a new branch, using [the branch naming scheme](https://github.com/Automattic/wp-calypso/blob/trunk/docs/git-workflow.md#branch-naming-scheme), e.g. `add/a-cool-feature` or `fix/1337-a-bug`.
+2. Create a new branch, using [the branch naming scheme](https://github.com/Automattic/wp-calypso/blob/trunk/docs/git-workflow.md#branch-naming-scheme), e.g. `add/a-cool-feature` or `fix/100-a-bug`.
 3. Install the dependencies by running `yarn install`. Make sure your Node version matches the minimum requirement specified in the `package.json` file.
 4. Build the library in development mode using `yarn build:watch`. This command compiles the code and watches for changes.
 5. **In a new terminal**, start a local server with `yarn start`. Now you can modify the code in the `src` folder and test it (or the output formats) in the `playground` directory.
