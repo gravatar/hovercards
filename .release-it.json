@@ -9,7 +9,7 @@
     "assets": ["release/hovercards.zip"]
   },
   "npm": {
-    "publish": false
+    "publish": true
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
