@@ -21,6 +21,9 @@ jobs:
     steps: 
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GRAVATAR_A8C_TOKEN }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -33,8 +36,8 @@ jobs:
 
       - name: Initialize Git user
         run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config user.name "gravatar-automattic"
+          git config user.email "gravatar@automattic.com"
 
       - name: Initialize the NPM config
         run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
@@ -44,5 +47,5 @@ jobs:
       - name: Release
         run: yarn release ${{ github.event.inputs.increment }} --ci
         env: 
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.GRAVATAR_A8C_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
