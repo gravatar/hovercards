@@ -52,8 +52,6 @@ yarn add react react-dom @gravatar-com/hovercards
 
 For Vanilla JavaScript, import the library as shown below:
 
-> Replace `x.x.x` with the latest version number. Please refer to UNPKG's [documentation](https://unpkg.com/) for more information.
-
 ```html
 <!-- Import the hovercard styles -->
 <link rel="stylesheet" href="https://unpkg.com/@gravatar-com/hovercards@x.x.x/dist/style.css">
@@ -82,6 +80,8 @@ For React, import the library as shown below:
   console.log( Gravatar );
 </script>
 ```
+
+> Replace `x.x.x` with the latest version number. Please refer to UNPKG's [documentation](https://unpkg.com/) for more information.
 
 ## Vanilla JavaScript
 
