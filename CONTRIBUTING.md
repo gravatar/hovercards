@@ -59,9 +59,9 @@ Below is a list of available scripts. You can run them using `yarn <script>`:
 
 This project utilizes [release-it](https://github.com/release-it/release-it) for automating releases across both [NPM](https://npm.im/@gravatar-com/hovercards) and [GitHub](https://github.com/gravatar/hovercards/releases). There're two ways to create a new release:
 
-- Local Release: Run `yarn release` and follow the instructions.
 - GitHub Action:
     - Go to the [release action page](https://github.com/gravatar/hovercards/actions/workflows/release.yml)
     - Click on the `Run workflow` button
     - Choose the appropriate `Version type`
     - Confirm by clicking on `Run workflow` again
+- Local Release (with the push permission): Run `yarn release` and follow the instructions.
