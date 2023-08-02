@@ -9,8 +9,8 @@ const baseConfig = {
 		path: path.resolve( 'dist' ),
 	},
 	externals: {
-		react: 'React',
-		'react-dom': 'ReactDOM',
+		react: 'react',
+		'react-dom': 'react-dom',
 	},
 };
 
@@ -58,6 +58,10 @@ const umdConfig = {
 			type: 'umd',
 			umdNamedDefine: true,
 		},
+	},
+	externals: {
+		react: 'React',
+		'react-dom': 'ReactDOM',
 	},
 };
 

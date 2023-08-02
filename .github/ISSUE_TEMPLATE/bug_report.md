@@ -21,7 +21,7 @@ Share the steps to reproduce the issue, screenshots, or a [CodeSandbox](https://
 
 - Gravatar Hovercards version: [e.g. v1.0.0]
 - Browser: [e.g. Chrome, Safari]
-- Platform: [e.g. Windows, macOS, iOS, Android]
+- Platform: [e.g. Windows, MacOS, iOS, Android]
 
 ## Additional Information
 
