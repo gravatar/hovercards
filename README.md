@@ -52,12 +52,14 @@ yarn add react react-dom @gravatar-com/hovercards
 
 For Vanilla JavaScript, import the library as shown below:
 
+> Replace `x.x.x` with the latest version number. Please refer to UNPKG's [documentation](https://unpkg.com/) for more information.
+
 ```html
 <!-- Import the hovercard styles -->
-<link rel="stylesheet" href="https://unpkg.com/@gravatar-com/hovercards/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@gravatar-com/hovercards@x.x.x/dist/style.css">
 
 <!-- Import the hovercards library -->
-<script src="https://unpkg.com/@gravatar-com/hovercards" defer></script>
+<script src="https://unpkg.com/@gravatar-com/hovercards@x.x.x" defer></script>
 
 <script>
   // The library is accessible as a global variable
@@ -68,13 +70,13 @@ For Vanilla JavaScript, import the library as shown below:
 For React, import the library as shown below:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@gravatar-com/hovercards/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@gravatar-com/hovercards@x.x.x/dist/style.css">
 
 <!-- Ensure React and ReactDOM are imported before the library -->
-<script src="https://unpkg.com/react" defer></script>
-<script src="https://unpkg.com/react-dom" defer></script>
+<script src="https://unpkg.com/react@x.x.x" defer></script>
+<script src="https://unpkg.com/react-dom@x.x.x" defer></script>
 <!-- Import the React hovercards library -->
-<script src="https://unpkg.com/@gravatar-com/hovercards/dist/index.react.umd.js" defer></script>
+<script src="https://unpkg.com/@gravatar-com/hovercards@x.x.x/dist/index.react.umd.js" defer></script>
 
 <script>
   console.log( Gravatar );
