@@ -133,14 +133,15 @@ export default class Hovercards {
 		let refs: HTMLElement[] = [];
 		const camelAttrName = dataAttributeName.replace( /-([a-z])/g, ( g ) => g[ 1 ].toUpperCase() );
 		const ignoreRefs = ignoreSelector ? Array.from( dc.querySelectorAll( ignoreSelector ) ) : [];
+		const matchPath = 'gravatar.com/avatar/';
 
 		if (
 			target.dataset[ camelAttrName ] ||
-			( target.tagName === 'IMG' && ( target as HTMLImageElement ).src.includes( 'gravatar.com/' ) )
+			( target.tagName === 'IMG' && ( target as HTMLImageElement ).src.includes( matchPath ) )
 		) {
 			refs = [ target ];
 		} else {
-			refs = Array.from( target.querySelectorAll( 'img[src*="gravatar.com/"]' ) );
+			refs = Array.from( target.querySelectorAll( `img[src*="${ matchPath }"]` ) );
 
 			if ( dataAttributeName ) {
 				refs = [
