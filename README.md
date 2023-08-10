@@ -126,7 +126,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
     hovercards.attach( document.body );
 
     // You can exclude certain Gravatar images from hovercards by using `ignoreSelector`
-    hovercards.attach( document.body, { ignoreSelector: '.ignore img[src*="gravatar.com/"]' } );
+    hovercards.attach( document.body, { ignoreSelector: '.ignore img[src*="gravatar.com/avatar/"]' } );
 } );
 ```
 
