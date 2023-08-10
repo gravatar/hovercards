@@ -70,8 +70,8 @@
 		"release": "release-it"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.22.9",
-		"@babel/preset-env": "^7.22.9",
+		"@babel/core": "^7.22.10",
+		"@babel/preset-env": "^7.22.10",
 		"@babel/preset-react": "^7.22.5",
 		"@babel/preset-typescript": "^7.22.5",
 		"@wordpress/eslint-plugin": "^14.11.0",
@@ -88,9 +88,9 @@
 		"postcss-loader": "^7.3.3",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"release-it": "^16.1.3",
+		"release-it": "^16.1.4",
 		"rimraf": "^5.0.1",
-		"sass": "^1.64.2",
+		"sass": "^1.65.1",
 		"sass-loader": "^13.3.2",
 		"style-loader": "^3.3.3",
 		"terser-webpack-plugin": "^5.3.9",
