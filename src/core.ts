@@ -136,7 +136,7 @@ export default class Hovercards {
 		const matchPath = 'gravatar.com/avatar/';
 
 		if (
-			target.dataset[ camelAttrName ] ||
+			( camelAttrName && target.dataset[ camelAttrName ] ) ||
 			( target.tagName === 'IMG' && ( target as HTMLImageElement ).src.includes( matchPath ) )
 		) {
 			refs = [ target ];
