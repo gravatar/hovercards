@@ -1874,7 +1874,7 @@ __metadata:
     "@babel/preset-env": ^7.22.10
     "@babel/preset-react": ^7.22.5
     "@babel/preset-typescript": ^7.22.5
-    "@wordpress/eslint-plugin": ^14.11.0
+    "@wordpress/eslint-plugin": ^14.12.0
     "@wordpress/scripts": ^26.9.0
     autoprefixer: ^10.4.14
     babel-loader: ^9.1.3
@@ -3621,6 +3621,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wordpress/babel-plugin-import-jsx-pragma@npm:^4.22.0":
+  version: 4.22.0
+  resolution: "@wordpress/babel-plugin-import-jsx-pragma@npm:4.22.0"
+  peerDependencies:
+    "@babel/core": ^7.12.9
+  checksum: a8ff5f330f982114cace8c38270e2ebef2b9448ce3eb7be8df3f5c6d52a600123b197bf7ecde18b335f84d77f468ef786904c9780c0ea333dbb6c99a7bddb6ee
+  languageName: node
+  linkType: hard
+
 "@wordpress/babel-preset-default@npm:^7.22.0":
   version: 7.22.0
   resolution: "@wordpress/babel-preset-default@npm:7.22.0"
@@ -3641,6 +3650,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wordpress/babel-preset-default@npm:^7.23.0":
+  version: 7.23.0
+  resolution: "@wordpress/babel-preset-default@npm:7.23.0"
+  dependencies:
+    "@babel/core": ^7.16.0
+    "@babel/plugin-transform-react-jsx": ^7.16.0
+    "@babel/plugin-transform-runtime": ^7.16.0
+    "@babel/preset-env": ^7.16.0
+    "@babel/preset-typescript": ^7.16.0
+    "@babel/runtime": ^7.16.0
+    "@wordpress/babel-plugin-import-jsx-pragma": ^4.22.0
+    "@wordpress/browserslist-config": ^5.22.0
+    "@wordpress/element": ^5.16.0
+    "@wordpress/warning": ^2.39.0
+    browserslist: ^4.21.9
+    core-js: ^3.31.0
+  checksum: 0fe09357f2b1f404186461f94b068f9c166dad5fca597d740195f5aea7df9887fb5896a75567cbc7061bb0223c1628adb8aaff28ded6690f7ecb18a97f9b3db4
+  languageName: node
+  linkType: hard
+
 "@wordpress/base-styles@npm:^4.29.0":
   version: 4.29.0
   resolution: "@wordpress/base-styles@npm:4.29.0"
@@ -3652,6 +3681,13 @@ __metadata:
   version: 5.21.0
   resolution: "@wordpress/browserslist-config@npm:5.21.0"
   checksum: 9318c1a44d5a30a458a84f93646c9c12c18ea8b97314f54e7f9755cb661966ff27cc0c4f91c7b949bde60a6725cf1453ca91d3bdcf176f339917e654e0519375
+  languageName: node
+  linkType: hard
+
+"@wordpress/browserslist-config@npm:^5.22.0":
+  version: 5.22.0
+  resolution: "@wordpress/browserslist-config@npm:5.22.0"
+  checksum: 452b627ba320a15a26ce99da1214a60a4b4289658880648874920f6ad1ee35fc77781655ace5cdd108ee3643f5dc42760df6c46ee59cdfc60f8a299b8312c522
   languageName: node
   linkType: hard
 
@@ -3683,12 +3719,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wordpress/element@npm:^5.16.0":
+  version: 5.16.0
+  resolution: "@wordpress/element@npm:5.16.0"
+  dependencies:
+    "@babel/runtime": ^7.16.0
+    "@types/react": ^18.0.21
+    "@types/react-dom": ^18.0.6
+    "@wordpress/escape-html": ^2.39.0
+    change-case: ^4.1.2
+    is-plain-object: ^5.0.0
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  checksum: 078b35e0a1ee7441ae0a948094bc2fbea7e29d2e72c0a757b19649b6877843f57defabb718884a68bc2087dd47f1cfc8089a6f9baa053bcd6394ab43bd0b88d4
+  languageName: node
+  linkType: hard
+
 "@wordpress/escape-html@npm:^2.38.0":
   version: 2.38.0
   resolution: "@wordpress/escape-html@npm:2.38.0"
   dependencies:
     "@babel/runtime": ^7.16.0
   checksum: 4cf3c2a3b068c0d9174119b034fdc7376a7ca42d5fa8e07121de375268fd93008323f28abfa1062a57a07eda4b33c7a3cb2d879fc40b80446f516528a957fbb4
+  languageName: node
+  linkType: hard
+
+"@wordpress/escape-html@npm:^2.39.0":
+  version: 2.39.0
+  resolution: "@wordpress/escape-html@npm:2.39.0"
+  dependencies:
+    "@babel/runtime": ^7.16.0
+  checksum: 174026245a58f5a83eb9462a5441f3d56bfbb023d37fc89f23a1e5234924e1f9618c182e5119776fea0b1cf6cae924ca1f96351d21757b80ce5d519596db973c
   languageName: node
   linkType: hard
 
@@ -3723,6 +3784,40 @@ __metadata:
     typescript:
       optional: true
   checksum: 372b7d1d008c823be3b8ca55729447958ef4b82765d19843ed5f6e49a3270282cc82ca88e280bca3e85bacfaa3d08ae676618f2187f43595e3e726eb84f9e8f4
+  languageName: node
+  linkType: hard
+
+"@wordpress/eslint-plugin@npm:^14.12.0":
+  version: 14.12.0
+  resolution: "@wordpress/eslint-plugin@npm:14.12.0"
+  dependencies:
+    "@babel/eslint-parser": ^7.16.0
+    "@typescript-eslint/eslint-plugin": ^5.3.0
+    "@typescript-eslint/parser": ^5.3.0
+    "@wordpress/babel-preset-default": ^7.23.0
+    "@wordpress/prettier-config": ^2.22.0
+    cosmiconfig: ^7.0.0
+    eslint-config-prettier: ^8.3.0
+    eslint-plugin-import: ^2.25.2
+    eslint-plugin-jest: ^27.2.1
+    eslint-plugin-jsdoc: ^39.6.9
+    eslint-plugin-jsx-a11y: ^6.5.1
+    eslint-plugin-prettier: ^3.3.0
+    eslint-plugin-react: ^7.27.0
+    eslint-plugin-react-hooks: ^4.3.0
+    globals: ^13.12.0
+    requireindex: ^1.2.0
+  peerDependencies:
+    "@babel/core": ">=7"
+    eslint: ">=8"
+    prettier: ">=2"
+    typescript: ">=4"
+  peerDependenciesMeta:
+    prettier:
+      optional: true
+    typescript:
+      optional: true
+  checksum: d0dae60132faba9df44c0eb915ecd690856e15cce623fe05e4e6e952ea93481d9f393869bf9e4f66ebdd292055aba4f3588b5ea5f7f8c1a17141818a9cbb4a1b
   languageName: node
   linkType: hard
 
@@ -3778,6 +3873,15 @@ __metadata:
   peerDependencies:
     prettier: ">=2"
   checksum: 18b956bb8e261efaa288ecd01edc77c84ba61258af330f58409a74fe23363983ba65192fb37c6c6818ce419667bf95541d4187404bdeb50b606d90f93949ef00
+  languageName: node
+  linkType: hard
+
+"@wordpress/prettier-config@npm:^2.22.0":
+  version: 2.22.0
+  resolution: "@wordpress/prettier-config@npm:2.22.0"
+  peerDependencies:
+    prettier: ">=2"
+  checksum: 50dbd3a9f3619a5f8ce928b7bf2a271077d0ce05658dd36269c7a129b7bd968d9207a120877ed0c2ea1c7fae9f817a8b7e9cd368e424360f01393d53437b80a6
   languageName: node
   linkType: hard
 
@@ -3866,6 +3970,13 @@ __metadata:
   version: 2.38.0
   resolution: "@wordpress/warning@npm:2.38.0"
   checksum: 3a4b9f7dbecca476981f894365a82d14333537209f89e8f6026d01dd0a665187ec2f9765c583e0fcea696b539ddf0054a98b9fbf39e51c1d58368c73f1153906
+  languageName: node
+  linkType: hard
+
+"@wordpress/warning@npm:^2.39.0":
+  version: 2.39.0
+  resolution: "@wordpress/warning@npm:2.39.0"
+  checksum: d907048b35e31f21657cf08a09ddefa8669d92195b18a1286f9a4cc254818b7a6994663d58b11eb1892db029691aa531bb70fc7a4ffb75e7193a3f2f25cb59e9
   languageName: node
   linkType: hard
 
