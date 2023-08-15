@@ -460,6 +460,10 @@ export default class Hovercards {
 	 * @private
 	 */
 	_handleMouseEnter( e: MouseEvent, hovercardRef: HovercardRef ) {
+		if ( 'ontouchstart' in dc ) {
+			return;
+		}
+
 		e.stopImmediatePropagation();
 
 		// Don't hide the hovercard when the mouse is over the ref from the hovercard
@@ -477,6 +481,10 @@ export default class Hovercards {
 	 * @private
 	 */
 	_handleMouseLeave( e: MouseEvent, { id }: HovercardRef ) {
+		if ( 'ontouchstart' in dc ) {
+			return;
+		}
+
 		e.stopImmediatePropagation();
 
 		clearInterval( this._showHovercardTimeoutIds.get( id ) );
