@@ -62,6 +62,6 @@ This project utilizes [release-it](https://github.com/release-it/release-it) for
 - GitHub Action:
     - Go to the [release action page](https://github.com/gravatar/hovercards/actions/workflows/release.yml)
     - Click on the `Run workflow` button
-    - Choose the appropriate `Version type`
+    - Choose the appropriate `Version type` (we use [Semantic Versioning](https://semver.org/))
     - Confirm by clicking on `Run workflow` again
 - Local Release (with the push permission): Run `yarn release` and follow the instructions.
