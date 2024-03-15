@@ -44,7 +44,7 @@ function App() {
 			</div>
 			<Hovercards style={ { display: 'flex', flexDirection: 'column', gap: '5rem' } } { ...props }>
 				<img
-					src="https://www.gravatar.com/avatar/f3023a1c05b9a37f8a0ac2bf132e68e0ee030610364e36611c08b391b9532e77?s=60&d=retro&r=g"
+					src="https://www.gravatar.com/avatar/a8fb08baaca16a8c0c87177d3d54499b"
 					width="60"
 					height="60"
 					alt="Gravatar"

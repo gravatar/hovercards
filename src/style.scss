@@ -95,12 +95,12 @@ $color-blue: #1d4fc4;
 	}
 
 	.gravatar-hovercard__body {
-		min-height: 63px;
+		min-height: 42px;
 	}
 
 	.gravatar-hovercard__about {
 
-		@include ellipsis(3);
+		@include ellipsis(2);
 	}
 
 	.gravatar-hovercard__footer {
