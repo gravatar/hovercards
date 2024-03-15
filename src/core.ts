@@ -12,6 +12,8 @@ export interface ProfileData {
 	displayName: string;
 	currentLocation?: string;
 	aboutMe?: string;
+	jobTitle?: string;
+	company?: string;
 	accounts?: Account[];
 }
 
@@ -62,7 +64,6 @@ interface HovercardRef {
 
 const BASE_API_URL = 'https://secure.gravatar.com';
 
-const socialLinksOrder = [ 'wordpress', 'mastodon', 'tumblr', 'github', 'twitter' ];
 const dc = document;
 
 export default class Hovercards {
@@ -237,6 +238,8 @@ export default class Hovercards {
 			displayName,
 			currentLocation,
 			aboutMe,
+			jobTitle,
+			company,
 			accounts = [],
 		} = profileData;
 
@@ -247,31 +250,31 @@ export default class Hovercards {
 		const username = escHtml( displayName );
 		const isEditProfile = ! aboutMe && myHash === hash;
 		const renderSocialLinks = accounts
+			.slice( 0, 3 )
 			.reduce( ( links, { url, shortname, iconUrl, name } ) => {
-				const idx = socialLinksOrder.indexOf( shortname );
-
-				if ( idx !== -1 ) {
-					links[ idx ] = `
-						<a class="gravatar-hovercard__social-link" href="${ escUrl( url ) }" target="_blank" data-service-name="${ shortname }">
-							<img class="gravatar-hovercard__social-icon" src="${ escUrl( iconUrl ) }" width="32" height="32" alt="${ escHtml(
-						name
-					) }" />
-						</a>
-					`;
-				}
+				links.push( `
+					<a class="gravatar-hovercard__social-link" href="${ escUrl( url ) }" target="_blank" data-service-name="${ shortname }">
+						<img class="gravatar-hovercard__social-icon" src="${ escUrl( iconUrl ) }" width="32" height="32" alt="${ escHtml(
+					name
+				) }" />
+					</a>
+				` );
 
 				return links;
 			}, [] )
 			.join( '' );
 
+		const professionalInfo = [ jobTitle, company ].filter( Boolean ).join( ', ' );
+
 		hovercard.innerHTML = `
 			<div class="gravatar-hovercard__inner">
 				<div class="gravatar-hovercard__header">
 					<a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
-						<img class="gravatar-hovercard__avatar" src="${ escUrl( thumbnailUrl ) }" width="56" height="56" alt="${ username }" />
+						<img class="gravatar-hovercard__avatar" src="${ escUrl( thumbnailUrl ) }" width="72" height="72" alt="${ username }" />
 					</a>
 					<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
 						<h4 class="gravatar-hovercard__name">${ username }</h4>
+						${ professionalInfo ? `<p class="gravatar-hovercard__location">${ escHtml( professionalInfo ) }</p>` : '' }
 						${ currentLocation ? `<p class="gravatar-hovercard__location">${ escHtml( currentLocation ) }</p>` : '' }
 					</a>
 				</div>
@@ -353,6 +356,8 @@ export default class Hovercards {
 							currentLocation,
 							aboutMe,
 							accounts,
+							job_title: jobTitle,
+							company,
 						} = data.entry[ 0 ];
 
 						this._cachedProfiles.set( hash, {
@@ -362,6 +367,8 @@ export default class Hovercards {
 							displayName,
 							currentLocation,
 							aboutMe,
+							jobTitle,
+							company,
 							accounts: accounts?.map( ( { url, shortname, iconUrl, name }: Account ) => ( {
 								url,
 								shortname,
