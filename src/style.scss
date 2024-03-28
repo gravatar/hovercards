@@ -72,7 +72,7 @@ $color-blue: #1d4fc4;
 		background-color: $color-super-light-gray;
 	}
 
-	.gravatar-hovercard__name-location-link {
+	.gravatar-hovercard__personal-info-link {
 		text-decoration: none;
 	}
 
@@ -87,6 +87,7 @@ $color-blue: #1d4fc4;
 		color: $color-black;
 	}
 
+	.gravatar-hovercard__job,
 	.gravatar-hovercard__location {
 
 		@include ellipsis(1);
@@ -145,7 +146,7 @@ $color-blue: #1d4fc4;
 .gravatar-hovercard--skeleton {
 
 	.gravatar-hovercard__avatar-link,
-	.gravatar-hovercard__name-location-link,
+	.gravatar-hovercard__personal-info-link,
 	.gravatar-hovercard__social-link,
 	.gravatar-hovercard__profile-link {
 		background-color: $color-super-light-gray;
@@ -157,7 +158,7 @@ $color-blue: #1d4fc4;
 		border-radius: 50%;
 	}
 
-	.gravatar-hovercard__name-location-link {
+	.gravatar-hovercard__personal-info-link {
 		height: 20px;
 		width: 50%;
 	}
