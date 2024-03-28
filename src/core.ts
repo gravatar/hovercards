@@ -208,7 +208,7 @@ export default class Hovercards {
 			<div class="gravatar-hovercard__inner">
 				<div class="gravatar-hovercard__header">
 					<div class="gravatar-hovercard__avatar-link"></div>
-					<div class="gravatar-hovercard__name-location-link"></div>
+					<div class="gravatar-hovercard__personal-info-link"></div>
 				</div>
 				<div class="gravatar-hovercard__footer">
 					<div class="gravatar-hovercard__social-link"></div>
@@ -264,7 +264,7 @@ export default class Hovercards {
 			}, [] )
 			.join( '' );
 
-		const professionalInfo = [ jobTitle, company ].filter( Boolean ).join( ', ' );
+		const jobInfo = [ jobTitle, company ].filter( Boolean ).join( ', ' );
 
 		hovercard.innerHTML = `
 			<div class="gravatar-hovercard__inner">
@@ -272,9 +272,9 @@ export default class Hovercards {
 					<a class="gravatar-hovercard__avatar-link" href="${ profileUrl }" target="_blank">
 						<img class="gravatar-hovercard__avatar" src="${ escUrl( thumbnailUrl ) }" width="72" height="72" alt="${ username }" />
 					</a>
-					<a class="gravatar-hovercard__name-location-link" href="${ profileUrl }" target="_blank">
+					<a class="gravatar-hovercard__personal-info-link" href="${ profileUrl }" target="_blank">
 						<h4 class="gravatar-hovercard__name">${ username }</h4>
-						${ professionalInfo ? `<p class="gravatar-hovercard__location">${ escHtml( professionalInfo ) }</p>` : '' }
+						${ jobInfo ? `<p class="gravatar-hovercard__job">${ escHtml( jobInfo ) }</p>` : '' }
 						${ currentLocation ? `<p class="gravatar-hovercard__location">${ escHtml( currentLocation ) }</p>` : '' }
 					</a>
 				</div>
